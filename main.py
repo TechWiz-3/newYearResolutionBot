@@ -58,7 +58,7 @@ async def remindme(ctx,*,days):#time in days
     fullTimeInSeconds = days*86400
     while True:
         await asyncio.sleep(fullTimeInSeconds)
-        mycursor.execute("SELECT * FROM railway ORDER BY name")
+        mycursor.execute("SELECT * FROM test_goals_2002 ORDER BY user;")
         #mysql fetch
         #remind person of their goals
 
