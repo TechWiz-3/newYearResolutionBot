@@ -59,6 +59,8 @@ async def remindme(ctx,*,days):#time in days
     while True:
         await asyncio.sleep(fullTimeInSeconds)
         mycursor.execute("SELECT * FROM test_goals_2002 ORDER BY user;")
+        mydb.commit()
+
         #mysql fetch
         #remind person of their goals
 
@@ -72,5 +74,24 @@ async def wait_until(ctx, dt):
     #     await asyncio.sleep(remaining)
     #     if remaining == 0:
     #         break
+
+
+@bot.slash_command(guild_ids=[864438892736282625, 867597533458202644])
+async def view_goals(ctx):
+    final = ""
+    mycursor.execute("SELECT goals FROM test_goals_2002 WHERE user = 'Zac the Wise\#1381'")
+    for x in mycursor:
+        final += str(x)
+    print(final)
+    await ctx.respond(final)
+
+@bot.slash_command(guild_ids=[864438892736282625, 867597533458202644])
+async def initialise(ctx):
+    if not ctx.author.guild_permissions.administrator:
+        await ctx.respond("**You don't have the right permissions for that.**", ephemeral = True)
+        return
+    else:
+        await ctx.respond("done")
+
 
 bot.run(token)
