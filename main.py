@@ -30,6 +30,7 @@ mydb = mysql.connector.connect(
   port=port
 )
 mycursor = mydb.cursor()
+secondcursor = mydb.cursor()
 
 @bot.slash_command(guild_ids=[864438892736282625, 867597533458202644])
 async def help(ctx):
@@ -46,8 +47,9 @@ async def newyeargoal(ctx,*,goal):
     """Log a goal, one at a time"""
     await ctx.respond(f"Yessir\nYour goal is `{goal}`\n**I've logged it for you, NOW LET'S GO GET IT <:lezgooo:923128327970099231>**\nOh and also, remember to do `/remindme` to let me know how often to remind you about it!")
     person = str(ctx.author)
-    finalValues = (person, goal)
-    sql = "INSERT INTO test_goals_2002 (user, goals) VALUES (%s, %s)"
+    status = False
+    finalValues = (person, goal, status)
+    sql = "INSERT INTO 2022_Goals (user, goals, status) VALUES (%s, %s, %s)"
     mycursor.execute(sql, finalValues)
     mydb.commit()
     #await asyncio.sleep(2628288)
@@ -58,7 +60,7 @@ async def remindme(ctx,*,days):#time in days
     fullTimeInSeconds = days*86400
     while True:
         await asyncio.sleep(fullTimeInSeconds)
-        mycursor.execute("SELECT * FROM test_goals_2002 ORDER BY user;")
+        mycursor.execute("SELECT * FROM 2022_Goals ORDER BY user;")
         mydb.commit()
 
         #mysql fetch
@@ -79,11 +81,37 @@ async def wait_until(ctx, dt):
 @bot.slash_command(guild_ids=[864438892736282625, 867597533458202644])
 async def view_goals(ctx):
     final = ""
-    mycursor.execute("SELECT goals FROM test_goals_2002 WHERE user = 'Zac the Wise\#1381'")
+    mycursor.execute("SELECT goals FROM 2022_Goals WHERE user = 'Zac the Wise\#1381'")
     for x in mycursor:
         final += str(x)
-    print(final)
+    final = final.replace("(", "")
+    final = final.replace(")", "")
+    final = final.replace("\'", "``")
+    final = final.replace(",", "\n")
+    #check the status for each goal with the username
+    await ctx.respond(f"Your goals are...\n\n{final}\nYou have achieved x/y number of goals")
+
+@bot.slash_command(guild_ids=[864438892736282625, 867597533458202644])
+async def view_ids(ctx):
+    final = ""
+    secondcursor.execute("SELECT * FROM 2022_Goals WHERE user = 'Zac the Wise\#1381'")
+    for x in secondcursor:
+        mycursor.execute("SELECT goals FROM 2022_Goals WHERE user = 'Zac the Wise\#1381'")
+        for y in mycursor:
+            print(y)
+        mycursor.execute("SELECT id FROM 2022_Goals WHERE user = 'Zac the Wise\#1381'")
+        for z in mycursor:
+            print(z)
+
+    for x in mycursor:
+        final += str(x)
     await ctx.respond(final)
+
+
+@bot.slash_command(guild_ids=[864438892736282625, 867597533458202644])
+async def goal_achieved(ctx, id):
+    await ctx.respond(id)
+
 
 @bot.slash_command(guild_ids=[864438892736282625, 867597533458202644])
 async def initialise(ctx):
