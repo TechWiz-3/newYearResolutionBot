@@ -96,11 +96,12 @@ async def view_ids(ctx):
     author = str(ctx.author)
     print(author)
     final = ""
-    author = 'Zac the Wise#1381'
+    author = ('Zac the Wise#1381',)
     print(author)
     sql = "SELECT goals, id FROM 2022_Goals WHERE user = %s"
-    query = sql + author
-    mycursor.execute(query)
+    # query = sql + author
+    # mycursor.execute(query)
+    mycursor.execute("SELECT goals, id FROM 2022_Goals WHERE user = %s", (author))
     # mycursor.execute(sql, author)
     # mycursor.execute("SELECT goals, id FROM 2022_Goals WHERE user = %s", (author))
     # mycursor.execute(f"SELECT goals, id FROM 2022_Goals WHERE user = {author}")
