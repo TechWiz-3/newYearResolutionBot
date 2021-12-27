@@ -81,7 +81,7 @@ async def wait_until(ctx, dt):
 @bot.slash_command(guild_ids=[864438892736282625, 867597533458202644])
 async def view_goals(ctx):
     final = ""
-    mycursor.execute("SELECT goals FROM 2022_Goals WHERE user = 'Zac the Wise\#1381'")
+    mycursor.execute("SELECT goals FROM 2022_Goals WHERE user = 'Zac the Wise#1381'")
     for x in mycursor:
         final += str(x)
     final = final.replace("(", "")
@@ -93,18 +93,28 @@ async def view_goals(ctx):
 
 @bot.slash_command(guild_ids=[864438892736282625, 867597533458202644])
 async def view_ids(ctx):
+    author = str(ctx.author)
+    print(author)
     final = ""
-    secondcursor.execute("SELECT * FROM 2022_Goals WHERE user = 'Zac the Wise\#1381'")
-    for x in secondcursor:
-        mycursor.execute("SELECT goals FROM 2022_Goals WHERE user = 'Zac the Wise\#1381'")
-        for y in mycursor:
-            print(y)
-        mycursor.execute("SELECT id FROM 2022_Goals WHERE user = 'Zac the Wise\#1381'")
-        for z in mycursor:
-            print(z)
-
+    author = 'Zac the Wise#1381'
+    print(author)
+    sql = "SELECT goals, id FROM 2022_Goals WHERE user = %s"
+    query = sql + author
+    mycursor.execute(query)
+    # mycursor.execute(sql, author)
+    # mycursor.execute("SELECT goals, id FROM 2022_Goals WHERE user = %s", (author))
+    # mycursor.execute(f"SELECT goals, id FROM 2022_Goals WHERE user = {author}")
+    # mycursor.execute("SELECT goals, id FROM 2022_Goals WHERE user = %s." % (author))
+    # mycursor.execute("SELECT goals, id FROM 2022_Goals WHERE user = author")
+    # mycursor.execute("SELECT goa fruit (name, variety) VALUES (%s, %s)", (new_fruit, new_fruit_type));
+    # mycursor.execute("SELECT * FROM 2022_Goals WHERE user = author")
     for x in mycursor:
-        final += str(x)
+        xx = str(x)
+        xx = xx.replace(",", "  **")
+        xx = xx.replace("'", "``")
+        xx = xx.replace("(", "")
+        xx = xx.replace(")", "**\n")
+        final += str(xx)
     await ctx.respond(final)
 
 
