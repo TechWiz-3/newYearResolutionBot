@@ -139,6 +139,21 @@ async def goal_achieved(ctx, id):
         xx = xx.replace("(", "")
         xx = xx.replace(")", "\n")
         final += str(xx)
+
+
+
+
+    value = tuple(id) 
+    print(value)
+    # sql = "SELECT status FROM 2022_Goals WHERE id = %s"
+    # mycursor.execute(sql, value)
+
+    # sql = "UPDATE 2022_Goals SET Status WHERE id = %s VALUES (%s)"
+    sql = "UPDATE 2022_Goals SET status = '1' WHERE id = %s"
+    # value = ('1', id)
+    # print(type(value))
+    mycursor.execute(sql, value)
+    mydb.commit()
     await ctx.respond(f"**Congratulations...**\nYou have ACHIEVED `{final}`**Collect your trophy:**\n:trophy:")
 
 
