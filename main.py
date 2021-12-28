@@ -1,3 +1,4 @@
+from typing import ValuesView
 import discord
 import asyncio
 import random
@@ -56,26 +57,22 @@ async def newyeargoal(ctx,*,goal):
 
 @bot.slash_command(guild_ids=[864438892736282625, 867597533458202644])
 async def remindme(ctx,*,days):#time in days
-    await ctx.respond(f"Going to be reminding you every `{days}`\nGood job :trophy:")
+    """Tells the bot to remind you about your goals every x days"""
     fullTimeInSeconds = days*86400
-    while True:
-        await asyncio.sleep(fullTimeInSeconds)
-        mycursor.execute("SELECT * FROM 2022_Goals ORDER BY user;")
-        mydb.commit()
+    values = (str(ctx.author), days)
+    sql = "INSERT INTO how_often_2 (user, days) VALUES (%s, %s)"
+    mycursor.execute(sql, values)
+    mydb.commit()
+    await ctx.respond(f"Going to be reminding you every `{days}`\n\n*Good job bruh, now time to get to work <:stronk_doge:925285801921769513> <:lezgooo:925286931221344256>*")
+    
+    # while True:
+    #     await asyncio.sleep(fullTimeInSeconds)
+    #     mycursor.execute("SELECT * FROM 2022_Goals ORDER BY user;")
+    #     mydb.commit()
 
         #mysql fetch
         #remind person of their goals
 
-@bot.slash_command(guild_ids=[864438892736282625, 867597533458202644])
-async def wait_until(ctx, dt):
-    # sleep until the specified datetime
-    # while True:
-    now = datetime.datetime.now()
-    await ctx.respond(now)
-    #     remaining = (dt - now).total_seconds()
-    #     await asyncio.sleep(remaining)
-    #     if remaining == 0:
-    #         break
 
 
 @bot.slash_command(guild_ids=[864438892736282625, 867597533458202644])
@@ -107,7 +104,7 @@ async def view_goals(ctx):
     if goalsAchievedCounter > 0:
         await ctx.respond(f"Your goals are...\n\n{final}\n**<:pepe_hypers:925274715214458880> You have achieved __{goalsAchievedCounter}__ out of __{goalsCounter}__ goals**\nKEEP GRINDING <:pepebuff:874499841407983647> <:pepebuff:874499841407983647>")
     else:
-        await ctx.respond(f"Your goals are...\n\n{final}\nYou haven't achieved any of your {goalsCounter} goals, but that doesn't matter, **TRAIN HARD TRAIN SMART** (that's what Gravity Destroyers is for) and you'll get there <:lezgooo:923128327970099231> <:lezgooo:923128327970099231>")
+        await ctx.respond(f"Your goals are...\n\n{final}\nYou haven't achieved any of your {goalsCounter} goals, but that doesn't matter, **TRAIN HARD TRAIN SMART** (that's what Gravity Destroyers is for) and you'll get there <:lezgooo:925286931221344256> <:lezgooo:925286931221344256>")
 @bot.slash_command(guild_ids=[864438892736282625, 867597533458202644])
 async def view_ids(ctx):
     """Displays each logged called and it's unique ID to access"""
@@ -166,6 +163,7 @@ async def initialise(ctx):
         await ctx.respond("**You don't have the right permissions for that.**", ephemeral = True)
         return
     else:
+        sql = "FROM "
         await ctx.respond("done")
 
 
