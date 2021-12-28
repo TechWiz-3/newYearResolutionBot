@@ -80,6 +80,7 @@ async def wait_until(ctx, dt):
 
 @bot.slash_command(guild_ids=[864438892736282625, 867597533458202644])
 async def view_goals(ctx):
+    """Displays your currently logged and achieved goals"""
     final = ""
     author = (str(ctx.author),)
     print(author)
@@ -98,6 +99,7 @@ async def view_goals(ctx):
 
 @bot.slash_command(guild_ids=[864438892736282625, 867597533458202644])
 async def view_ids(ctx):
+    """Displays each logged called and it's unique ID to access"""
     author = str(ctx.author)
     print(author)
     final = ""
