@@ -82,21 +82,32 @@ async def wait_until(ctx, dt):
 async def view_goals(ctx):
     """Displays your currently logged and achieved goals"""
     final = ""
+    finalAchieved = ""
+    goalsCounter = 0
+    goalsAchievedCounter = 0
     author = (str(ctx.author),)
     print(author)
     sql = "SELECT goals FROM 2022_Goals WHERE user = %s"
-    mycursor.execute("SELECT goals, id FROM 2022_Goals WHERE user = %s", (author))
+    mycursor.execute("SELECT goals FROM 2022_Goals WHERE user = %s", (author))
     for x in mycursor:
         final += str(x)
+        goalsCounter +=1
         #if achieved add a green tick to the message
         #add a counter to say that another goal has been achieved
     final = final.replace("(", "")
     final = final.replace(")", "")
     final = final.replace("\'", "``")
     final = final.replace(",", "\n")
+    mycursor.execute("SELECT goals FROM 2022_Goals WHERE user = %s AND status = '1'", (author))
+    for x in mycursor:
+        finalAchieved += str(x)
+        goalsAchievedCounter +=1
+    print(goalsAchievedCounter)
     #check the status for each goal with the username
-    await ctx.respond(f"Your goals are...\n\n{final}\nYou have achieved x/y number of goals")
-
+    if goalsAchievedCounter > 0:
+        await ctx.respond(f"Your goals are...\n\n{final}\n**<:pepe_hypers:925274715214458880> You have achieved __{goalsAchievedCounter}__ out of __{goalsCounter}__ goals**\nKEEP GRINDING <:pepebuff:874499841407983647> <:pepebuff:874499841407983647>")
+    else:
+        await ctx.respond(f"Your goals are...\n\n{final}\nYou haven't achieved any of your {goalsCounter} goals, but that doesn't matter, TRAIN HARD TRAIN SMART (that's what Gravity Destroyers is for) and you'll get there <:lezgooo:923128327970099231> <:lezgooo:923128327970099231>")
 @bot.slash_command(guild_ids=[864438892736282625, 867597533458202644])
 async def view_ids(ctx):
     """Displays each logged called and it's unique ID to access"""
@@ -139,22 +150,12 @@ async def goal_achieved(ctx, id):
         xx = xx.replace("(", "")
         xx = xx.replace(")", "\n")
         final += str(xx)
-
-
-
-
     value = tuple(id) 
     print(value)
-    # sql = "SELECT status FROM 2022_Goals WHERE id = %s"
-    # mycursor.execute(sql, value)
-
-    # sql = "UPDATE 2022_Goals SET Status WHERE id = %s VALUES (%s)"
     sql = "UPDATE 2022_Goals SET status = '1' WHERE id = %s"
-    # value = ('1', id)
-    # print(type(value))
     mycursor.execute(sql, value)
     mydb.commit()
-    await ctx.respond(f"**Congratulations...**\nYou have ACHIEVED `{final}`**Collect your trophy:**\n:trophy:")
+    await ctx.respond(f"**Congratulations...**\n<:pepe_hypers:925274715214458880> You have ACHIEVED `{final}`**Collect your trophy:**\n:trophy:")
 
 
 
