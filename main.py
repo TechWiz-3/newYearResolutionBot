@@ -128,7 +128,19 @@ async def view_ids(ctx):
 
 @bot.slash_command(guild_ids=[864438892736282625, 867597533458202644])
 async def goal_achieved(ctx, id):
-    await ctx.respond(id)
+    final = ""
+    fetchByID = tuple(id)
+    mycursor.execute("SELECT goals FROM 2022_Goals WHERE id = %s", (fetchByID))
+    for x in mycursor:
+        print(x)
+        xx = str(x)
+        xx = xx.replace(",", " ")
+        xx = xx.replace("'", "")
+        xx = xx.replace("(", "")
+        xx = xx.replace(")", "\n")
+        final += str(xx)
+    await ctx.respond(f"**Congratulations...**\nYou have ACHIEVED `{final}`**Collect your trophy:**\n:trophy:")
+
 
 
 @bot.slash_command(guild_ids=[864438892736282625, 867597533458202644])
