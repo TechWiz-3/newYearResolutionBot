@@ -107,7 +107,7 @@ async def view_goals(ctx):
     if goalsAchievedCounter > 0:
         await ctx.respond(f"Your goals are...\n\n{final}\n**<:pepe_hypers:925274715214458880> You have achieved __{goalsAchievedCounter}__ out of __{goalsCounter}__ goals**\nKEEP GRINDING <:pepebuff:874499841407983647> <:pepebuff:874499841407983647>")
     else:
-        await ctx.respond(f"Your goals are...\n\n{final}\nYou haven't achieved any of your {goalsCounter} goals, but that doesn't matter, TRAIN HARD TRAIN SMART (that's what Gravity Destroyers is for) and you'll get there <:lezgooo:923128327970099231> <:lezgooo:923128327970099231>")
+        await ctx.respond(f"Your goals are...\n\n{final}\nYou haven't achieved any of your {goalsCounter} goals, but that doesn't matter, **TRAIN HARD TRAIN SMART** (that's what Gravity Destroyers is for) and you'll get there <:lezgooo:923128327970099231> <:lezgooo:923128327970099231>")
 @bot.slash_command(guild_ids=[864438892736282625, 867597533458202644])
 async def view_ids(ctx):
     """Displays each logged called and it's unique ID to access"""
@@ -139,6 +139,7 @@ async def view_ids(ctx):
 
 @bot.slash_command(guild_ids=[864438892736282625, 867597533458202644])
 async def goal_achieved(ctx, id):
+    """Log when you achieve a goal by goal ID"""
     final = ""
     fetchByID = tuple(id)
     mycursor.execute("SELECT goals FROM 2022_Goals WHERE id = %s", (fetchByID))
