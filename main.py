@@ -6,11 +6,12 @@ import aiohttp
 import json
 from discord.utils import get
 import requests
-from discord.ext import commands
+from discord.ext import commands, tasks
 from dotenv import load_dotenv
 import os
 import mysql.connector
 import datetime
+from itertools import cycle
 
 
 load_dotenv()
@@ -21,7 +22,7 @@ password = os.getenv("password")
 database = os.getenv("database")
 port = os.getenv("port")
 
-bot = commands.Bot(command_prefix=".")
+bot = commands.Bot(command_prefix="goals!")
 
 mydb = mysql.connector.connect(
   host=host,
@@ -60,7 +61,7 @@ async def remindme(ctx,*,days):#time in days
     """Tells the bot to remind you about your goals every x days"""
     fullTimeInSeconds = days*86400
     values = (str(ctx.author), days)
-    sql = "INSERT INTO how_often_2 (user, days) VALUES (%s, %s)"
+    sql = "INSERT INTO reminders (user, days) VALUES (%s, %s)"
     mycursor.execute(sql, values)
     mydb.commit()
     await ctx.respond(f"Going to be reminding you every `{days}`\n\n*Good job bruh, now time to get to work <:stronk_doge:925285801921769513> <:lezgooo:925286931221344256>*")
@@ -155,16 +156,58 @@ async def goal_achieved(ctx, id):
     mydb.commit()
     await ctx.respond(f"**Congratulations...**\n<:pepe_hypers:925274715214458880> You have ACHIEVED `{final}`**Collect your trophy:**\n:trophy:")
 
+@bot.command()
+async def set_reminder(ctx, how_long, type_of_time,*,message):
+    how_long = int(how_long)
+    if type_of_time.lower() == "h" or "hour" in type_of_time.lower():
+        finalTime = how_long * 3600
+        await asyncio.sleep(int(finalTime))
+        await ctx.send(f"reminder set will be waiting for {finalTime} seconds")
+    if type_of_time.lower() == "d" or "day" in type_of_time.lower():
+        finalTime = how_long * 86400
+        await asyncio.sleep(int(finalTime))
+        await ctx.send(f"reminder set will be waiting for {finalTime} seconds")
+    if type_of_time.lower() == "m" or "minute" in type_of_time.lower():
+        finalTime = how_long * 60
+        await asyncio.sleep(int(finalTime))
+        await ctx.send(f"reminder set will be waiting for {finalTime} seconds")
 
 
-@bot.slash_command(guild_ids=[864438892736282625, 867597533458202644])
+
+@bot.command()
 async def initialise(ctx):
     if not ctx.author.guild_permissions.administrator:
         await ctx.respond("**You don't have the right permissions for that.**", ephemeral = True)
         return
     else:
-        sql = "FROM "
-        await ctx.respond("done")
+        goals = ""
+        sql = "SELECT user, days FROM reminders" #select the username and their selected reminder interval
+        # while True:
+        mycursor.execute(sql) #execute sql query
+        for x in mycursor: #loop through the results of the sql query
+            (username, howOften) = x #assign the username and reminder interval provided by x
+            await asyncio.sleep(5) #sleep
+            sql = "SELECT goals FROM 2022_Goals WHERE user = %s" #request for the users goals in the goals table
+            userRequest = (username,)
+            secondcursor.execute(sql, userRequest) #execute sql query
+            for goal in secondcursor: #loop the the results of the latest query
+                goal = str(goal)
+                goal = goal.replace(",", " ")
+                goal = goal.replace("'", "`")
+                goal = goal.replace("(", "")
+                goal = goal.replace(")", "\n")
+                goals += goal
+            await ctx.send(f'Your goals\n{goals}') #print the users goals
+        await ctx.send("Done")
+
+# @bot.slash_command(guild_ids=[864438892736282625, 867597533458202644])
+# async def initialise(ctx):
+#     if not ctx.author.guild_permissions.administrator:
+#         await ctx.respond("**You don't have the right permissions for that.**", ephemeral = True)
+#         return
+#     else:
+#         sql = "FROM "
+#         await ctx.respond("done")
 
 
 bot.run(token)
