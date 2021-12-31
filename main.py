@@ -10,7 +10,6 @@ from discord.ext import commands, tasks
 from dotenv import load_dotenv
 import os
 import mysql.connector
-import datetime
 from itertools import cycle
 from datetime import date, timedelta
 
@@ -33,6 +32,9 @@ mydb = mysql.connector.connect(
   port=port
 )
 mycursor = mydb.cursor(buffered=True)
+secondcursor = mydb.cursor(buffered=True)
+thirdcursor = mydb.cursor(buffered=True)
+fourthCursor = mydb.cursor(buffered=True)
 
 @bot.slash_command(guild_ids=[864438892736282625, 867597533458202644])
 async def help(ctx):
@@ -63,6 +65,16 @@ async def remindme(ctx,*,days):#time in days
     values = (str(ctx.author), days)
     sql = "INSERT INTO reminders (user, days) VALUES (%s, %s)"
     mycursor.execute(sql, values)
+    
+    nextReminder = str(date.today())
+    nextReminder = nextReminder.replace(",", "-")
+    nextReminder = nextReminder.replace(" ", "")
+    values = (str(ctx.author), nextReminder)
+    print(values)
+    print(type(values))
+    sql = "INSERT INTO nextDateReminder (user, next_date) VALUES (%s, %s)"
+    mycursor.execute(sql, values)
+
     mydb.commit()
     await ctx.respond(f"Going to be reminding you every `{days}`\n\n*Good job bruh, now time to get to work <:stronk_doge:925285801921769513> <:lezgooo:925286931221344256>*")
     
@@ -180,27 +192,42 @@ async def initialise(ctx):
         await ctx.respond("**You don't have the right permissions for that.**", ephemeral = True)
         return
     else:
+        counter = 0
         while True:
             goals = ""
             sql = "SELECT user, days FROM reminders" #select the username and their selected reminder interval
             mycursor.execute(sql) #execute sql query
             for x in mycursor: #loop through the results of the sql query
+                # print(x)
                 (username, howOften) = x #assign the username and reminder interval provided by x
-                remindInterval = howOften * 84000
-                await asyncio.sleep(remindInterval) #sleep
-                sql = "SELECT goals FROM 2022_Goals WHERE user = %s" #request for the users goals in the goals table
-                userRequest = (username,)
-                mycursor.execute(sql, userRequest) #execute sql query
-                for goal in mycursor: #loop the the results of the latest query
-                    goal = str(goal)
-                    goal = goal.replace(",", " ")
-                    goal = goal.replace("'", "`")
-                    goal = goal.replace("(", "")
-                    goal = goal.replace(")", "\n")
-                    goals += goal
-                await ctx.send(f'Your goals\n{goals}') #print the users goals
-            await ctx.send("Done")
+                # print(username)
+                sql = "SELECT user, next_date FROM nextDateReminder WHERE user = %s"
+                value = (username,)
+                # print("value", value)
+                secondcursor.execute(sql, value)
+                for dateEntry in secondcursor:
+                    # print("dataEntry", dateEntry)
+                    userForThirdQuery,unpackedDate = dateEntry
+                    # print(unpackedDate==date.today())
+                    if unpackedDate == date.today():    
+                        sql = "SELECT goals FROM 2022_Goals WHERE user = %s" #request for the users goals in the goals table
+                        userRequest = (userForThirdQuery,)
+                        thirdcursor.execute(sql, userRequest) #execute sql query
+                        for goal in thirdcursor: #loop the the results of the latest query
+                            goal = str(goal)
+                            goal = goal.replace(",", " ")
+                            goal = goal.replace("'", "`")
+                            goal = goal.replace("(", "")
+                            goal = goal.replace(")", "\n")
+                            goals += goal
+                        await ctx.send(f'Your goals\n{goals}') #print the users goals
+                        goals = ""
+                        insertSql = "INSERT INTO nextDateReminder ()"#yea i know code is midsentence
+                        fourthCursor.execute(insertSql, valuesToInsert)
+            await ctx.send("**__Done__**")
+            break
             # testing for the branch
+            #oh hey Neel, sup bro happy new year xD
 
 # @bot.slash_command(guild_ids=[864438892736282625, 867597533458202644])
 # async def initialise(ctx):
