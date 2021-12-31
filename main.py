@@ -12,6 +12,7 @@ import os
 import mysql.connector
 import datetime
 from itertools import cycle
+from datetime import date, timedelta
 
 
 load_dotenv()
