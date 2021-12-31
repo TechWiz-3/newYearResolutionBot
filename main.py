@@ -200,6 +200,7 @@ async def initialise(ctx):
                     goals += goal
                 await ctx.send(f'Your goals\n{goals}') #print the users goals
             await ctx.send("Done")
+            # testing for the branch
 
 # @bot.slash_command(guild_ids=[864438892736282625, 867597533458202644])
 # async def initialise(ctx):
