@@ -31,8 +31,7 @@ mydb = mysql.connector.connect(
   database=database,
   port=port
 )
-mycursor = mydb.cursor()
-secondcursor = mydb.cursor()
+mycursor = mydb.cursor(buffered=True)
 
 @bot.slash_command(guild_ids=[864438892736282625, 867597533458202644])
 async def help(ctx):
@@ -180,25 +179,26 @@ async def initialise(ctx):
         await ctx.respond("**You don't have the right permissions for that.**", ephemeral = True)
         return
     else:
-        goals = ""
-        sql = "SELECT user, days FROM reminders" #select the username and their selected reminder interval
-        # while True:
-        mycursor.execute(sql) #execute sql query
-        for x in mycursor: #loop through the results of the sql query
-            (username, howOften) = x #assign the username and reminder interval provided by x
-            await asyncio.sleep(5) #sleep
-            sql = "SELECT goals FROM 2022_Goals WHERE user = %s" #request for the users goals in the goals table
-            userRequest = (username,)
-            secondcursor.execute(sql, userRequest) #execute sql query
-            for goal in secondcursor: #loop the the results of the latest query
-                goal = str(goal)
-                goal = goal.replace(",", " ")
-                goal = goal.replace("'", "`")
-                goal = goal.replace("(", "")
-                goal = goal.replace(")", "\n")
-                goals += goal
-            await ctx.send(f'Your goals\n{goals}') #print the users goals
-        await ctx.send("Done")
+        while True:
+            goals = ""
+            sql = "SELECT user, days FROM reminders" #select the username and their selected reminder interval
+            mycursor.execute(sql) #execute sql query
+            for x in mycursor: #loop through the results of the sql query
+                (username, howOften) = x #assign the username and reminder interval provided by x
+                remindInterval = howOften * 84000
+                await asyncio.sleep(remindInterval) #sleep
+                sql = "SELECT goals FROM 2022_Goals WHERE user = %s" #request for the users goals in the goals table
+                userRequest = (username,)
+                mycursor.execute(sql, userRequest) #execute sql query
+                for goal in mycursor: #loop the the results of the latest query
+                    goal = str(goal)
+                    goal = goal.replace(",", " ")
+                    goal = goal.replace("'", "`")
+                    goal = goal.replace("(", "")
+                    goal = goal.replace(")", "\n")
+                    goals += goal
+                await ctx.send(f'Your goals\n{goals}') #print the users goals
+            await ctx.send("Done")
 
 # @bot.slash_command(guild_ids=[864438892736282625, 867597533458202644])
 # async def initialise(ctx):
