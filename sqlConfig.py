@@ -18,8 +18,13 @@ db = mysql.connector.connect(
 
 cursor = db.cursor(buffered=True)
 
-cursor.execute("CREATE TABLE 2022_Goals (id INT AUTO_INCREMENT PRIMARY KEY, user VARCHAR(50), goals VARCHAR(255), status BOOL, userId BIGINT(255) UNSIGNED)")
-cursor.execute("CREATE TABLE reminders (id INT AUTO_INCREMENT PRIMARY KEY, user VARCHAR(50), days SMALLINT UNSIGNED)")
-cursor.execute("CREATE TABLE nextDateReminder (id INT AUTO_INCREMENT PRIMARY KEY, user VARCHAR(50), next_date SMALLINT UNSIGNED)")
+# cursor.execute("CREATE TABLE 2022_Goals (id INT AUTO_INCREMENT PRIMARY KEY, user VARCHAR(50), goals VARCHAR(255), status BOOL, userId BIGINT(255) UNSIGNED)")
+# cursor.execute("CREATE TABLE reminders (id INT AUTO_INCREMENT PRIMARY KEY, user VARCHAR(50), days SMALLINT UNSIGNED)")
+# cursor.execute("CREATE TABLE nextDateReminder (id INT AUTO_INCREMENT PRIMARY KEY, user VARCHAR(50), next_date SMALLINT UNSIGNED)")
+
+# cursor.execute("DROP TABLE nextDateReminder")
+# cursor.execute("CREATE TABLE nextDateReminder (id INT AUTO_INCREMENT PRIMARY KEY, user VARCHAR(50), next_date DATE)")
+
+#cursor.execute("CREATE TABLE 2022_Goals_3 (id INT AUTO_INCREMENT PRIMARY KEY, user VARCHAR(50), goals VARCHAR(255), status BOOL, userId BIGINT(8))")
 
 db.commit()
