@@ -1,0 +1,5 @@
+git+https://github.com/Pycord-Development/pycord
+requests
+python-dotenv
+mysql-connector-python
+typing-extensions

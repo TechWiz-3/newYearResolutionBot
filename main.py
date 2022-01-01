@@ -1,5 +1,4 @@
 import asyncio
-from collections import UserDict
 from discord.ext import commands
 from dotenv import load_dotenv
 import os
