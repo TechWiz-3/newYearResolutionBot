@@ -22,6 +22,4 @@ cursor.execute("CREATE TABLE 2022_Goals (id INT AUTO_INCREMENT PRIMARY KEY, user
 cursor.execute("CREATE TABLE reminders (id INT AUTO_INCREMENT PRIMARY KEY, user VARCHAR(50), days SMALLINT UNSIGNED)")
 cursor.execute("CREATE TABLE nextDateReminder (id INT AUTO_INCREMENT PRIMARY KEY, user VARCHAR(50), next_date SMALLINT UNSIGNED)")
 
-
-
 db.commit()
