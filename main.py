@@ -250,7 +250,7 @@ async def initialise(ctx):
                         sendFunnyText = random.choice(reminderForOneAchieved)
                         try:
                             await reminderChannel.send(
-                                f"{memberObject.mention}\n**{sendFunnyText}**\n\\n{goals}"
+                                f"{memberObject.mention}\n**{sendFunnyText}**\n\n{goals}"
                                 )  # print the users goals
                         except:
                             await reminderChannel.send(
