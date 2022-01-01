@@ -62,7 +62,7 @@ async def newyeargoal(ctx, *, goal):
     person = str(ctx.author)
     personId = int(ctx.author.id)
     print("personId", personId)
-    print(ctx.author.id)
+    print (int(ctx.author.id))
     status = False
     finalValues = (person, goal, status, personId)
     sql = "INSERT INTO 2022_Goals (user, goals, status, userId) VALUES (%s, %s, %s, %s)"
