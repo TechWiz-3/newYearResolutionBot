@@ -10,12 +10,12 @@ import random
 
 
 load_dotenv()
-BOT_TOKEN = os.getenv("token")
-DB_HOST = os.getenv("host")
-DB_USER = os.getenv("user")
-DB_PASSWORD = os.getenv("password")
-DB_NAME = os.getenv("database")
-PORT = os.getenv("port")
+BOT_TOKEN = os.getenv("TOKEN")
+DB_HOST = os.getenv("MYSQLHOST")
+DB_USER = os.getenv("MYSQLUSER")
+DB_PASSWORD = os.getenv("MYSQLPASSWORD")
+DB_NAME = os.getenv("MYSQLDATABASE")
+PORT = os.getenv("MYSQLPORT")
 DEV_GUILD_ID = 864438892736282625
 PROD_GUILD_ID = 867597533458202644
 
