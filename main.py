@@ -1,9 +1,13 @@
 import asyncio
+from collections import UserDict
 from discord.ext import commands
 from dotenv import load_dotenv
 import os
 import mysql.connector
-from datetime import date
+from datetime import date, timedelta
+from discord.utils import get
+import discord
+import random
 
 
 load_dotenv()
@@ -26,7 +30,12 @@ cursor = db.cursor(buffered=True)
 secondcursor = db.cursor(buffered=True)
 thirdcursor = db.cursor(buffered=True)
 fourthCursor = db.cursor(buffered=True)
+fifthCursor = db.cursor(buffered=True)
 
+reminderFunnyText = ["The force wishes me to remind you of your goals, here they are.", "Did you think I'd let you forget about your goals? NOT A CHANCE", "How's it going mate?", "*Mighty presense decscends from sky to deliver a reminder to you*", "Ay bro, it's been some time, keep working at it", "Gravity Destroyers 2022 checking in with you"]
+reminderForOneAchieved = ["You've made the first step, now it's time for the second one <:lezgooo:925286931221344256>", "Hard work, smart work let's go <:lezgooo:925286931221344256> <:lezgooo:925286931221344256>", "You got this baby, second goal achieve coming soon <:stronk_doge:925285801921769513>", "*Mighty presense decscends from sky to deliver a reminder to you*"]
+reminderForTwoAchieved = ["Two goals achieved mate, the thirds gonna be a special one ;)", "Someones going for their 3rd goal this year <:lezgooo:925286931221344256>", "Third times a charm"]
+reminderForThreePlusAchieved = ["This mans on a roll, keep it going bro", "Did you think I'd let you forget about your goals? NOT A CHANCE. You've come THIS far, next goal let's go", "Accountability session king achiever howsit going?", "Sup warrior, time to check in :sunglasses:"]
 
 @bot.slash_command(guild_ids=[DEV_GUILD_ID, PROD_GUILD_ID])
 async def help(ctx):
@@ -51,9 +60,10 @@ async def newyeargoal(ctx, *, goal):
         f"Yessir\nYour goal is `{goal}`\n**I've logged it for you, NOW LET'S GO GET IT <:lezgooo:923128327970099231>**\nOh and also, remember to do `/remindme` to let me know how often to remind you about it!"
     )
     person = str(ctx.author)
+    personId = int(ctx.author.id)
     status = False
-    finalValues = (person, goal, status)
-    sql = "INSERT INTO 2022_Goals (user, goals, status) VALUES (%s, %s, %s)"
+    finalValues = (person, goal, status, personId)
+    sql = "INSERT INTO 2022_Goals (user, goals, status, userId) VALUES (%s, %s, %s, %s)"
     cursor.execute(sql, finalValues)
     db.commit()
     # await asyncio.sleep(2628288)
@@ -134,16 +144,7 @@ async def view_ids(ctx):
     author = (str(ctx.author),)
     print(author)
     sql = "SELECT goals, id FROM 2022_Goals WHERE user = %s"
-    # query = sql + author
-    # mycursor.execute(query)
     cursor.execute(sql, (author))
-    # mycursor.execute(sql, author)
-    # mycursor.execute("SELECT goals, id FROM 2022_Goals WHERE user = %s", (author))
-    # mycursor.execute(f"SELECT goals, id FROM 2022_Goals WHERE user = {author}")
-    # mycursor.execute("SELECT goals, id FROM 2022_Goals WHERE user = %s." % (author))
-    # mycursor.execute("SELECT goals, id FROM 2022_Goals WHERE user = author")
-    # mycursor.execute("SELECT goa fruit (name, variety) VALUES (%s, %s)", (new_fruit, new_fruit_type));
-    # mycursor.execute("SELECT * FROM 2022_Goals WHERE user = author")
     for x in cursor:
         xx = (
             str(x)
@@ -212,35 +213,108 @@ async def initialise(ctx):
         sql = "SELECT user, days FROM reminders"  # select the username and their selected reminder interval
         cursor.execute(sql)  # execute sql query
         for (username, howOften) in cursor:  # loop through the results of the sql query
-            # print(x)
-            # print(username)
             sql = "SELECT user, next_date FROM nextDateReminder WHERE user = %s"
             value = (username,)
-            # print("value", value)
             secondcursor.execute(sql, value)
             for dateEntry in secondcursor:
-                # print("dataEntry", dateEntry)
                 userForThirdQuery, unpackedDate = dateEntry
-                # print(unpackedDate==date.today())
+                server = bot.get_guild(864438892736282625)
+                reminderChannel = server.get_channel(869508676581466112)
+                slashEmoji = discord.utils.get(bot.emojis, name="aslash")
+                greenTickEmoji = discord.utils.get(bot.emojis, name="epicTick")
+
                 if unpackedDate == date.today():
-                    sql = "SELECT goals FROM 2022_Goals WHERE user = %s"  # request for the users goals in the goals table
+                    sql = "SELECT goals,status,userId FROM 2022_Goals WHERE user = %s"  # request for the users goals in the goals table
                     userRequest = (userForThirdQuery,)
                     thirdcursor.execute(sql, userRequest)  # execute sql query
+                    statusCounter = 0
+                    memberObject = ''
                     for (
-                        goal
+                        goalAndStatus
                     ) in thirdcursor:  # loop the the results of the latest query
-                        goal = str(goal)
-                        goal = goal.replace(",", " ")
-                        goal = goal.replace("'", "`")
-                        goal = goal.replace("(", "")
-                        goal = goal.replace(")", "\n")
-                        goals += goal
-                    await ctx.send(f"Your goals\n{goals}")  # print the users goals
-                    goals = ""
-                    insertSql = "INSERT INTO nextDateReminder ()"  # yea i know code is midsentence
-                    fourthCursor.execute(insertSql, ())
-        await ctx.send("**__Done__**")
-        break
+                        goal,status,idByMember = goalAndStatus #assign the variables returned
+                        memberObject = bot.get_user(int(idByMember)) 
+                        print(memberObject)
+                        print(idByMember)
+                        if status == 1:
+                            goals += f'{greenTickEmoji} `{goal}`\n'
+                            statusCounter+=1
+                        elif status == 0:
+                            goals += f'{slashEmoji} `{goal}`\n'   
+                    if statusCounter == 0:
+                        sendFunnyText = random.choice(reminderFunnyText)
+                        await reminderChannel.send(
+                            f"**{sendFunnyText}**\n\n{goals}"
+                            )  # print the users goals
+                    elif statusCounter == 1:
+                        sendFunnyText = random.choice(reminderForOneAchieved)
+                        await reminderChannel.send(
+                            f"{sendFunnyText}\n\\n{goals}"
+                            )  # print the users goals
+                    elif statusCounter == 2:
+                        sendFunnyText = random.choice(reminderForTwoAchieved)
+                        await reminderChannel.send(
+                            f"**{sendFunnyText}**\n\n{goals}"
+                            )  # print the users goals
+                    elif statusCounter > 2:
+                        sendFunnyText = random.choice(reminderForThreePlusAchieved)
+                        await reminderChannel.send(
+                            f"**{sendFunnyText}**\n\n{goals}"
+                            )  # print the users goals
+                    goals = "" #reset goals variable
+                    # insertSql = "INSERT INTO nextDateReminder (user, next_date) VALUES (%s, %s)"
+                    updateSql = "UPDATE nextDateReminder SET next_date = %s WHERE user = %s"
+                    nextDate = date.today() + timedelta(days=howOften)
+                    valuesForChangingDate = (nextDate, userForThirdQuery)
+                    fourthCursor.execute(updateSql, valuesForChangingDate)
+                    db.commit()
+                    await ctx.send("**End of mighty reminder message**")
+                elif unpackedDate < date.today(): #if the table is outdated
+                    print("Date smaller than current date triggered for", userForThirdQuery)
+                    sql = "SELECT goals,status,userId FROM 2022_Goals WHERE user = %s"  # request for the users goals in the goals table
+                    userRequest = (userForThirdQuery,)
+                    thirdcursor.execute(sql, userRequest)  # execute sql query
+                    statusCounter = 0
+                    memberObject = ''
+                    for (
+                        goalAndStatus
+                    ) in thirdcursor:  # loop the the results of the latest query
+                        goal,status,idByMember = goalAndStatus #assign the variables returned
+                        memberObject = bot.get_user(int(idByMember))
+                        if status == 1:
+                            goals += f'{greenTickEmoji} `{goal}`\n'
+                            statusCounter +=1
+                        elif status == 0:
+                            goals += f'{slashEmoji} `{goal}`\n'
+                    #print users goals to remind them
+                    if statusCounter == 0:
+                        sendFunnyText = random.choice(reminderFunnyText)
+                        await reminderChannel.send(f"{sendFunnyText}\n{goals}")  # print the users goals
+                    elif statusCounter == 1:
+                        sendFunnyText = random.choice(reminderForOneAchieved)
+                        await reminderChannel.send(
+                            f"**{sendFunnyText}**\n\n{goals}"
+                            )  # print the users goals
+                    elif statusCounter == 2:
+                        sendFunnyText = random.choice(reminderForTwoAchieved)
+                        await reminderChannel.send(
+                            f"**{sendFunnyText}**\n\n{goals}"
+                            )  # print the users goals
+                    elif statusCounter > 2:
+                        sendFunnyText = random.choice(reminderForThreePlusAchieved)
+                        await reminderChannel.send(
+                            f"**{sendFunnyText}**\n\n{goals}"
+                            ) # print the users goals
+                    goals = "" #reset goals variable
+                    # insertSql = "INSERT INTO nextDateReminder (user, next_date) VALUES (%s, %s)"
+                    updateSql = "UPDATE nextDateReminder SET next_date = %s WHERE user = %s"
+                    nextDate = date.today() + timedelta(days=howOften)
+                    valuesForChangingDate = (nextDate, userForThirdQuery)
+                    fourthCursor.execute(updateSql, valuesForChangingDate)
+                    db.commit()
+                    await ctx.send("**End of mighty reminder message**")
+        
+        break # REMEMBER TO REMOVE THIS LMAOOO
         # testing for the branch
         # oh hey Neel, sup bro happy new year xD
 
