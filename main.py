@@ -60,12 +60,10 @@ async def newyeargoal(ctx, *, goal):
         f"Yessir\nYour goal is `{goal}`\n**I've logged it for you, NOW LET'S GO GET IT <:lezgooo:923128327970099231>**\nOh and also, remember to do `/remindme` to let me know how often to remind you about it!"
     )
     person = str(ctx.author)
-    personId = float(ctx.author.id)
-    print("personId", personId)
-    print (float(ctx.author.id))
+    personId = str(ctx.author.id)
     status = False
     finalValues = (person, goal, status, personId)
-    sql = "INSERT INTO 2022_Goals_3 (user, goals, status, userId) VALUES (%s, %s, %s, %s)"
+    sql = "INSERT INTO 2022_Goals_Str (user, goals, status, userId) VALUES (%s, %s, %s, %s)"
     cursor.execute(sql, finalValues)
     db.commit()
     # await asyncio.sleep(2628288)
@@ -91,14 +89,6 @@ async def remindme(ctx, *, days):  # time in days
         f"Going to be reminding you every `{days}`\n\n*Good job bruh, now time to get to work <:stronk_doge:925285801921769513> <:lezgooo:925286931221344256>*"
     )
 
-    # while True:
-    #     await asyncio.sleep(fullTimeInSeconds)
-    #     mycursor.execute("SELECT * FROM 2022_Goals_3 ORDER BY user;")
-    #     mydb.commit()
-
-    # mysql fetch
-    # remind person of their goals
-
 
 @bot.slash_command(guild_ids=[DEV_GUILD_ID, PROD_GUILD_ID])
 async def view_goals(ctx):
@@ -109,7 +99,7 @@ async def view_goals(ctx):
     goalsAchievedCounter = 0
     author = (str(ctx.author),)
     print(author)
-    sql = "SELECT goals FROM 2022_Goals_3 WHERE user = %s"
+    sql = "SELECT goals FROM 2022_Goals_Str WHERE user = %s"
     cursor.execute(sql, (author))
     for x in cursor:
         final += str(x)
@@ -120,7 +110,7 @@ async def view_goals(ctx):
         final.replace("(", "").replace(")", "").replace("'", "``").replace(",", "\n")
     )
     cursor.execute(
-        "SELECT goals FROM 2022_Goals_3 WHERE user = %s AND status = '1'", (author)
+        "SELECT goals FROM 2022_Goals_Str WHERE user = %s AND status = '1'", (author)
     )
     for x in cursor:
         finalAchieved += str(x)
@@ -145,7 +135,7 @@ async def view_ids(ctx):
     final = ""
     author = (str(ctx.author),)
     print(author)
-    sql = "SELECT goals, id FROM 2022_Goals_3 WHERE user = %s"
+    sql = "SELECT goals, id FROM 2022_Goals_Str WHERE user = %s"
     cursor.execute(sql, (author))
     for x in cursor:
         xx = (
@@ -164,7 +154,7 @@ async def goal_achieved(ctx, id):
     """Log when you achieve a goal by goal ID"""
     final = ""
     fetchByID = tuple(id)
-    cursor.execute("SELECT goals FROM 2022_Goals_3 WHERE id = %s", (fetchByID))
+    cursor.execute("SELECT goals FROM 2022_Goals_Str WHERE id = %s", (fetchByID))
     for x in cursor:
         print(x)
         xx = (
@@ -177,7 +167,7 @@ async def goal_achieved(ctx, id):
         final += str(xx)
     value = tuple(id)
     print(value)
-    sql = "UPDATE 2022_Goals_3 SET status = '1' WHERE id = %s"
+    sql = "UPDATE 2022_Goals_Str SET status = '1' WHERE id = %s"
     cursor.execute(sql, value)
     db.commit()
     await ctx.respond(
@@ -226,7 +216,7 @@ async def initialise(ctx):
                 greenTickEmoji = discord.utils.get(bot.emojis, name="epicTick")
 
                 if unpackedDate == date.today():
-                    sql = "SELECT goals,status,userId FROM 2022_Goals_3 WHERE user = %s"  # request for the users goals in the goals table
+                    sql = "SELECT goals,status,userId FROM 2022_Goals_Str WHERE user = %s"  # request for the users goals in the goals table
                     userRequest = (userForThirdQuery,)
                     thirdcursor.execute(sql, userRequest)  # execute sql query
                     statusCounter = 0
@@ -235,6 +225,7 @@ async def initialise(ctx):
                         goalAndStatus
                     ) in thirdcursor:  # loop the the results of the latest query
                         goal,status,idByMember = goalAndStatus #assign the variables returned
+                        idByMember = int(idByMember)
                         try:
                             memberObject = bot.get_user(int(idByMember))
                         except:
@@ -295,7 +286,7 @@ async def initialise(ctx):
                     await ctx.send("**End of mighty reminder message**")
                 elif unpackedDate < date.today(): #if the table is outdated
                     print("Date smaller than current date triggered for", userForThirdQuery)
-                    sql = "SELECT goals,status,userId FROM 2022_Goals_3 WHERE user = %s"  # request for the users goals in the goals table
+                    sql = "SELECT goals,status,userId FROM 2022_Goals_Str WHERE user = %s"  # request for the users goals in the goals table
                     userRequest = (userForThirdQuery,)
                     thirdcursor.execute(sql, userRequest)  # execute sql query
                     statusCounter = 0
