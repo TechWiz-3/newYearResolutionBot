@@ -57,7 +57,7 @@ async def hello(ctx):
 async def newyeargoal(ctx, *, goal):
     """Log a goal, one at a time"""
     await ctx.respond(
-        f"Yessir\nYour goal is `{goal}`\n**I've logged it for you, NOW LET'S GO GET IT <:lezgooo:923128327970099231>**\nOh and also, remember to do `/remindme` to let me know how often to remind you about it!"
+        f"Yessir\nYour goal is `{goal}`\n**I've logged it for you, NOW LET'S GO GET IT <:lezgooo:923128327970099231>**\nOh and also, remember to do `/remindme` to let me know how often to remind you about it!\n`/view_goals` `/view_ids` `/goal_achieved`"
     )
     person = str(ctx.author)
     personId = str(ctx.author.id)
