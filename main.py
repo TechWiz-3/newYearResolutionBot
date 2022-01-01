@@ -41,7 +41,7 @@ reminderForThreePlusAchieved = ["This mans on a roll, keep it going bro", "Did y
 async def help(ctx):
     """Helps you use the bots commands"""
     await ctx.respond(
-        "**New Year Goal Command**\nTo use this command, type `/newyeargoal` and click space, enter or tab, then type in your goal, for best effect, type on goal at a time."
+        "**New Year Goal Command**\nTo use this command, type `/newyeargoal` and click space, enter or tab, then type in your goal, type on goal at a time and keep it to raw text.\n\n**View Goals Command**\nTo use this command, type `/view_goals`\n\n**View Ids Command**\nTo use this command, type `/view_ids`. Each goal will be displayed with it's corresponding ID in bold.\n\n**Goal Achieved**\nTo use this command, type `/goal_achieved` then press tab and enter the ID corresponding to the goal you wish to mark as achieved."
     )
 
 
@@ -57,7 +57,7 @@ async def hello(ctx):
 async def newyeargoal(ctx, *, goal):
     """Log a goal, one at a time"""
     await ctx.respond(
-        f"Yessir\nYour goal is `{goal}`\n**I've logged it for you, NOW LET'S GO GET IT <:lezgooo:923128327970099231>**\nOh and also, remember to do `/remindme` to let me know how often to remind you about it!\n`/view_goals` `/view_ids` `/goal_achieved`"
+        f"Yessir\nYour goal is `{goal}`\n**I've logged it for you, NOW LET'S GO GET IT <:lezgooo:923128327970099231>**\nOh and also, remember to do `/remindme` to let me know how often to remind you about it!"
     )
     person = str(ctx.author)
     personId = str(ctx.author.id)
