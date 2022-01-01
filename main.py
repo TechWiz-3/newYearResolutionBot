@@ -20,7 +20,8 @@ PORT = os.getenv("port")
 DEV_GUILD_ID = 864438892736282625
 PROD_GUILD_ID = 867597533458202644
 
-bot = commands.Bot(command_prefix="goals!")
+intents = discord.Intents.all()
+bot = commands.Bot(command_prefix="goals!", intents=intents)
 
 db = mysql.connector.connect(
     host=DB_HOST, user=DB_USER, password=DB_PASSWORD, database=DB_NAME, port=PORT
@@ -228,14 +229,16 @@ async def initialise(ctx):
                     userRequest = (userForThirdQuery,)
                     thirdcursor.execute(sql, userRequest)  # execute sql query
                     statusCounter = 0
-                    memberObject = ''
+                    global memberObject
                     for (
                         goalAndStatus
                     ) in thirdcursor:  # loop the the results of the latest query
                         goal,status,idByMember = goalAndStatus #assign the variables returned
-                        memberObject = bot.get_user(int(idByMember)) 
-                        print(memberObject)
-                        print(idByMember)
+                        try:
+                            memberObject = bot.get_user(int(idByMember))
+                        except:
+                            memberObject = f'User mention failed {userForThirdQuery}'
+                            print('Issue occured, none was returned as memberObject as shown here', memberObject)
                         if status == 1:
                             goals += f'{greenTickEmoji} `{goal}`\n'
                             statusCounter+=1
@@ -243,24 +246,44 @@ async def initialise(ctx):
                             goals += f'{slashEmoji} `{goal}`\n'   
                     if statusCounter == 0:
                         sendFunnyText = random.choice(reminderFunnyText)
-                        await reminderChannel.send(
-                            f"**{sendFunnyText}**\n\n{goals}"
-                            )  # print the users goals
+                        try:
+                            await reminderChannel.send(
+                                f"{memberObject.mention}\n**{sendFunnyText}**\n\n{goals}"
+                                )  # print the users goals
+                        except:
+                            await reminderChannel.send(
+                                f"{memberObject}\n**{sendFunnyText}**\n\n{goals}"
+                                )  # print the users goals
                     elif statusCounter == 1:
                         sendFunnyText = random.choice(reminderForOneAchieved)
-                        await reminderChannel.send(
-                            f"{sendFunnyText}\n\\n{goals}"
-                            )  # print the users goals
+                        try:
+                            await reminderChannel.send(
+                                f"{memberObject.mention}\n**{sendFunnyText}**\n\\n{goals}"
+                                )  # print the users goals
+                        except:
+                            await reminderChannel.send(
+                                f"{memberObject}\n**{sendFunnyText}**\n\n{goals}"
+                                )  # print the users goals
                     elif statusCounter == 2:
                         sendFunnyText = random.choice(reminderForTwoAchieved)
-                        await reminderChannel.send(
-                            f"**{sendFunnyText}**\n\n{goals}"
-                            )  # print the users goals
+                        try:
+                            await reminderChannel.send(
+                                f"{memberObject.mention}\n**{sendFunnyText}**\n\n{goals}"
+                                )  # print the users goals
+                        except:
+                            await reminderChannel.send(
+                                f"{memberObject}\n**{sendFunnyText}**\n\n{goals}"
+                                )  # print the users goals
                     elif statusCounter > 2:
                         sendFunnyText = random.choice(reminderForThreePlusAchieved)
-                        await reminderChannel.send(
-                            f"**{sendFunnyText}**\n\n{goals}"
-                            )  # print the users goals
+                        try:
+                            await reminderChannel.send(
+                                f"{memberObject.mention}\n**{sendFunnyText}**\n\n{goals}"
+                                )  # print the users goals
+                        except:
+                            await reminderChannel.send(
+                                f"{memberObject}\n**{sendFunnyText}**\n\n{goals}"
+                                )  # print the users goals
                     goals = "" #reset goals variable
                     # insertSql = "INSERT INTO nextDateReminder (user, next_date) VALUES (%s, %s)"
                     updateSql = "UPDATE nextDateReminder SET next_date = %s WHERE user = %s"
@@ -275,12 +298,17 @@ async def initialise(ctx):
                     userRequest = (userForThirdQuery,)
                     thirdcursor.execute(sql, userRequest)  # execute sql query
                     statusCounter = 0
-                    memberObject = ''
                     for (
                         goalAndStatus
                     ) in thirdcursor:  # loop the the results of the latest query
                         goal,status,idByMember = goalAndStatus #assign the variables returned
-                        memberObject = bot.get_user(int(idByMember))
+                        try:
+                            memberObject = bot.get_user(int(idByMember))
+                        except:
+                            memberObject = f'User mention failed {userForThirdQuery}'
+                            print('Issue occured, none was returned as memberObject as shown here', memberObject)
+                            
+
                         if status == 1:
                             goals += f'{greenTickEmoji} `{goal}`\n'
                             statusCounter +=1
@@ -292,19 +320,34 @@ async def initialise(ctx):
                         await reminderChannel.send(f"{sendFunnyText}\n{goals}")  # print the users goals
                     elif statusCounter == 1:
                         sendFunnyText = random.choice(reminderForOneAchieved)
-                        await reminderChannel.send(
-                            f"**{sendFunnyText}**\n\n{goals}"
-                            )  # print the users goals
+                        try:
+                            await reminderChannel.send(
+                                f"{memberObject.mention}\n**{sendFunnyText}**\n\n{goals}"
+                                )  # print the users goals
+                        except:
+                            await reminderChannel.send(
+                                f"{memberObject}\n**{sendFunnyText}**\n\n{goals}"
+                                )  # print the users goals
                     elif statusCounter == 2:
                         sendFunnyText = random.choice(reminderForTwoAchieved)
-                        await reminderChannel.send(
-                            f"**{sendFunnyText}**\n\n{goals}"
-                            )  # print the users goals
+                        try:
+                            await reminderChannel.send(
+                                f"{memberObject.mention}\n**{sendFunnyText}**\n\n{goals}"
+                                )  # print the users goals
+                        except:
+                            await reminderChannel.send(
+                                f"{memberObject}\n**{sendFunnyText}**\n\n{goals}"
+                                )  # print the users goals
                     elif statusCounter > 2:
                         sendFunnyText = random.choice(reminderForThreePlusAchieved)
-                        await reminderChannel.send(
-                            f"**{sendFunnyText}**\n\n{goals}"
-                            ) # print the users goals
+                        try:
+                            await reminderChannel.send(
+                                f"{memberObject.mention}\n**{sendFunnyText}**\n\n{goals}"
+                                ) # print the users goals
+                        except:
+                            await reminderChannel.send(
+                                f"{memberObject}\n**{sendFunnyText}**\n\n{goals}"
+                                )  # print the users goals
                     goals = "" #reset goals variable
                     # insertSql = "INSERT INTO nextDateReminder (user, next_date) VALUES (%s, %s)"
                     updateSql = "UPDATE nextDateReminder SET next_date = %s WHERE user = %s"
@@ -314,19 +357,7 @@ async def initialise(ctx):
                     db.commit()
                     await ctx.send("**End of mighty reminder message**")
         
-        break # REMEMBER TO REMOVE THIS LMAOOO
-        # testing for the branch
-        # oh hey Neel, sup bro happy new year xD
-
-
-# @bot.slash_command(guild_ids=[DEV_GUILD_ID, PROD_GUILD_ID])
-# async def initialise(ctx):
-#     if not ctx.author.guild_permissions.administrator:
-#         await ctx.respond("**You don't have the right permissions for that.**", ephemeral = True)
-#         return
-#     else:
-#         sql = "FROM "
-#         await ctx.respond("done")
+        await asyncio.sleep(120)
 
 
 bot.run(BOT_TOKEN)
