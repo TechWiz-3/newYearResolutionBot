@@ -115,6 +115,7 @@ async def view_goals(ctx):
     cursor.execute(sql, (author))
     #if no goals send you need to add some goals
     for x in cursor:
+        goalsSet = True
         final += str(x)
         goalsCounter += 1
         # if achieved add a green tick to the message
@@ -126,7 +127,6 @@ async def view_goals(ctx):
         "SELECT goals FROM 2022_Goals_Str WHERE user = %s AND status = '1'", (author)
     )
     for x in cursor:
-        goalsSet = True
         finalAchieved += str(x)
         goalsAchievedCounter += 1
     print(goalsAchievedCounter)
