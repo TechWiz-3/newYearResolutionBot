@@ -2,9 +2,9 @@
 
 # Update created by Zac on 2/Jan
 
-# Correct a bug in view_goals command
+# Huge commit, created change_reminder_interval and stop_reminding as well as removing some comments and fixing some bugs
 
-# Version 1.2.0
+# Version 1.3.0
 
 import asyncio
 from discord.commands import Option
@@ -16,7 +16,6 @@ from datetime import date, timedelta
 from discord.utils import get
 import discord
 import random
-
 
 load_dotenv()
 BOT_TOKEN = os.getenv("TOKEN")
@@ -47,6 +46,7 @@ reminderForTwoAchieved = ["Two goals achieved mate, the thirds gonna be a specia
 reminderForThreePlusAchieved = ["This mans on a roll, keep it going bro", "Did you think I'd let you forget about your goals? NOT A CHANCE. You've come THIS far, next goal let's go", "Accountability session king achiever howsit going?", "Sup warrior, time to check in :sunglasses:"]
 specificGoalDeleted = ["Can someone explain why?", "Who deletes their goals huh", "You just deleted a goal bruh, better make it up by adding two more", "Insane", "What is the meaning of life????? Humans make me doubt myself :rolling_eyes:"]
 allGoalsDeleted = ["WTH THIS PEEP IS CRAZY", "Dude is on a KILLING RAMPAGE", "Somebody get the police, dude just deleted all his goals", "If you don't got goals you can't achieve em"]
+reminderDeleted = ["Oh no, why did you delete your reminder T_T", "He deleted his reminders :(", "Man doesn't want to be reminded anymore?? Is this real??"]
 
 @bot.slash_command(guild_ids=[DEV_GUILD_ID, PROD_GUILD_ID])
 async def help(ctx):
@@ -83,23 +83,28 @@ async def newyeargoal(ctx, *, goal):
 @bot.slash_command(guild_ids=[DEV_GUILD_ID, PROD_GUILD_ID])
 async def remindme(ctx, *, days):  # time in days
     """Tells the bot to remind you about your goals every x days"""
-    # fullTimeInSeconds = days * 86400
-    values = (str(ctx.author), days)
-    sql = "INSERT INTO reminders (user, days) VALUES (%s, %s)"
-    cursor.execute(sql, values)
-
-    nextReminder = str(date.today()).replace(",", "-").replace(" ", "")
-    values = (str(ctx.author), nextReminder)
-    print(values)
-    print(type(values))
-    sql = "INSERT INTO nextDateReminder (user, next_date) VALUES (%s, %s)"
-    cursor.execute(sql, values)
-
-    db.commit()
-    await ctx.respond(
-        f"Going to be reminding you every `{days}`\n\n*Good job bruh, now time to get to work <:stronk_doge:925285801921769513> <:lezgooo:925286931221344256>*"
-    )
-
+    goalsSet = False
+    checkGoals = "SELECT * FROM 2022_Goals_Str WHERE user = %s"
+    values = (str(ctx.author),)
+    cursor.execute(checkGoals, values)
+    for entry in cursor:
+        goalsSet = True
+    if goalsSet == True:
+        values = (str(ctx.author), days)
+        sql = "INSERT INTO reminders (user, days) VALUES (%s, %s)"
+        cursor.execute(sql, values)
+        nextReminder = str(date.today()).replace(",", "-").replace(" ", "")
+        values = (str(ctx.author), nextReminder)
+        sql = "INSERT INTO nextDateReminder (user, next_date) VALUES (%s, %s)"
+        cursor.execute(sql, values)
+        db.commit()
+        await ctx.respond(
+            f"Going to be reminding you every `{days}`\n\n*Good job bruh, now time to get to work <:stronk_doge:925285801921769513> <:lezgooo:925286931221344256>*"
+        )
+    elif goalsSet == False:
+        await ctx.respond(
+            "Well it's great that you want to be reminded, but make sure you set goals first `/newyeargoal` :grin:"
+        )
 
 @bot.slash_command(guild_ids=[DEV_GUILD_ID, PROD_GUILD_ID])
 async def view_goals(ctx):
@@ -112,7 +117,7 @@ async def view_goals(ctx):
     author = (str(ctx.author),)
     print(author)
     sql = "SELECT goals FROM 2022_Goals_Str WHERE user = %s"
-    cursor.execute(sql, (author))
+    cursor.execute(sql, author)
     #if no goals send you need to add some goals
     for x in cursor:
         goalsSet = True
@@ -230,7 +235,6 @@ async def initialise(ctx):
                 reminderChannel = server.get_channel(869508676581466112)
                 slashEmoji = discord.utils.get(bot.emojis, name="aslash")
                 greenTickEmoji = discord.utils.get(bot.emojis, name="epicTick")
-
                 if unpackedDate == date.today():
                     sql = "SELECT goals,status,userId FROM 2022_Goals_Str WHERE user = %s"  # request for the users goals in the goals table
                     userRequest = (userForThirdQuery,)
@@ -364,17 +368,16 @@ async def initialise(ctx):
         
         await asyncio.sleep(120)
 
-@bot.slash_command(guild_ids=[DEV_GUILD_ID, PROD_GUILD_ID])#id: Option(str "Enter the goal id if you wish to remove a goal")
+@bot.slash_command(guild_ids=[DEV_GUILD_ID, PROD_GUILD_ID])
 async def clear_goals(ctx, id: Option(int, "Enter the ID of the goal you wish to delete", required=False)):
     """Delete all logged goals, or a specific goal based on ID"""
-    #sql = "SELECT goals FROM 2022_Goals_Str WHERE us"
     if id == None:
         sql = "DELETE FROM 2022_Goals_Str WHERE user = %s"
         user = (str(ctx.author),)
         cursor.execute(sql, user)
         db.commit()
         await ctx.respond(
-            f"All goals deleted. {allGoalsDeleted}\nNow time to put new ones in `/newyeargoal`"
+            f"All goals deleted. {random.choice(allGoalsDeleted)}\nNow time to put new ones in `/newyeargoal`"
             )
     else:
         sql = "DELETE FROM 2022_Goals_Str WHERE user = %s AND id = %s"
@@ -384,7 +387,35 @@ async def clear_goals(ctx, id: Option(int, "Enter the ID of the goal you wish to
         cursor.execute(sql, values)
         db.commit()
         await ctx.respond(
-            f"Specific goal deleted {specificGoalDeleted}"
+            f"Specific goal deleted {random.choice(specificGoalDeleted)}"
             )
+
+@bot.slash_command(guild_ids=[DEV_GUILD_ID, PROD_GUILD_ID])
+async def stop_reminding(ctx):
+    """Stops the bot from reminding you about your goals"""
+    deleteReminderEntries = "DELETE FROM reminders WHERE user = %s"
+    deleteDateReminderEntries = "Delete FROM nextDateReminder WHERE user = %s"
+    user = (str(ctx.author),)
+    cursor.execute(deleteReminderEntries, user)
+    cursor.execute(deleteDateReminderEntries, user)
+    await ctx.respond(
+        f"{random.choice(reminderDeleted)}\nDo `/remindme` again to change the interval. If not then we're sad to see you go... all the best"
+    )
+
+@bot.slash_command(guild_ids=[DEV_GUILD_ID, PROD_GUILD_ID])
+async def change_reminder_interval(ctx, how_often: int):
+    """Adjusts how often you're reminded of your goals"""
+    adjustInterval = "UPDATE reminders SET days = %s WHERE user = %s"
+    values = (how_often, str(ctx.author))
+    cursor.execute(adjustInterval, values)
+    adjustIntervalDate = "UPDATE nextDateReminder SET next_date = %s WHERE user = %s"
+    values = (
+        str(date.today()),
+        str(ctx.author)
+        )
+    cursor.execute(adjustIntervalDate, values)
+    cooldoge = discord.utils.get(bot.emojis, name="cooldoge")
+    await ctx.respond(f"{cooldoge} Well, that went well. Your interval is now `{how_often}` days. Achievement time babyy")
+
 
 bot.run(BOT_TOKEN)
