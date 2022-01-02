@@ -2,9 +2,9 @@
 
 # Update created by Zac on 2/Jan
 
-# Added code that lets the user know when they have no goals set when using the /view_goals command
+# Made bot less insulting
 
-# Version 1.1.1
+# Version 1.1.2
 
 import asyncio
 from discord.app.commands import Option
@@ -140,7 +140,7 @@ async def view_goals(ctx):
             f"Your goals are...\n\n{final}\nYou haven't achieved any of your {goalsCounter} goals, but that doesn't matter, **TRAIN HARD TRAIN SMART** (that's what Gravity Destroyers is for) and you'll get there <:lezgooo:925286931221344256> <:lezgooo:925286931221344256>"
         )
     elif goalsSet == False:
-        await ctx.respond("You need to set your goals first before viewing them -_- might I recommend that your first goal be *get a brain*\n\n*However, I live go serve bright human... these commands may help...* `/help` `/newyeargoal`")
+        await ctx.respond("You need to set your goals first before viewing them -_-\n\n*However, I live go serve bright human... these commands may help...* `/help` `/newyeargoal`")
 
 
 @bot.slash_command(guild_ids=[DEV_GUILD_ID, PROD_GUILD_ID])
