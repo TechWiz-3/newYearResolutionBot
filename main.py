@@ -2,9 +2,9 @@
 
 # Update created by Zac on 2/Jan
 
-# Changed up an import on line 10
+# Correct a bug in view_goals command
 
-# Version 1.1.1
+# Version 1.2.0
 
 import asyncio
 from discord.commands import Option
