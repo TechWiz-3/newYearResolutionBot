@@ -2,12 +2,12 @@
 
 # Update created by Zac on 2/Jan
 
-# Made bot less insulting
+# Changed up an import on line 10
 
-# Version 1.1.2
+# Version 1.1.1
 
 import asyncio
-from discord.app.commands import Option
+from discord.commands import Option
 from discord.ext import commands
 from dotenv import load_dotenv
 import os
