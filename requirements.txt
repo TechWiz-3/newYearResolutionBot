@@ -3,3 +3,5 @@ requests
 python-dotenv
 mysql-connector-python
 typing-extensions
+asycnio
+async-timeout
