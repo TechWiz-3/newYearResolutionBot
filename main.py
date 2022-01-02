@@ -2,9 +2,9 @@
 
 # Update created by Zac on 2/Jan
 
-# Added a clear goals command
+# Added code that lets the user know when they have no goals set when using the /view_goals command
 
-# Version 1.1.0
+# Version 1.1.1
 
 import asyncio
 from discord.app.commands import Option
@@ -104,6 +104,7 @@ async def remindme(ctx, *, days):  # time in days
 @bot.slash_command(guild_ids=[DEV_GUILD_ID, PROD_GUILD_ID])
 async def view_goals(ctx):
     """Displays your currently logged and achieved goals"""
+    goalsSet = False
     final = ""
     finalAchieved = ""
     goalsCounter = 0
@@ -125,6 +126,7 @@ async def view_goals(ctx):
         "SELECT goals FROM 2022_Goals_Str WHERE user = %s AND status = '1'", (author)
     )
     for x in cursor:
+        goalsSet = True
         finalAchieved += str(x)
         goalsAchievedCounter += 1
     print(goalsAchievedCounter)
@@ -133,10 +135,12 @@ async def view_goals(ctx):
         await ctx.respond(
             f"Your goals are...\n\n{final}\n**<:pepe_hypers:925274715214458880> You have achieved __{goalsAchievedCounter}__ out of __{goalsCounter}__ goals**\nKEEP GRINDING <:pepebuff:874499841407983647> <:pepebuff:874499841407983647>"
         )
-    else:
+    elif goalsSet == True:
         await ctx.respond(
             f"Your goals are...\n\n{final}\nYou haven't achieved any of your {goalsCounter} goals, but that doesn't matter, **TRAIN HARD TRAIN SMART** (that's what Gravity Destroyers is for) and you'll get there <:lezgooo:925286931221344256> <:lezgooo:925286931221344256>"
         )
+    elif goalsSet == False:
+        await ctx.respond("You need to set your goals first before viewing them -_- might I recommend that your first goal be *get a brain*\n\n*However, I live go serve bright human... these commands may help...* `/help` `/newyeargoal`")
 
 
 @bot.slash_command(guild_ids=[DEV_GUILD_ID, PROD_GUILD_ID])
