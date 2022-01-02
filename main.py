@@ -1,4 +1,13 @@
+# Created by #Zac the Wise#1381 with help from #iamkneel#2359
+
+# Update created by Zac on 2/Jan
+
+# Added a clear goals command
+
+# Version 1.1.0
+
 import asyncio
+from discord.app.commands import Option
 from discord.ext import commands
 from dotenv import load_dotenv
 import os
@@ -36,6 +45,8 @@ reminderFunnyText = ["The force wishes me to remind you of your goals, here they
 reminderForOneAchieved = ["You've made the first step, now it's time for the second one <:lezgooo:925286931221344256>", "Hard work, smart work let's go <:lezgooo:925286931221344256> <:lezgooo:925286931221344256>", "You got this baby, second goal achieve coming soon <:stronk_doge:925285801921769513>", "*Mighty presense decscends from sky to deliver a reminder to you*"]
 reminderForTwoAchieved = ["Two goals achieved mate, the thirds gonna be a special one ;)", "Someones going for their 3rd goal this year <:lezgooo:925286931221344256>", "Third times a charm"]
 reminderForThreePlusAchieved = ["This mans on a roll, keep it going bro", "Did you think I'd let you forget about your goals? NOT A CHANCE. You've come THIS far, next goal let's go", "Accountability session king achiever howsit going?", "Sup warrior, time to check in :sunglasses:"]
+specificGoalDeleted = ["Can someone explain why?", "Who deletes their goals huh", "You just deleted a goal bruh, better make it up by adding two more", "Insane", "What is the meaning of life????? Humans make me doubt myself :rolling_eyes:"]
+allGoalsDeleted = ["WTH THIS PEEP IS CRAZY", "Dude is on a KILLING RAMPAGE", "Somebody get the police, dude just deleted all his goals", "If you don't got goals you can't achieve em"]
 
 @bot.slash_command(guild_ids=[DEV_GUILD_ID, PROD_GUILD_ID])
 async def help(ctx):
@@ -300,8 +311,6 @@ async def initialise(ctx):
                         except:
                             memberObject = f'User mention failed {userForThirdQuery}'
                             print('Issue occured, none was returned as memberObject as shown here', memberObject)
-                            
-
                         if status == 1:
                             goals += f'{greenTickEmoji} `{goal}`\n'
                             statusCounter +=1
@@ -342,7 +351,6 @@ async def initialise(ctx):
                                 f"{memberObject}\n**{sendFunnyText}**\n\n{goals}"
                                 )  # print the users goals
                     goals = "" #reset goals variable
-                    # insertSql = "INSERT INTO nextDateReminder (user, next_date) VALUES (%s, %s)"
                     updateSql = "UPDATE nextDateReminder SET next_date = %s WHERE user = %s"
                     nextDate = date.today() + timedelta(days=howOften)
                     valuesForChangingDate = (nextDate, userForThirdQuery)
@@ -352,5 +360,27 @@ async def initialise(ctx):
         
         await asyncio.sleep(120)
 
+@bot.slash_command(guild_ids=[DEV_GUILD_ID, PROD_GUILD_ID])#id: Option(str "Enter the goal id if you wish to remove a goal")
+async def clear_goals(ctx, id: Option(int, "Enter the ID of the goal you wish to delete", required=False)):
+    """Delete all logged goals, or a specific goal based on ID"""
+    #sql = "SELECT goals FROM 2022_Goals_Str WHERE us"
+    if id == None:
+        sql = "DELETE FROM 2022_Goals_Str WHERE user = %s"
+        user = (str(ctx.author),)
+        cursor.execute(sql, user)
+        db.commit()
+        await ctx.respond(
+            f"All goals deleted. {allGoalsDeleted}\nNow time to put new ones in `/newyeargoal`"
+            )
+    else:
+        sql = "DELETE FROM 2022_Goals_Str WHERE user = %s AND id = %s"
+        user = str(ctx.author)
+        goalId = int(id)
+        values = (user, goalId)
+        cursor.execute(sql, values)
+        db.commit()
+        await ctx.respond(
+            f"Specific goal deleted {specificGoalDeleted}"
+            )
 
 bot.run(BOT_TOKEN)
