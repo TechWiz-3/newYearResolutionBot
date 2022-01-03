@@ -12,26 +12,26 @@ The New Years Resolution Bot is coded in [*Pycord*](https://github.com/Pycord-De
 
 ### Where
 
-Currently the bot is only functional in [one server](https://discord.gg/7Pjjf2XTFw) as this bot was created specifically for the server. Functionality to allow use in other servers will be developed later on
+Currently the bot is only functional in [one server](https://discord.gg/7Pjjf2XTFw) as this bot was created specifically for that server. Functionality to allow use in other servers will be developed later on
 
 ## Commands
 
-#### `/help`
+##### `/help`
 
-#### `/newyeargoal`
+##### `/newyeargoal`
 
-#### `/remindme`
+##### `/remindme`
 
-#### `/view_goals`
+##### `/view_goals`
 
-#### `/view_ids`
+##### `/view_ids`
 
-#### `/goal_achieved`
+##### `/goal_achieved`
 
-#### `/stop_reminding`
+##### `/stop_reminding`
 
-#### `/change_reminder_interval`
+##### `/change_reminder_interval`
 
-#### `/next_reminder`
+##### `/next_reminder`
 
-### `/hello`
+##### `/hello`
