@@ -2,9 +2,9 @@
 
 # Update created by Zac on 3/Jan
 
-# Get started command but cut down
+# Fixed get started command, now splits into parts with typing and delay
 
-# Version 2.2.0
+# Version 2.3.0
 
 import asyncio
 from discord.commands import Option
@@ -449,18 +449,21 @@ async def next_reminder(ctx):
 
 @bot.slash_command(guild_ids=[DEV_GUILD_ID, PROD_GUILD_ID])
 async def get_started(ctx):
-    await ctx.respond(
+    interaction = await ctx.respond(
         f"Ayo {ctx.author.mention} so you want to get after those goals and make this year, YOUR year. Well GOOD NEWS, I'm here to help..."
         )
     await asyncio.sleep(2)
-    interaction = await ctx.respond()
-    # async with aiohttp.ClientSession() as session:
-    #     webhook = Webhook.from_url(
-    #         'https://discord.com/api/webhooks/927517231515058176/Auz7Au1kFt_3EX3y7wEaVeSs2MvBD_tiJRrMrKDSrZQv8sS0l9AUgVdTpFDwnFSYAttg',
-    #          session=session
-    #             )
-
-    # content = str("Hi hello help???")
-    # await interaction.followup.send(content=content, username='Gravity Destroyers 2022 Followup', avatar_url='https://cdn.discordapp.com/emojis/925286931221344256.png?size=240')
+    async with ctx.typing():
+        await asyncio.sleep(5)
+    content = "This is how I help you:\n`/help` The help command is your go to command to understand anything, but here's the recommended sequence of commands:"
+    await interaction.followup.send(content=content)
+    async with ctx.typing():
+        await asyncio.sleep(5)
+    content = "First, run `/newyeargoal` for each new year goal you wish to achieve. Run `/view_goals` to ensure that all your goals havee been logged. Next, run `/remindme` to set how often you'll be reminded.\nYou should be initialy reminded in a few minutes and then after that you'll be reminded at your chosen day interval."
+    await interaction.followup.send(content=content)
+    async with ctx.typing():
+        await asyncio.sleep(5)
+    content = "For more commands, particilarly for adjusting goals and times as well as marking goals as achieved use the `/help command`. If you enounter any issues pls ping `@Zac the Wise#1381` :)"
+    await interaction.followup.send(content=content)
 
 bot.run(BOT_TOKEN)
