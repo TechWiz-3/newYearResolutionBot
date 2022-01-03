@@ -1,8 +1,8 @@
 # Created by #Zac the Wise#1381 with help from #iamkneel#2359
 
-# Update created by Zac on 2/Jan
+# Update created by Zac on 3/Jan
 
-# Huge commit, created change_reminder_interval and stop_reminding as well as removing some comments and fixing some bugs
+# Pushed again hopefully to fix railway bug
 
 # Version 1.3.0
 
