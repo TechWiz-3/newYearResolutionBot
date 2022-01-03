@@ -2,9 +2,9 @@
 
 # Update created by Zac on 3/Jan
 
-# Fixed a small fstring bug for cooldoge emoji
+# Created a new main goals table 2022_Goals and migrated to it
 
-# Version 1.4.1
+# Version 2.0.0
 
 import asyncio
 from discord.commands import Option
@@ -74,7 +74,7 @@ async def newyeargoal(ctx, *, goal):
     personId = str(ctx.author.id)
     status = False
     finalValues = (person, goal, status, personId)
-    sql = "INSERT INTO 2022_Goals_Str (user, goals, status, userId) VALUES (%s, %s, %s, %s)"
+    sql = "INSERT INTO 2022_Goals (user, goals, status, userId) VALUES (%s, %s, %s, %s)"
     cursor.execute(sql, finalValues)
     db.commit()
     # await asyncio.sleep(2628288)
@@ -84,7 +84,7 @@ async def newyeargoal(ctx, *, goal):
 async def remindme(ctx, *, days):  # time in days
     """Tells the bot to remind you about your goals every x days"""
     goalsSet = False
-    checkGoals = "SELECT * FROM 2022_Goals_Str WHERE user = %s"
+    checkGoals = "SELECT * FROM 2022_Goals WHERE user = %s"
     values = (str(ctx.author),)
     cursor.execute(checkGoals, values)
     for entry in cursor:
@@ -116,7 +116,7 @@ async def view_goals(ctx):
     goalsAchievedCounter = 0
     author = (str(ctx.author),)
     print(author)
-    sql = "SELECT goals FROM 2022_Goals_Str WHERE user = %s"
+    sql = "SELECT goals FROM 2022_Goals WHERE user = %s"
     cursor.execute(sql, author)
     #if no goals send you need to add some goals
     for x in cursor:
@@ -129,7 +129,7 @@ async def view_goals(ctx):
         final.replace("(", "").replace(")", "").replace("'", "``").replace(",", "\n")
     )
     cursor.execute(
-        "SELECT goals FROM 2022_Goals_Str WHERE user = %s AND status = '1'", (author)
+        "SELECT goals FROM 2022_Goals WHERE user = %s AND status = '1'", (author)
     )
     for x in cursor:
         finalAchieved += str(x)
@@ -156,7 +156,7 @@ async def view_ids(ctx):
     final = ""
     author = (str(ctx.author),)
     print(author)
-    sql = "SELECT goals, id FROM 2022_Goals_Str WHERE user = %s"
+    sql = "SELECT goals, id FROM 2022_Goals WHERE user = %s"
     cursor.execute(sql, (author))
     for x in cursor:
         xx = (
@@ -175,7 +175,7 @@ async def goal_achieved(ctx, id):
     """Log when you achieve a goal by goal ID"""
     final = ""
     fetchByID = tuple(id)
-    cursor.execute("SELECT goals FROM 2022_Goals_Str WHERE id = %s", (fetchByID))
+    cursor.execute("SELECT goals FROM 2022_Goals WHERE id = %s", (fetchByID))
     for x in cursor:
         print(x)
         xx = (
@@ -188,7 +188,7 @@ async def goal_achieved(ctx, id):
         final += str(xx)
     value = tuple(id)
     print(value)
-    sql = "UPDATE 2022_Goals_Str SET status = '1' WHERE id = %s"
+    sql = "UPDATE 2022_Goals SET status = '1' WHERE id = %s"
     cursor.execute(sql, value)
     db.commit()
     await ctx.respond(
@@ -236,7 +236,7 @@ async def initialise(ctx):
                 slashEmoji = discord.utils.get(bot.emojis, name="aslash")
                 greenTickEmoji = discord.utils.get(bot.emojis, name="epicTick")
                 if unpackedDate == date.today():
-                    sql = "SELECT goals,status,userId FROM 2022_Goals_Str WHERE user = %s"  # request for the users goals in the goals table
+                    sql = "SELECT goals,status,userId FROM 2022_Goals WHERE user = %s"  # request for the users goals in the goals table
                     userRequest = (userForThirdQuery,)
                     thirdcursor.execute(sql, userRequest)  # execute sql query
                     statusCounter = 0
@@ -306,7 +306,7 @@ async def initialise(ctx):
                     await ctx.send("**End of mighty reminder message**")
                 elif unpackedDate < date.today(): #if the table is outdated
                     print("Date smaller than current date triggered for", userForThirdQuery)
-                    sql = "SELECT goals,status,userId FROM 2022_Goals_Str WHERE user = %s"  # request for the users goals in the goals table
+                    sql = "SELECT goals,status,userId FROM 2022_Goals WHERE user = %s"  # request for the users goals in the goals table
                     userRequest = (userForThirdQuery,)
                     thirdcursor.execute(sql, userRequest)  # execute sql query
                     statusCounter = 0
@@ -372,7 +372,7 @@ async def initialise(ctx):
 async def clear_goals(ctx, id: Option(int, "Enter the ID of the goal you wish to delete", required=False)):
     """Delete all logged goals, or a specific goal based on ID"""
     if id == None:
-        sql = "DELETE FROM 2022_Goals_Str WHERE user = %s"
+        sql = "DELETE FROM 2022_Goals WHERE user = %s"
         user = (str(ctx.author),)
         cursor.execute(sql, user)
         db.commit()
@@ -380,7 +380,7 @@ async def clear_goals(ctx, id: Option(int, "Enter the ID of the goal you wish to
             f"All goals deleted. {random.choice(allGoalsDeleted)}\nNow time to put new ones in `/newyeargoal`"
             )
     else:
-        sql = "DELETE FROM 2022_Goals_Str WHERE user = %s AND id = %s"
+        sql = "DELETE FROM 2022_Goals WHERE user = %s AND id = %s"
         user = str(ctx.author)
         goalId = int(id)
         values = (user, goalId)
