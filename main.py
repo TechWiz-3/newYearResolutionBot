@@ -2,9 +2,9 @@
 
 # Update created by Zac on 3/Jan
 
-# Pushed again hopefully to fix railway bug
+# Added a next_reminder command and made a minor adjustment to change_reminder_interval command
 
-# Version 1.3.0
+# Version 1.4.0
 
 import asyncio
 from discord.commands import Option
@@ -415,7 +415,33 @@ async def change_reminder_interval(ctx, how_often: int):
         )
     cursor.execute(adjustIntervalDate, values)
     cooldoge = discord.utils.get(bot.emojis, name="cooldoge")
-    await ctx.respond(f"{cooldoge} Well, that went well. Your interval is now `{how_often}` days. Achievement time babyy")
+    await ctx.respond(f
+    "{cooldoge} Well, that went well. Your interval is now `{how_often}` day(s). Achievement time babyy"
+    )
 
-
+@bot.slash_command(guild_ids=[DEV_GUILD_ID, PROD_GUILD_ID])
+async def next_reminder(ctx):
+    """Shows you how often you'll be reminded as well as your next reminder date"""
+    reminderSet = False
+    howOften = 0
+    nextDate = None
+    getReminderInterval = "SELECT days FROM reminders WHERE user = %s"
+    values = (str(ctx.author),)
+    cursor.execute(getReminderInterval, values)
+    for entry in cursor:
+        reminderSet = True
+        howOften, = entry
+    getNextReminderDate = "SELECT next_date FROM nextDateReminder WHERE user = %s"
+    secondcursor.execute(getNextReminderDate, values)
+    for dateEntry in secondcursor:
+        nextDate, = dateEntry
+    if reminderSet == True:
+        await ctx.respond(
+            f"You have set to be reminded every `{howOften}` day(s) and your next reminder is on `{nextDate}` meanwhile... KEEP GRINDING <:lezgooo:925286931221344256>"
+            )    
+    elif reminderSet == False:
+        umEmoji = discord.utils.get(bot.emojis, name="um")
+        await ctx.respond(
+            f"{umEmoji} you need to set a reminder first before viewing it... `/remindme`"
+            )
 bot.run(BOT_TOKEN)
