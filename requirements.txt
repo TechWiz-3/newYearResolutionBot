@@ -3,4 +3,4 @@ requests
 python-dotenv
 mysql-connector-python
 typing-extensions
-#aiohttp
+# aiohttp
