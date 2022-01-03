@@ -2,9 +2,9 @@
 
 # Update created by Zac on 3/Jan
 
-# Fixed get started command, now splits into parts with typing and delay
+# Adjusted delay in get started command and added on ready status
 
-# Version 2.3.0
+# Version 2.4.0
 
 import asyncio
 from discord.commands import Option
@@ -49,6 +49,19 @@ reminderForThreePlusAchieved = ["This mans on a roll, keep it going bro", "Did y
 specificGoalDeleted = ["Can someone explain why?", "Who deletes their goals huh", "You just deleted a goal bruh, better make it up by adding two more", "Insane", "What is the meaning of life????? Humans make me doubt myself :rolling_eyes:"]
 allGoalsDeleted = ["WTH THIS PEEP IS CRAZY", "Dude is on a KILLING RAMPAGE", "Somebody get the police, dude just deleted all his goals", "If you don't got goals you can't achieve em"]
 reminderDeleted = ["Oh no, why did you delete your reminder T_T", "He deleted his reminders :(", "Man doesn't want to be reminded anymore?? Is this real??"]
+
+# class sql:
+#     def getGoals(self, cursorInstance):
+#         getGoals = "query here"
+#         return getGoals
+
+@bot.event
+async def on_ready():
+    while True:
+        await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name="you achieve your goals"))
+        await asyncio.sleep(5)
+        await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name="get started | /help"))
+        await asyncio.sleep(5)
 
 @bot.slash_command(guild_ids=[DEV_GUILD_ID, PROD_GUILD_ID])
 async def help(ctx):
@@ -458,12 +471,12 @@ async def get_started(ctx):
     content = "This is how I help you:\n`/help` The help command is your go to command to understand anything, but here's the recommended sequence of commands:"
     await interaction.followup.send(content=content)
     async with ctx.typing():
-        await asyncio.sleep(5)
+        await asyncio.sleep(10)
     content = "First, run `/newyeargoal` for each new year goal you wish to achieve. Run `/view_goals` to ensure that all your goals havee been logged. Next, run `/remindme` to set how often you'll be reminded.\nYou should be initialy reminded in a few minutes and then after that you'll be reminded at your chosen day interval."
     await interaction.followup.send(content=content)
     async with ctx.typing():
-        await asyncio.sleep(5)
-    content = "For more commands, particilarly for adjusting goals and times as well as marking goals as achieved use the `/help command`. If you enounter any issues pls ping `@Zac the Wise#1381` :)"
+        await asyncio.sleep(7)
+    content = "For more commands, particularly for adjusting goals and times as well as marking goals as achieved use the `/help command`. If you enounter any issues pls ping `@Zac the Wise#1381` :)"
     await interaction.followup.send(content=content)
 
 bot.run(BOT_TOKEN)
