@@ -16,6 +16,8 @@ from datetime import date, timedelta
 from discord.utils import get
 import discord
 import random
+# import aiohttp
+# from discord import Webhook
 
 load_dotenv()
 BOT_TOKEN = os.getenv("TOKEN")
@@ -450,7 +452,15 @@ async def get_started(ctx):
     await ctx.respond(
         f"Ayo {ctx.author.mention} so you want to get after those goals and make this year, YOUR year. Well GOOD NEWS, I'm here to help..."
         )
-    #await asyncio.sleep(2)
-    #await interaction.followup.send('hiya')
+    await asyncio.sleep(2)
+    interaction = await ctx.respond()
+    # async with aiohttp.ClientSession() as session:
+    #     webhook = Webhook.from_url(
+    #         'https://discord.com/api/webhooks/927517231515058176/Auz7Au1kFt_3EX3y7wEaVeSs2MvBD_tiJRrMrKDSrZQv8sS0l9AUgVdTpFDwnFSYAttg',
+    #          session=session
+    #             )
+
+    # content = str("Hi hello help???")
+    # await interaction.followup.send(content=content, username='Gravity Destroyers 2022 Followup', avatar_url='https://cdn.discordapp.com/emojis/925286931221344256.png?size=240')
 
 bot.run(BOT_TOKEN)
