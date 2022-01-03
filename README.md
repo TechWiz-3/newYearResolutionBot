@@ -8,7 +8,7 @@ The New Years Resolution Bot is a discord bot created to motivate users to log t
 
 ### How
 
-The New Years Resolution Bot is coded in [*Pycord*](https://github.com/Pycord-Development/pycord) and [*Python MySQL Connector*](https://dev.mysql.com/doc/connector-python/en/). The bot is coded entirely in slash commands.
+The New Years Resolution Bot is coded in [*Pycord*](https://github.com/Pycord-Development/pycord) and [*Python MySQL Connector*](https://dev.mysql.com/doc/connector-python/en/). The bot is coded to use entirely slash commands as a user interface for commands.
 
 ### Where
 
@@ -17,6 +17,8 @@ Currently the bot is only functional in [one server](https://discord.gg/7Pjjf2XT
 ## Commands
 
 ##### `/help`
+
+##### `/get_started`
 
 ##### `/newyeargoal`
 
