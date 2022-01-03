@@ -2,9 +2,9 @@
 
 # Update created by Zac on 4/Jan
 
-# Made get_started command simpler, added small text to remindme command
+# Huge update, changed code to stop exploitation of remindme command and migrated guild and channel
 
-# Version 2.5.0
+# Version 2.6.0
 
 import asyncio
 from discord.commands import Option
@@ -117,9 +117,20 @@ async def remindme(ctx, *, days):  # time in days
             f"Going to be reminding you every `{days}`\n\n*Good job bruh, now time to get to work <:stronk_doge:925285801921769513> <:lezgooo:925286931221344256> If you need help, we got you <#867600399879372820>*"
         )
     elif goalsSet == False:
-        await ctx.respond(
+        reminderSetPreviously = False
+        getReminders = "SELECT days FROM reminders WHERE user = %s"
+        values = (str(ctx.author),)
+        secondcursor.execute(getReminders, values)
+        for reminder in secondcursor:
+            reminderSetPreviously = True
+        if reminderSetPreviously == False:
+            await ctx.respond(
+                "MATE, like BRUH lmao :joy:\nYou've already set a reminder, are you trying to break me?\nBut what you can do... is reset your reminder time with `/change_reminder_interval`. Also if you don't wish to be reminded type `/stop_reminding`"
+                    )
+        else:
+            await ctx.respond(
             "Well it's great that you want to be reminded, but make sure you set goals first `/newyeargoal` :grin:"
-        )
+            )
 
 @bot.slash_command(guild_ids=[DEV_GUILD_ID, PROD_GUILD_ID])
 async def view_goals(ctx):
@@ -246,8 +257,8 @@ async def initialise(ctx):
             secondcursor.execute(sql, value)
             for dateEntry in secondcursor:
                 userForThirdQuery, unpackedDate = dateEntry
-                server = bot.get_guild(864438892736282625)
-                reminderChannel = server.get_channel(869508676581466112)
+                server = bot.get_guild(PROD_GUILD_ID)
+                reminderChannel = server.get_channel(867599113825812481)
                 slashEmoji = discord.utils.get(bot.emojis, name="aslash")
                 greenTickEmoji = discord.utils.get(bot.emojis, name="epicTick")
                 if unpackedDate == date.today():
