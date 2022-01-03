@@ -2,9 +2,9 @@
 
 # Update created by Zac on 3/Jan
 
-# Added a walk through commands
+# Get started command but cut down
 
-# Version 2.1.0
+# Version 2.2.0
 
 import asyncio
 from discord.commands import Option
@@ -447,6 +447,10 @@ async def next_reminder(ctx):
 
 @bot.slash_command(guild_ids=[DEV_GUILD_ID, PROD_GUILD_ID])
 async def get_started(ctx):
-    await ctx.respond(f"Ayo {ctx.author.mention} so you want to get after those goals and make this year, YOUR year. Well GOOD NEWS, I'm here to help... This is how I help you\n`/help` the help command is your go to command to understand anything, but here's the recommended sequence of commands:\nFirst, run `/newyeargoal` for each new year goal you wish to achieve. Run `/view_goals` to ensure that all your goals havee been logged. Next, run `/remindme` to set how often you'll be reminded. You should be initialy reminded in a few minutes and then after that you'll be reminded at your chosen day interval.\nFor more commands, particilarly for adjusting goals and times as well as marking goals as achieved use the `/help` command. If you enounter any issues pls ping `@Zac the Wise#1381` :)")
+    await ctx.respond(
+        f"Ayo {ctx.author.mention} so you want to get after those goals and make this year, YOUR year. Well GOOD NEWS, I'm here to help..."
+        )
+    #await asyncio.sleep(2)
+    #await interaction.followup.send('hiya')
 
 bot.run(BOT_TOKEN)
