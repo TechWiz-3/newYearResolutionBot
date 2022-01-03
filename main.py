@@ -1,10 +1,10 @@
 # Created by #Zac the Wise#1381 with help from #iamkneel#2359
 
-# Update created by Zac on 3/Jan
+# Update created by Zac on 4/Jan
 
-# Adjusted delay in get started command and added on ready status
+# Made get_started command simpler, added small text to remindme command
 
-# Version 2.4.0
+# Version 2.5.0
 
 import asyncio
 from discord.commands import Option
@@ -114,7 +114,7 @@ async def remindme(ctx, *, days):  # time in days
         cursor.execute(sql, values)
         db.commit()
         await ctx.respond(
-            f"Going to be reminding you every `{days}`\n\n*Good job bruh, now time to get to work <:stronk_doge:925285801921769513> <:lezgooo:925286931221344256>*"
+            f"Going to be reminding you every `{days}`\n\n*Good job bruh, now time to get to work <:stronk_doge:925285801921769513> <:lezgooo:925286931221344256> If you need help, we got you <#867600399879372820>*"
         )
     elif goalsSet == False:
         await ctx.respond(
@@ -472,11 +472,11 @@ async def get_started(ctx):
     await interaction.followup.send(content=content)
     async with ctx.typing():
         await asyncio.sleep(10)
-    content = "First, run `/newyeargoal` for each new year goal you wish to achieve. Run `/view_goals` to ensure that all your goals havee been logged. Next, run `/remindme` to set how often you'll be reminded.\nYou should be initialy reminded in a few minutes and then after that you'll be reminded at your chosen day interval."
+    content = "Run`/newyeargoal` for each new year goal you wish to achieve.\nRun `/view_goals` to ensure that all your goals havee been logged.\nRun `/remindme` to set how often you'll be reminded.\n*You should be initialy reminded in a few minutes and then after that you'll be reminded at your chosen day interval.*"
     await interaction.followup.send(content=content)
     async with ctx.typing():
         await asyncio.sleep(7)
-    content = "For more commands, particularly for adjusting goals and times as well as marking goals as achieved use the `/help command`. If you enounter any issues pls ping `@Zac the Wise#1381` :)"
+    content = "For more commands, particularly for adjusting goals and times as well as marking goals as achieved use the `/help` command. If you enounter any issues pls ping `@Zac the Wise#1381` :)"
     await interaction.followup.send(content=content)
 
 bot.run(BOT_TOKEN)
