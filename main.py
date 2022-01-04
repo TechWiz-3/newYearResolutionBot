@@ -2,9 +2,9 @@
 
 # Update created by Zac on 4/Jan
 
-# Huge update, changed code to stop exploitation of remindme command and migrated guild and channel
+# Fixed a bug in the remind me command to prevent setting multiple reminders
 
-# Version 2.6.0
+# Version 2.6.1
 
 import asyncio
 from discord.commands import Option
@@ -105,18 +105,6 @@ async def remindme(ctx, *, days):  # time in days
     for entry in cursor:
         goalsSet = True
     if goalsSet == True:
-        values = (str(ctx.author), days)
-        sql = "INSERT INTO reminders (user, days) VALUES (%s, %s)"
-        cursor.execute(sql, values)
-        nextReminder = str(date.today()).replace(",", "-").replace(" ", "")
-        values = (str(ctx.author), nextReminder)
-        sql = "INSERT INTO nextDateReminder (user, next_date) VALUES (%s, %s)"
-        cursor.execute(sql, values)
-        db.commit()
-        await ctx.respond(
-            f"Going to be reminding you every `{days}`\n\n*Good job bruh, now time to get to work <:stronk_doge:925285801921769513> <:lezgooo:925286931221344256> If you need help, we got you <#867600399879372820>*"
-        )
-    elif goalsSet == False:
         reminderSetPreviously = False
         getReminders = "SELECT days FROM reminders WHERE user = %s"
         values = (str(ctx.author),)
@@ -128,6 +116,18 @@ async def remindme(ctx, *, days):  # time in days
                 "MATE, like BRUH lmao :joy:\nYou've already set a reminder, are you trying to break me?\nBut what you can do... is reset your reminder time with `/change_reminder_interval`. Also if you don't wish to be reminded type `/stop_reminding`"
                     )
         else:
+            values = (str(ctx.author), days)
+            sql = "INSERT INTO reminders (user, days) VALUES (%s, %s)"
+            cursor.execute(sql, values)
+            nextReminder = str(date.today()).replace(",", "-").replace(" ", "")
+            values = (str(ctx.author), nextReminder)
+            sql = "INSERT INTO nextDateReminder (user, next_date) VALUES (%s, %s)"
+            cursor.execute(sql, values)
+            db.commit()
+            await ctx.respond(
+                f"Going to be reminding you every `{days}`\n\n*Good job bruh, now time to get to work <:stronk_doge:925285801921769513> <:lezgooo:925286931221344256> If you need help, we got you <#867600399879372820>*"
+            )
+    elif goalsSet == False:
             await ctx.respond(
             "Well it's great that you want to be reminded, but make sure you set goals first `/newyeargoal` :grin:"
             )
