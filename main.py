@@ -2,9 +2,9 @@
 
 # Update created by Zac on 4/Jan
 
-# Improved remindme message and goal_achieved arguements
+# Cleaned up large portion of document, added backlogs, addded comments and revised variable names up until view_goals function
 
-# Version 2.7.7
+# Version 2.8.0
 
 import asyncio
 from discord.commands import Option
@@ -57,10 +57,11 @@ reminderDeleted = ["Oh no, why did you delete your reminder T_T", "He deleted hi
 
 @bot.event
 async def on_ready():
-    server = bot.get_guild(867597533458202644)
-    channel = server.get_channel(867599113825812481)
-    await channel.send("<@760345587802964010> remember to run the initialisation command")
+    server = bot.get_guild(867597533458202644) # get Grav Destroyers server
+    channel = server.get_channel(867599113825812481) #g et bots channel
+    await channel.send("<@760345587802964010> remember to run the initialisation command") # ping me to remind me to run init command
     while True:
+        # alternate between two bot statuses
         await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name="you achieve your goals"))
         await asyncio.sleep(5)
         await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name="get started | /help"))
@@ -74,67 +75,57 @@ async def help(ctx):
         f"{about}\n\n**New Year Goal Command**\nTo use this command, type `/newyeargoal` and click space, enter or tab, then type in your goal, type one goal at a time and keep it to raw text.\n\n**View Goals Command**\nTo use this command, type `/view_goals`\n\n**View Ids Command**\nTo use this command, type `/view_ids`. Each goal will be displayed with it's corresponding ID in bold.\n\n**Goal Achieved**\nTo use this command, type `/goal_achieved` then press tab and enter the ID corresponding to the goal you wish to mark as achieved.\n\n**Remind Me Command**\nThis command instructs the bot to remind you of your goals. To use it type `/remindme` then press tab and enter how often you wish to be reminded of your goals in days."
     )
 
-
-@bot.slash_command(
-    guild_ids=[DEV_GUILD_ID]
-)  # create a slash command for the supplied guilds
-async def hello(ctx):
-    """Say hello to the bot"""  # the command description can be supplied as the docstring
-    await ctx.respond(f"Hello {ctx.author}!")
-
-
 @bot.slash_command(guild_ids=[DEV_GUILD_ID, PROD_GUILD_ID])
-async def newyeargoal(ctx, *, goal):
+async def newyeargoal(ctx, *, goal: Option("Type the name of the goal (one only)", required=True)):
     """Log a goal, one at a time"""
+    person = str(ctx.author) # get name
+    personId = str(ctx.author.id) # get id
+    status = False # set status if achieved to false
+    finalValues = (person, goal, status, personId)
+    insertGoals = "INSERT INTO 2022_Goals (user, goals, status, userId) VALUES (%s, %s, %s, %s)"
+    cursor.execute(insertGoals, finalValues) # execute
+    db.commit()
     await ctx.respond(
         f"Yessir\nYour goal is `{goal}`\n**I've logged it for you, NOW LET'S GO GET IT <:lezgooo:923128327970099231>**\nOh and also, remember to do `/remindme` to let me know how often to remind you about it!"
-    )
-    person = str(ctx.author)
-    personId = str(ctx.author.id)
-    status = False
-    finalValues = (person, goal, status, personId)
-    sql = "INSERT INTO 2022_Goals (user, goals, status, userId) VALUES (%s, %s, %s, %s)"
-    cursor.execute(sql, finalValues)
-    db.commit()
-    # await asyncio.sleep(2628288)
-
+        )
 
 @bot.slash_command(guild_ids=[DEV_GUILD_ID, PROD_GUILD_ID])
 async def remindme(ctx, *, days: Option(int, "Enter how often you'd like to be reminded in days", required=True)):  # time in days
     """Tells the bot to remind you about your goals every x days"""
-    # if not days.is_integer():
-        # await ctx.respond("Brah, are you trying to break me? :(\nThe value you enter must be in days and not a decimal")
-    # else:
-    goalsSet = False
-    checkGoals = "SELECT * FROM 2022_Goals WHERE user = %s"
-    values = (str(ctx.author),)
-    cursor.execute(checkGoals, values)
-    for entry in cursor:
-        goalsSet = True
-    if goalsSet == True:
-        reminderSetPreviously = False
-        getReminders = "SELECT days FROM reminders WHERE user = %s"
-        values = (str(ctx.author),)
-        secondcursor.execute(getReminders, values)
-        for reminder in secondcursor:
-            reminderSetPreviously = True
-        if reminderSetPreviously == True:
+    goalsSet = False # automatically assume that goals haven't been set
+    checkGoals = "SELECT * FROM 2022_Goals WHERE user = %s" # check if goals have been set
+    values = (str(ctx.author),) # get the users name
+    cursor.execute(checkGoals, values) # execute
+    for entry in cursor: # loop through results if there are any
+        goalsSet = True # goals indeed have been set
+    if goalsSet == True: # go ahead to next check
+        reminderSetPreviously = False # assume that a reminder has not been set before
+        getReminders = "SELECT days FROM reminders WHERE user = %s" # find reminders set previously
+        values = (str(ctx.author),) # users name
+        secondcursor.execute(getReminders, values) # execute
+        for reminder in secondcursor: # loop through results if they exist
+            reminderSetPreviously = True # reminder has been set prevously
+        if reminderSetPreviously == True: # reminder has been set previously
+            # tell them off
             await ctx.respond(
                 "MATE, like BRUH lmao :joy:\nYou've already set a reminder, are you trying to break me?\nBut what you can do... is reset your reminder time with `/change_reminder_interval`. Also if you don't wish to be reminded type `/stop_reminding`"
                     )
-        else:
+        else: # if reminder hasn't been set previously
+            # finally execute remind me command
+            setReminder = "INSERT INTO reminders (user, days) VALUES (%s, %s)" # insert days interval
             values = (str(ctx.author), days)
-            sql = "INSERT INTO reminders (user, days) VALUES (%s, %s)"
-            cursor.execute(sql, values)
-            nextReminder = str(date.today()).replace(",", "-").replace(" ", "")
+            cursor.execute(setReminder, values) # execute
+            # set next reminder to today
+            nextReminder = str(date.today()).replace(",", "-").replace(" ", "") # do i even need all the replace replace
             values = (str(ctx.author), nextReminder)
-            sql = "INSERT INTO nextDateReminder (user, next_date) VALUES (%s, %s)"
-            cursor.execute(sql, values)
+            # insert date into db
+            setDate = "INSERT INTO nextDateReminder (user, next_date) VALUES (%s, %s)"
+            cursor.execute(setDate, values)
             db.commit()
             await ctx.respond(
-                f"Going to be reminding you every `{days}`\n\n*Good job bruh, now time to get to work <:stronk_doge:925285801921769513> <:lezgooo:925286931221344256> If you need help, we got you <#867600399879372820>*\nTo check your next reminder `/next_reminder`"
+                f"Going to be reminding you every `{days}`\nTo check your next reminder `/next_reminder`\n\n*Good job bruh, now time to get to work <:stronk_doge:925285801921769513> <:lezgooo:925286931221344256> If you need help, we got you <#867600399879372820>*"
             )
-    elif goalsSet == False:
+    elif goalsSet == False: # if goals haven't been set
             await ctx.respond(
             "Well it's great that you want to be reminded, but make sure you set goals first `/newyeargoal` :grin:"
             )
@@ -148,10 +139,8 @@ async def view_goals(ctx):
     goalsCounter = 0
     goalsAchievedCounter = 0
     author = (str(ctx.author),)
-    print(author)
-    sql = "SELECT goals FROM 2022_Goals WHERE user = %s"
-    cursor.execute(sql, author)
-    #if no goals send you need to add some goals
+    getGoals = "SELECT goals FROM 2022_Goals WHERE user = %s"
+    cursor.execute(getGoals, author)
     for x in cursor:
         goalsSet = True
         final += str(x)
@@ -179,7 +168,6 @@ async def view_goals(ctx):
         )
     elif goalsSet == False:
         await ctx.respond("You need to set your goals first before viewing them -_-\n\n*However, I live go serve bright human... these commands may help...* `/help` `/newyeargoal`")
-
 
 @bot.slash_command(guild_ids=[DEV_GUILD_ID, PROD_GUILD_ID])
 async def view_ids(ctx):
@@ -470,18 +458,17 @@ async def get_started(ctx):
     interaction = await ctx.respond(
         f"Ayo {ctx.author.mention} so you want to get after those goals and make this year, YOUR year. Well GOOD NEWS, I'm here to help..."
         )
-    await asyncio.sleep(2)
     async with ctx.typing():
-        await asyncio.sleep(5)
-    content = "This is how I help you:\n`/help` The help command is your go to command to understand anything, but here's the recommended sequence of commands:"
+        await asyncio.sleep(7)
+    content = "**This is how I help you:**\n`/help` The help command is your go to command to understand anything, but here's the recommended sequence of commands:"
     await interaction.followup.send(content=content)
     async with ctx.typing():
         await asyncio.sleep(10)
-    content = "Run`/newyeargoal` for each new year goal you wish to achieve.\nRun `/view_goals` to ensure that all your goals havee been logged.\nRun `/remindme` to set how often you'll be reminded.\n*You should be initialy reminded in a few minutes and then after that you'll be reminded at your chosen day interval.*"
+    content = "Run`**/newyeargoal`** for **each** new year goal you wish to achieve.\nRun **`/view_goals`** to ensure that all your goals havee been logged.\nRun **`/remindme`** to set how often you'll be reminded."
     await interaction.followup.send(content=content)
     async with ctx.typing():
         await asyncio.sleep(7)
-    content = "For more commands, particularly for adjusting goals and times as well as marking goals as achieved use the `/help` command. If you enounter any issues pls ping `@Zac the Wise#1381` :)"
+    content = "For more command use the `/help` command. If you enounter any issues pls ping `@Zac the Wise#1381` :)"
     await interaction.followup.send(content=content)
 
 bot.run(BOT_TOKEN)
