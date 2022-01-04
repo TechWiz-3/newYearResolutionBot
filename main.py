@@ -4,7 +4,7 @@
 
 # Tweaking remind me
 
-# Version 2.7.1
+# Version 2.7.2
 
 import asyncio
 from discord.commands import Option
@@ -66,6 +66,7 @@ async def on_ready():
 @bot.slash_command(guild_ids=[DEV_GUILD_ID, PROD_GUILD_ID])
 async def help(ctx):
     """Helps you use the bots commands"""
+    about = f""
     await ctx.respond(
         "**New Year Goal Command**\nTo use this command, type `/newyeargoal` and click space, enter or tab, then type in your goal, type one goal at a time and keep it to raw text.\n\n**View Goals Command**\nTo use this command, type `/view_goals`\n\n**View Ids Command**\nTo use this command, type `/view_ids`. Each goal will be displayed with it's corresponding ID in bold.\n\n**Goal Achieved**\nTo use this command, type `/goal_achieved` then press tab and enter the ID corresponding to the goal you wish to mark as achieved.\n\n**Remind Me Command**\nThis command instructs the bot to remind you of your goals. To use it type `/remindme` then press tab and enter how often you wish to be reminded of your goals in days."
     )
@@ -413,7 +414,7 @@ async def stop_reminding(ctx):
     user = (str(ctx.author),)
     cursor.execute(deleteReminderEntries, user)
     cursor.execute(deleteDateReminderEntries, user)
-    db.commt()
+    db.commit()
     await ctx.respond(
         f"{random.choice(reminderDeleted)}\nDo `/remindme` again to change the interval. If not then we're sad to see you go... all the best"
     )
