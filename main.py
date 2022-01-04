@@ -2,7 +2,7 @@
 
 # Update created by Zac on 4/Jan
 
-# Tweaking remind me
+# Fixed a slight bug in stop_reminding
 
 # Version 2.7.2
 
