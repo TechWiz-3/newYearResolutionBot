@@ -2,9 +2,9 @@
 
 # Update created by Zac on 4/Jan
 
-# Fixed error message in initialise command as well as a tiny fix in help command
+# Improved remindme message and goal_achieved arguements
 
-# Version 2.7.6
+# Version 2.7.7
 
 import asyncio
 from discord.commands import Option
@@ -132,7 +132,7 @@ async def remindme(ctx, *, days: Option(int, "Enter how often you'd like to be r
             cursor.execute(sql, values)
             db.commit()
             await ctx.respond(
-                f"Going to be reminding you every `{days}`\n\n*Good job bruh, now time to get to work <:stronk_doge:925285801921769513> <:lezgooo:925286931221344256> If you need help, we got you <#867600399879372820>*"
+                f"Going to be reminding you every `{days}`\n\n*Good job bruh, now time to get to work <:stronk_doge:925285801921769513> <:lezgooo:925286931221344256> If you need help, we got you <#867600399879372820>*\nTo check your next reminder `/next_reminder`"
             )
     elif goalsSet == False:
             await ctx.respond(
@@ -204,7 +204,7 @@ async def view_ids(ctx):
 
 
 @bot.slash_command(guild_ids=[DEV_GUILD_ID, PROD_GUILD_ID])
-async def goal_achieved(ctx, id):
+async def goal_achieved(ctx, id: Option(int, "Enter the ID of the goal you wish to mark as achieved", required=True)):
     """Log when you achieve a goal by goal ID"""
     final = ""
     fetchByID = tuple(id)
