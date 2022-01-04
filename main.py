@@ -2,9 +2,9 @@
 
 # Update created by Zac on 4/Jan
 
-# Fixed slight bug in f string help command
+# Fixed error message in initialise command as well as a tiny fix in help command
 
-# Version 2.7.5
+# Version 2.7.6
 
 import asyncio
 from discord.commands import Option
@@ -71,7 +71,7 @@ async def help(ctx):
     """Helps you use the bots commands"""
     about = f"**About Me**\nI'm a bot specifically created for Gravity Destroyers. My purpose is simple:\n<:agreentick:875244017833639956> Log users goals\n<:agreentick:875244017833639956> Remind users about their goals\n<:agreentick:875244017833639956> Help motivate and remind users to keep working at and achieve their goals :muscle:"
     await ctx.respond(
-        f"{about}\n**New Year Goal Command**\nTo use this command, type `/newyeargoal` and click space, enter or tab, then type in your goal, type one goal at a time and keep it to raw text.\n\n**View Goals Command**\nTo use this command, type `/view_goals`\n\n**View Ids Command**\nTo use this command, type `/view_ids`. Each goal will be displayed with it's corresponding ID in bold.\n\n**Goal Achieved**\nTo use this command, type `/goal_achieved` then press tab and enter the ID corresponding to the goal you wish to mark as achieved.\n\n**Remind Me Command**\nThis command instructs the bot to remind you of your goals. To use it type `/remindme` then press tab and enter how often you wish to be reminded of your goals in days."
+        f"{about}\n\n**New Year Goal Command**\nTo use this command, type `/newyeargoal` and click space, enter or tab, then type in your goal, type one goal at a time and keep it to raw text.\n\n**View Goals Command**\nTo use this command, type `/view_goals`\n\n**View Ids Command**\nTo use this command, type `/view_ids`. Each goal will be displayed with it's corresponding ID in bold.\n\n**Goal Achieved**\nTo use this command, type `/goal_achieved` then press tab and enter the ID corresponding to the goal you wish to mark as achieved.\n\n**Remind Me Command**\nThis command instructs the bot to remind you of your goals. To use it type `/remindme` then press tab and enter how often you wish to be reminded of your goals in days."
     )
 
 
@@ -231,9 +231,7 @@ async def goal_achieved(ctx, id):
 @bot.command()
 async def initialise(ctx):
     if not ctx.author.guild_permissions.administrator:
-        await ctx.send(
-            "**You don't have the right permissions for that.**", ephemeral=True
-        )
+        await ctx.send(content=f"**{ctx.author.mention} You don't have the right permissions for that.**\n||But between you and me, nice try lmao, sadly Zac foresaw that clever bois like you would try stuff like that\nAlso, DON'T TELL HIM I SAID THIS, imma delete the message||", delete_after = 7)
         return
     counter = 0
     while True:
