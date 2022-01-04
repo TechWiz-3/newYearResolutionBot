@@ -18,6 +18,8 @@ Currently the bot is only functional in [one server](https://discord.gg/7Pjjf2XT
 
 ##### `/help`
 
+##### `get_started`
+
 ##### `/get_started`
 
 ##### `/newyeargoal`
@@ -35,5 +37,3 @@ Currently the bot is only functional in [one server](https://discord.gg/7Pjjf2XT
 ##### `/change_reminder_interval`
 
 ##### `/next_reminder`
-
-##### `/hello`
