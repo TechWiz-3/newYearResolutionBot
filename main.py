@@ -2,9 +2,9 @@
 
 # Update created by Zac on 4/Jan
 
-# Cleared DB of suhs entries
+# Fixed clear_goals, added decimal banning feature to remindme
 
-# Version 2.6.3
+# Version 2.7.0
 
 import asyncio
 from discord.commands import Option
@@ -98,39 +98,42 @@ async def newyeargoal(ctx, *, goal):
 @bot.slash_command(guild_ids=[DEV_GUILD_ID, PROD_GUILD_ID])
 async def remindme(ctx, *, days):  # time in days
     """Tells the bot to remind you about your goals every x days"""
-    goalsSet = False
-    checkGoals = "SELECT * FROM 2022_Goals WHERE user = %s"
-    values = (str(ctx.author),)
-    cursor.execute(checkGoals, values)
-    for entry in cursor:
-        goalsSet = True
-    if goalsSet == True:
-        reminderSetPreviously = False
-        getReminders = "SELECT days FROM reminders WHERE user = %s"
+    if not days.is_integer():
+        await ctx.respond("Brah, are you trying to break me? :(\nThe value you enter must be in days and not a decimal")
+    else:
+        goalsSet = False
+        checkGoals = "SELECT * FROM 2022_Goals WHERE user = %s"
         values = (str(ctx.author),)
-        secondcursor.execute(getReminders, values)
-        for reminder in secondcursor:
-            reminderSetPreviously = True
-        if reminderSetPreviously == True:
-            await ctx.respond(
-                "MATE, like BRUH lmao :joy:\nYou've already set a reminder, are you trying to break me?\nBut what you can do... is reset your reminder time with `/change_reminder_interval`. Also if you don't wish to be reminded type `/stop_reminding`"
-                    )
-        else:
-            values = (str(ctx.author), days)
-            sql = "INSERT INTO reminders (user, days) VALUES (%s, %s)"
-            cursor.execute(sql, values)
-            nextReminder = str(date.today()).replace(",", "-").replace(" ", "")
-            values = (str(ctx.author), nextReminder)
-            sql = "INSERT INTO nextDateReminder (user, next_date) VALUES (%s, %s)"
-            cursor.execute(sql, values)
-            db.commit()
-            await ctx.respond(
-                f"Going to be reminding you every `{days}`\n\n*Good job bruh, now time to get to work <:stronk_doge:925285801921769513> <:lezgooo:925286931221344256> If you need help, we got you <#867600399879372820>*"
-            )
-    elif goalsSet == False:
-            await ctx.respond(
-            "Well it's great that you want to be reminded, but make sure you set goals first `/newyeargoal` :grin:"
-            )
+        cursor.execute(checkGoals, values)
+        for entry in cursor:
+            goalsSet = True
+        if goalsSet == True:
+            reminderSetPreviously = False
+            getReminders = "SELECT days FROM reminders WHERE user = %s"
+            values = (str(ctx.author),)
+            secondcursor.execute(getReminders, values)
+            for reminder in secondcursor:
+                reminderSetPreviously = True
+            if reminderSetPreviously == True:
+                await ctx.respond(
+                    "MATE, like BRUH lmao :joy:\nYou've already set a reminder, are you trying to break me?\nBut what you can do... is reset your reminder time with `/change_reminder_interval`. Also if you don't wish to be reminded type `/stop_reminding`"
+                        )
+            else:
+                values = (str(ctx.author), days)
+                sql = "INSERT INTO reminders (user, days) VALUES (%s, %s)"
+                cursor.execute(sql, values)
+                nextReminder = str(date.today()).replace(",", "-").replace(" ", "")
+                values = (str(ctx.author), nextReminder)
+                sql = "INSERT INTO nextDateReminder (user, next_date) VALUES (%s, %s)"
+                cursor.execute(sql, values)
+                db.commit()
+                await ctx.respond(
+                    f"Going to be reminding you every `{days}`\n\n*Good job bruh, now time to get to work <:stronk_doge:925285801921769513> <:lezgooo:925286931221344256> If you need help, we got you <#867600399879372820>*"
+                )
+        elif goalsSet == False:
+                await ctx.respond(
+                "Well it's great that you want to be reminded, but make sure you set goals first `/newyeargoal` :grin:"
+                )
 
 @bot.slash_command(guild_ids=[DEV_GUILD_ID, PROD_GUILD_ID])
 async def view_goals(ctx):
@@ -398,12 +401,16 @@ async def initialise(ctx):
 async def clear_goals(ctx, id: Option(int, "Enter the ID of the goal you wish to delete", required=False)):
     """Delete all logged goals, or a specific goal based on ID"""
     if id == None:
-        sql = "DELETE FROM 2022_Goals WHERE user = %s"
+        deleteGoals = "DELETE FROM 2022_Goals WHERE user = %s"
+        deleteReminderEntries = "DELETE FROM reminders WHERE user = %s"
+        deleteDateReminderEntries = "Delete FROM nextDateReminder WHERE user = %s"
         user = (str(ctx.author),)
-        cursor.execute(sql, user)
+        cursor.execute(deleteGoals, user)
+        cursor.execute(deleteReminderEntries, user)
+        cursor.execute(deleteDateReminderEntries, user)
         db.commit()
         await ctx.respond(
-            f"All goals deleted. {random.choice(allGoalsDeleted)}\nNow time to put new ones in `/newyeargoal`"
+            f"All goals deleted. {random.choice(allGoalsDeleted)}\nNow time to put new ones in `/newyeargoal`\n*Also, your reminders have been removed*"
             )
     else:
         sql = "DELETE FROM 2022_Goals WHERE user = %s AND id = %s"
@@ -424,6 +431,7 @@ async def stop_reminding(ctx):
     user = (str(ctx.author),)
     cursor.execute(deleteReminderEntries, user)
     cursor.execute(deleteDateReminderEntries, user)
+    db.commt()
     await ctx.respond(
         f"{random.choice(reminderDeleted)}\nDo `/remindme` again to change the interval. If not then we're sad to see you go... all the best"
     )
@@ -440,6 +448,7 @@ async def change_reminder_interval(ctx, how_often: int):
         str(ctx.author)
         )
     cursor.execute(adjustIntervalDate, values)
+    db.commit()
     cooldoge = discord.utils.get(bot.emojis, name="cooldoge")
     await ctx.respond(
         f"{cooldoge} Well, that went well. Your interval is now `{how_often}` day(s). Achievement time babyy"
