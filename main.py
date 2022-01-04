@@ -2,7 +2,7 @@
 
 # Update created by Zac on 4/Jan
 
-# Fixed a slight bug in stop_reminding
+# Repush for railway
 
 # Version 2.7.2
 
@@ -465,6 +465,7 @@ async def next_reminder(ctx):
 
 @bot.slash_command(guild_ids=[DEV_GUILD_ID, PROD_GUILD_ID])
 async def get_started(ctx):
+    """Helps you get started :)"""
     interaction = await ctx.respond(
         f"Ayo {ctx.author.mention} so you want to get after those goals and make this year, YOUR year. Well GOOD NEWS, I'm here to help..."
         )
