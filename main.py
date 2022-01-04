@@ -2,9 +2,9 @@
 
 # Update created by Zac on 4/Jan
 
-# Fixed a bug in the remind me command to prevent setting multiple reminders
+# Cleared DB of suhs entries
 
-# Version 2.6.2
+# Version 2.6.3
 
 import asyncio
 from discord.commands import Option
