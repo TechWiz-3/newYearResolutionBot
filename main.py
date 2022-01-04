@@ -2,9 +2,9 @@
 
 # Update created by Zac on 4/Jan
 
-# Fixed clear_goals, added decimal banning feature to remindme
+# Tweaking remind me
 
-# Version 2.7.0
+# Version 2.7.1
 
 import asyncio
 from discord.commands import Option
@@ -96,44 +96,44 @@ async def newyeargoal(ctx, *, goal):
 
 
 @bot.slash_command(guild_ids=[DEV_GUILD_ID, PROD_GUILD_ID])
-async def remindme(ctx, *, days):  # time in days
+async def remindme(ctx, *, days: int):  # time in days
     """Tells the bot to remind you about your goals every x days"""
-    if not days.is_integer():
-        await ctx.respond("Brah, are you trying to break me? :(\nThe value you enter must be in days and not a decimal")
-    else:
-        goalsSet = False
-        checkGoals = "SELECT * FROM 2022_Goals WHERE user = %s"
+    # if not days.is_integer():
+        # await ctx.respond("Brah, are you trying to break me? :(\nThe value you enter must be in days and not a decimal")
+    # else:
+    goalsSet = False
+    checkGoals = "SELECT * FROM 2022_Goals WHERE user = %s"
+    values = (str(ctx.author),)
+    cursor.execute(checkGoals, values)
+    for entry in cursor:
+        goalsSet = True
+    if goalsSet == True:
+        reminderSetPreviously = False
+        getReminders = "SELECT days FROM reminders WHERE user = %s"
         values = (str(ctx.author),)
-        cursor.execute(checkGoals, values)
-        for entry in cursor:
-            goalsSet = True
-        if goalsSet == True:
-            reminderSetPreviously = False
-            getReminders = "SELECT days FROM reminders WHERE user = %s"
-            values = (str(ctx.author),)
-            secondcursor.execute(getReminders, values)
-            for reminder in secondcursor:
-                reminderSetPreviously = True
-            if reminderSetPreviously == True:
-                await ctx.respond(
-                    "MATE, like BRUH lmao :joy:\nYou've already set a reminder, are you trying to break me?\nBut what you can do... is reset your reminder time with `/change_reminder_interval`. Also if you don't wish to be reminded type `/stop_reminding`"
-                        )
-            else:
-                values = (str(ctx.author), days)
-                sql = "INSERT INTO reminders (user, days) VALUES (%s, %s)"
-                cursor.execute(sql, values)
-                nextReminder = str(date.today()).replace(",", "-").replace(" ", "")
-                values = (str(ctx.author), nextReminder)
-                sql = "INSERT INTO nextDateReminder (user, next_date) VALUES (%s, %s)"
-                cursor.execute(sql, values)
-                db.commit()
-                await ctx.respond(
-                    f"Going to be reminding you every `{days}`\n\n*Good job bruh, now time to get to work <:stronk_doge:925285801921769513> <:lezgooo:925286931221344256> If you need help, we got you <#867600399879372820>*"
-                )
-        elif goalsSet == False:
-                await ctx.respond(
-                "Well it's great that you want to be reminded, but make sure you set goals first `/newyeargoal` :grin:"
-                )
+        secondcursor.execute(getReminders, values)
+        for reminder in secondcursor:
+            reminderSetPreviously = True
+        if reminderSetPreviously == True:
+            await ctx.respond(
+                "MATE, like BRUH lmao :joy:\nYou've already set a reminder, are you trying to break me?\nBut what you can do... is reset your reminder time with `/change_reminder_interval`. Also if you don't wish to be reminded type `/stop_reminding`"
+                    )
+        else:
+            values = (str(ctx.author), days)
+            sql = "INSERT INTO reminders (user, days) VALUES (%s, %s)"
+            cursor.execute(sql, values)
+            nextReminder = str(date.today()).replace(",", "-").replace(" ", "")
+            values = (str(ctx.author), nextReminder)
+            sql = "INSERT INTO nextDateReminder (user, next_date) VALUES (%s, %s)"
+            cursor.execute(sql, values)
+            db.commit()
+            await ctx.respond(
+                f"Going to be reminding you every `{days}`\n\n*Good job bruh, now time to get to work <:stronk_doge:925285801921769513> <:lezgooo:925286931221344256> If you need help, we got you <#867600399879372820>*"
+            )
+    elif goalsSet == False:
+            await ctx.respond(
+            "Well it's great that you want to be reminded, but make sure you set goals first `/newyeargoal` :grin:"
+            )
 
 @bot.slash_command(guild_ids=[DEV_GUILD_ID, PROD_GUILD_ID])
 async def view_goals(ctx):
@@ -223,24 +223,6 @@ async def goal_achieved(ctx, id):
     await ctx.respond(
         f"**Congratulations...**\n<:pepe_hypers:925274715214458880> You have ACHIEVED `{final}`**Collect your trophy:**\n:trophy:"
     )
-
-
-@bot.command()
-async def set_reminder(ctx, how_long, type_of_time, *, message):
-    how_long = int(how_long)
-    if type_of_time.lower() == "h" or "hour" in type_of_time.lower():
-        finalTime = how_long * 3600
-        await asyncio.sleep(int(finalTime))
-        await ctx.send(f"reminder set will be waiting for {finalTime} seconds")
-    if type_of_time.lower() == "d" or "day" in type_of_time.lower():
-        finalTime = how_long * 86400
-        await asyncio.sleep(int(finalTime))
-        await ctx.send(f"reminder set will be waiting for {finalTime} seconds")
-    if type_of_time.lower() == "m" or "minute" in type_of_time.lower():
-        finalTime = how_long * 60
-        await asyncio.sleep(int(finalTime))
-        await ctx.send(f"reminder set will be waiting for {finalTime} seconds")
-
 
 @bot.command()
 async def initialise(ctx):
