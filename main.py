@@ -2,9 +2,9 @@
 
 # Update created by Zac on 4/Jan
 
-# Repush for railway
+# Added description for 'days' in remind me command
 
-# Version 2.7.2
+# Version 2.7.3
 
 import asyncio
 from discord.commands import Option
@@ -97,7 +97,7 @@ async def newyeargoal(ctx, *, goal):
 
 
 @bot.slash_command(guild_ids=[DEV_GUILD_ID, PROD_GUILD_ID])
-async def remindme(ctx, *, days: int):  # time in days
+async def remindme(ctx, *, days: Option(int, "Enter how often you'd like to be reminded in days", required=True)):  # time in days
     """Tells the bot to remind you about your goals every x days"""
     # if not days.is_integer():
         # await ctx.respond("Brah, are you trying to break me? :(\nThe value you enter must be in days and not a decimal")
