@@ -2,9 +2,9 @@
 
 # Update created by Zac on 4/Jan
 
-# Cleaned up large portion of document, added backlogs, addded comments and revised variable names up until view_goals function
+# Fixed error in newyeargoal command
 
-# Version 2.8.0
+# Version 2.8.1
 
 import asyncio
 from discord.commands import Option
@@ -76,7 +76,7 @@ async def help(ctx):
     )
 
 @bot.slash_command(guild_ids=[DEV_GUILD_ID, PROD_GUILD_ID])
-async def newyeargoal(ctx, *, goal: Option("Type the name of the goal (one only)", required=True)):
+async def newyeargoal(ctx, *, goal: Option(str, "Type the name of the goal (one only)", required=True)):
     """Log a goal, one at a time"""
     person = str(ctx.author) # get name
     personId = str(ctx.author.id) # get id
