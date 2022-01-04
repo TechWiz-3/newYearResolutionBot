@@ -4,7 +4,7 @@
 
 # Fixed a bug in the remind me command to prevent setting multiple reminders
 
-# Version 2.6.1
+# Version 2.6.2
 
 import asyncio
 from discord.commands import Option
@@ -111,7 +111,7 @@ async def remindme(ctx, *, days):  # time in days
         secondcursor.execute(getReminders, values)
         for reminder in secondcursor:
             reminderSetPreviously = True
-        if reminderSetPreviously == False:
+        if reminderSetPreviously == True:
             await ctx.respond(
                 "MATE, like BRUH lmao :joy:\nYou've already set a reminder, are you trying to break me?\nBut what you can do... is reset your reminder time with `/change_reminder_interval`. Also if you don't wish to be reminded type `/stop_reminding`"
                     )
