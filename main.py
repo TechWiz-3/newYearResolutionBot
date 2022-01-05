@@ -2,9 +2,9 @@
 
 # Update created by Zac on 5/Jan
 
-# fixed an error in goal_achieved
+# fixed another error in goal_achieved
 
-# Version 2.13.2
+# Version 2.13.3
 
 import asyncio
 from discord.commands import Option
@@ -213,10 +213,10 @@ async def goal_achieved(ctx, id: Option(int, "Enter the ID of the goal you wish 
             .replace(")", "\n")
         )
         final += str(xx)
-    value = tuple(id)
+    value = (id,)
     print(value)
-    sql = "UPDATE 2022_Goals SET status = '1' WHERE id = %s"
-    cursor.execute(sql, value)
+    markAchieved = "UPDATE 2022_Goals SET status = '1' WHERE id = %s"
+    cursor.execute(markAchieved, value)
     db.commit()
     await ctx.respond(
         f"**Congratulations...**\n<:pepe_hypers:925274715214458880> You have ACHIEVED `{final}`**Collect your trophy:**\n:trophy:"
