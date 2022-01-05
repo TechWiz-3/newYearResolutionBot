@@ -2,9 +2,9 @@
 
 # Update created by Zac on 5/Jan
 
-# what is wrong with heroku and railway
+# added slight optimisation for view_goals command, still more work to be done
 
-# Version 2.12.2
+# Version 2.13
 
 import asyncio
 from discord.commands import Option
@@ -147,13 +147,15 @@ async def view_goals(ctx):
         goal,status = goalAndStatus # assign the results
         goalsSet = True
         goalsCounter += 1
-        final += str(goal)
-        
+        if status == 1:
+            final = f"{greenTickEmoji} `{goal}`\n"
+        elif status == 0:
+            final = f"{slashEmoji} `{goal}`\n"
         # if achieved add a green tick to the message
         # add a counter to say that another goal has been achieved
-    final = (
-        final.replace("(", "").replace(")", "").replace("'", "``").replace(",", "\n")
-    )
+    #final = (
+        #final.replace("(", "").replace(")", "").replace("'", "``").replace(",", "\n")
+    #)
     cursor.execute(
         "SELECT goals FROM 2022_Goals WHERE user = %s AND status = '1'", (author)
     )
