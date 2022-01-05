@@ -30,10 +30,10 @@ Currently the bot is only functional in [one server](https://discord.gg/7Pjjf2XT
 `/remindme days`  
 *Instructs the bot how often to remind the user about their goals in days*  
 
-`/view_goals`
+`/view_goals`  
 *Displays the users goals*  
 
-`/view_ids`
+`/view_ids`  
 *Displays the users goals with their corresponding ID in the database. The ID is used for actions such as deleting a goal or marking it as achieved*  
 
 `/goal_achieved`  
@@ -44,7 +44,7 @@ Currently the bot is only functional in [one server](https://discord.gg/7Pjjf2XT
 *Instructs the bot to stop reminding the user of their goals* T_T  
 
 `/change_reminder_interval`  
-`/change_reminder_interval days`
+`/change_reminder_interval days`  
 *Changes how often the bot reminds the user*  
   
 `/next_reminder`  
