@@ -2,9 +2,9 @@
 
 # Update created by Zac on 5/Jan
 
-# fixed an error in view goal
+# fixed an error in goal_achieved
 
-# Version 2.13.1
+# Version 2.13.2
 
 import asyncio
 from discord.commands import Option
@@ -201,7 +201,7 @@ async def view_ids(ctx):
 async def goal_achieved(ctx, id: Option(int, "Enter the ID of the goal you wish to mark as achieved", required=True)):
     """Log when you achieve a goal by goal ID"""
     final = ""
-    fetchByID = tuple(id)
+    fetchByID = (id,)
     cursor.execute("SELECT goals FROM 2022_Goals WHERE id = %s", (fetchByID))
     for x in cursor:
         print(x)
