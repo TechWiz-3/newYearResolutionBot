@@ -2,7 +2,7 @@
 
 # Update created by Zac on 5/Jan
 
-# wth is wrong
+# what is wrong with heroku and railway
 
 # Version 2.12.2
 
