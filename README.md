@@ -57,8 +57,8 @@ Currently the bot is only functional in [one server](https://discord.gg/7Pjjf2XT
 ## Setup & Tools
 *The file `sqlConfig.py` contains the queries to create the three database tables used by the bot.*  
 
-`2022_Goals` is used for storing each users goals as well as their user ID and name, in the future it will also store the server ID of which the command was invoked in.  
+`2022_Goals` *is used for storing each users goals as well as their user ID and name, in the future it will also store the server ID of which the command was invoked in.*  
 
-`reminders` stores the uername and how often (in days) the user wishes to be reminded.  
+`reminders` *stores the uername and how often (in days) the user wishes to be reminded.*  
 
-`nextDateReminder` stores the next date each user should be reminded on.
+`nextDateReminder` *stores the next date each user should be reminded on.*    
