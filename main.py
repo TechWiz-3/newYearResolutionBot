@@ -2,9 +2,9 @@
 
 # Update created by Zac on 5/Jan
 
-# fixed huge vulnerability in goal_achieved
+# fixed a new line in goal_achieved
 
-# Version 2.14.0
+# Version 2.15.0
 
 import asyncio
 from discord.commands import Option
@@ -224,7 +224,7 @@ async def goal_achieved(ctx, id: Option(int, "Enter the ID of the goal you wish 
         cursor.execute(markAchieved, value)
         db.commit()
         await ctx.respond(
-            f"**Congratulations...**\n<:pepe_hypers:925274715214458880> You have ACHIEVED `{final}`**Collect your trophy:**\n:trophy:"
+            f"**Congratulations...**\n<:pepe_hypers:925274715214458880> You have ACHIEVED `{final}`\n**Collect your trophy:**\n:trophy:"
         )
     else:
         await ctx.respond("Hmm, something sus be going on here, maybe you made an error with the id? I'm not sure... but I wasn't able to log the goal as achieved T_T")
