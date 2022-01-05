@@ -2,9 +2,9 @@
 
 # Update created by Zac on 5/Jan
 
-# added slight optimisation for view_goals command, still more work to be done
+# fixed an error in view goal
 
-# Version 2.13
+# Version 2.13.1
 
 import asyncio
 from discord.commands import Option
@@ -148,9 +148,9 @@ async def view_goals(ctx):
         goalsSet = True
         goalsCounter += 1
         if status == 1:
-            final = f"{greenTickEmoji} `{goal}`\n"
+            final += f"{greenTickEmoji} `{goal}`\n"
         elif status == 0:
-            final = f"{slashEmoji} `{goal}`\n"
+            final += f"{slashEmoji} `{goal}`\n"
         # if achieved add a green tick to the message
         # add a counter to say that another goal has been achieved
     #final = (
