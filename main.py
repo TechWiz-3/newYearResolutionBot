@@ -2,9 +2,9 @@
 
 # Update created by Zac on 4/Jan
 
-# Repush for railway
+# Added message to say when initialition start
 
-# Version 2.10.0
+# Version 2.11.0
 
 import asyncio
 from discord.commands import Option
@@ -222,6 +222,7 @@ async def initialise(ctx):
         await ctx.send(content=f"**{ctx.author.mention} You don't have the right permissions for that.**\n||But between you and me, nice try lmao, sadly Zac foresaw that clever bois like you would try stuff like that\nAlso, DON'T TELL HIM I SAID THIS, imma delete the message||", delete_after = 7)
         return
     counter = 0
+    await ctx.send("Initialising...")
     while True:
         goals = ""
         sql = "SELECT user, days FROM reminders"  # select the username and their selected reminder interval
