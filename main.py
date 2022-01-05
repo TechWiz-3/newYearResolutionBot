@@ -1,10 +1,10 @@
 # Created by #Zac the Wise#1381 with help from #iamkneel#2359
 
-# Update created by Zac on 4/Jan
+# Update created by Zac on 5/Jan
 
-# Added message to say when initialition start
+# Adjusted change reminder interval command and began changes on view goals command
 
-# Version 2.11.0
+# Version 2.12.0
 
 import asyncio
 from discord.commands import Option
@@ -133,6 +133,8 @@ async def remindme(ctx, *, days: Option(int, "Enter how often you'd like to be r
 @bot.slash_command(guild_ids=[DEV_GUILD_ID, PROD_GUILD_ID])
 async def view_goals(ctx):
     """Displays your currently logged and achieved goals"""
+    greenTickEmoji = discord.utils.get(bot.emojis, name="epicTick")
+    slashEmoji = discord.utils.get(bot.emojis, name="aslash")
     goalsSet = False
     final = ""
     finalAchieved = ""
@@ -167,7 +169,7 @@ async def view_goals(ctx):
             f"Your goals are...\n\n{final}\nYou haven't achieved any of your {goalsCounter} goals, but that doesn't matter, **TRAIN HARD TRAIN SMART** (that's what Gravity Destroyers is for) and you'll get there <:lezgooo:925286931221344256> <:lezgooo:925286931221344256>"
         )
     elif goalsSet == False:
-        await ctx.respond("You need to set your goals first before viewing them -_-\n\n*However, I live go serve bright human... these commands may help...* `/help` `/newyeargoal`")
+        await ctx.respond("Ummm, you need to set your goals first before viewing them lol\n\n*However, I live go serve bright human ;) ... these commands may help...* `/help` `/newyeargoal`")
 
 @bot.slash_command(guild_ids=[DEV_GUILD_ID, PROD_GUILD_ID])
 async def view_ids(ctx):
@@ -410,7 +412,7 @@ async def stop_reminding(ctx):
     )
 
 @bot.slash_command(guild_ids=[DEV_GUILD_ID, PROD_GUILD_ID])
-async def change_reminder_interval(ctx, how_often: int):
+async def change_reminder_interval(ctx, how_often: Option(int, "Enter how often in days you wish to be reminded", required=True)):
     """Adjusts how often you're reminded of your goals"""
     adjustInterval = "UPDATE reminders SET days = %s WHERE user = %s"
     values = (how_often, str(ctx.author))
