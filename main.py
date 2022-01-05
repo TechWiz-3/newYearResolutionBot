@@ -2,9 +2,9 @@
 
 # Update created by Zac on 4/Jan
 
-# Fixed slight error in get_started appearance
+# Removed end of mighty reminder message text
 
-# Version 2.9.0
+# Version 2.10.0
 
 import asyncio
 from discord.commands import Option
@@ -304,7 +304,7 @@ async def initialise(ctx):
                     valuesForChangingDate = (nextDate, userForThirdQuery)
                     fourthCursor.execute(updateSql, valuesForChangingDate)
                     db.commit()
-                    await ctx.send("**End of mighty reminder message**")
+                    #await ctx.send("**End of mighty reminder message**")
                 elif unpackedDate < date.today(): #if the table is outdated
                     print("Date smaller than current date triggered for", userForThirdQuery)
                     sql = "SELECT goals,status,userId FROM 2022_Goals WHERE user = %s"  # request for the users goals in the goals table
