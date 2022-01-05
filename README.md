@@ -16,10 +16,10 @@ Currently the bot is only functional in [one server](https://discord.gg/7Pjjf2XT
 
 ## Commands
 
-### `/help`  
+`/help`  
 *Displays a information about the capabilities of the bot as well as a list of commands and their users*
 
-### `/get_started`  
+`/get_started`  
 *Responds with a series of messages explaining the basic commands to begin using the bot*  
 
 `/newyeargoal`  
