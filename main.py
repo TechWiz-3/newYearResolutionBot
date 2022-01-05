@@ -2,7 +2,7 @@
 
 # Update created by Zac on 5/Jan
 
-# Adjusted change reminder interval command and began changes on view goals command
+# Continued working on view goals command
 
 # Version 2.12.0
 
@@ -141,12 +141,14 @@ async def view_goals(ctx):
     goalsCounter = 0
     goalsAchievedCounter = 0
     author = (str(ctx.author),)
-    getGoals = "SELECT goals FROM 2022_Goals WHERE user = %s"
-    cursor.execute(getGoals, author)
-    for x in cursor:
+    getGoals = "SELECT goals, status FROM 2022_Goals WHERE user = %s"
+    cursor.execute(getGoals, author) # get each goal and corressponding status for the user
+    for goalAndStatus in cursor:
+        goal,status = goalAndStatus # assign the results
         goalsSet = True
-        final += str(x)
         goalsCounter += 1
+        final += str(goal)
+        
         # if achieved add a green tick to the message
         # add a counter to say that another goal has been achieved
     final = (
