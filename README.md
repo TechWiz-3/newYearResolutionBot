@@ -43,7 +43,7 @@ Currently the bot is only functional in [one server](https://discord.gg/7Pjjf2XT
 `/stop_reminding`  
 *Instructs the bot to stop reminding the user of their goals* T_T  
 
-`/change_reminder_interval`
+`/change_reminder_interval`  
 `/change_reminder_interval days`
 *Changes how often the bot reminds the user*  
   
