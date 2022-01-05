@@ -2,9 +2,9 @@
 
 # Update created by Zac on 4/Jan
 
-# Fixed error in newyeargoal command
+# Fixed slight error in get_started appearance
 
-# Version 2.8.1
+# Version 2.9.0
 
 import asyncio
 from discord.commands import Option
@@ -464,7 +464,7 @@ async def get_started(ctx):
     await interaction.followup.send(content=content)
     async with ctx.typing():
         await asyncio.sleep(10)
-    content = "Run`**/newyeargoal`** for **each** new year goal you wish to achieve.\nRun **`/view_goals`** to ensure that all your goals havee been logged.\nRun **`/remindme`** to set how often you'll be reminded."
+    content = "Run**`/newyeargoal`** for **each** new year goal you wish to achieve.\nRun **`/view_goals`** to ensure that all your goals havee been logged.\nRun **`/remindme`** to set how often you'll be reminded."
     await interaction.followup.send(content=content)
     async with ctx.typing():
         await asyncio.sleep(7)
