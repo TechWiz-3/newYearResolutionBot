@@ -2,9 +2,9 @@
 
 # Update created by Zac on 5/Jan
 
-# repush for railway
+# fixed huge vulnerability in goal_achieved
 
-# Version 2.13.3
+# Version 2.14.0
 
 import asyncio
 from discord.commands import Option
@@ -200,27 +200,34 @@ async def view_ids(ctx):
 @bot.slash_command(guild_ids=[DEV_GUILD_ID, PROD_GUILD_ID])
 async def goal_achieved(ctx, id: Option(int, "Enter the ID of the goal you wish to mark as achieved", required=True)):
     """Log when you achieve a goal by goal ID"""
+    userGoalIdVerified = False
     final = ""
     fetchByID = (id,)
-    cursor.execute("SELECT goals FROM 2022_Goals WHERE id = %s", (fetchByID))
-    for x in cursor:
-        print(x)
+    cursor.execute("SELECT user, goals FROM 2022_Goals WHERE id = %s", (fetchByID))
+    for userandGoal in cursor:
+        user, goal = userandGoal
+        if user == str(ctx.author):
+            userGoalIdVerified = True
         xx = (
-            str(x)
+            str(goal)
             .replace(",", " ")
             .replace("'", "")
             .replace("(", "")
             .replace(")", "\n")
         )
         final += str(xx)
-    value = (id,)
-    print(value)
-    markAchieved = "UPDATE 2022_Goals SET status = '1' WHERE id = %s"
-    cursor.execute(markAchieved, value)
-    db.commit()
-    await ctx.respond(
-        f"**Congratulations...**\n<:pepe_hypers:925274715214458880> You have ACHIEVED `{final}`**Collect your trophy:**\n:trophy:"
-    )
+    
+    if userGoalIdVerified == True:
+        value = (id,)
+        print(value)
+        markAchieved = "UPDATE 2022_Goals SET status = '1' WHERE id = %s"
+        cursor.execute(markAchieved, value)
+        db.commit()
+        await ctx.respond(
+            f"**Congratulations...**\n<:pepe_hypers:925274715214458880> You have ACHIEVED `{final}`**Collect your trophy:**\n:trophy:"
+        )
+    else:
+        await ctx.respond("Hmm, something sus be going on here, maybe you made an error with the id? I'm not sure... but I wasn't able to log the goal as achieved T_T")
 
 @bot.command()
 async def initialise(ctx):

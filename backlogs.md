@@ -3,5 +3,6 @@
 ###### - Checkmarks for View Goals
 ###### - Support use in other servers
 ###### - Support specific time for reminder or when user online
+
+# Achieved
 ##### - Prevent users from achieving other peoples goals based on ID
-##### - 
