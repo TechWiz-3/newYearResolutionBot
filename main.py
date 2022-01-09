@@ -2,9 +2,9 @@
 
 # Update created by Zac on 9/Jan
 
-# change edit goal command to be beter
+# added db commit lol
 
-# Version 2.18.0
+# Version 2.18.1
 
 import asyncio
 from discord.commands import Option
@@ -500,6 +500,7 @@ async def edit_goal(ctx, id: Option(int, "Enter the ID corresponding to the goal
         changeGoal = "UPDATE 2022_Goals SET goals = %s WHERE user = %s AND id = %s"
         values = (newtext, str(ctx.author), id)
         cursor.execute(changeGoal, values)
+        db.commit()
         await ctx.respond(f"Perfect, you've replaced goal `{id}` with the text `{newtext}`")
     else:
         await ctx.respond("Something sus here bruh, idk what it is tho, maybe the ID you put is wrong?")
