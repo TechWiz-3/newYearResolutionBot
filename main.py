@@ -1,10 +1,10 @@
 # Created by #Zac the Wise#1381 with help from #iamkneel#2359
 
-# Update created by Zac on 5/Jan
+# Update created by Zac on 9/Jan
 
-# fixed a new line in goal_achieved
+# added new command edit goal
 
-# Version 2.15.0
+# Version 2.16.0
 
 import asyncio
 from discord.commands import Option
@@ -485,4 +485,11 @@ async def get_started(ctx):
     content = "For more command use the `/help` command. If you enounter any issues pls ping `@Zac the Wise#1381` :)"
     await interaction.followup.send(content=content)
 
+@bot.slash_command(guild_ids=[DEV_GUILD_ID, PROD_GUILD_ID])
+async def edit_goal(ctx, id: Option(int, "Enter the ID corresponding to the goal you wish to change"), newtext: Option(str, "Enter the new goal you'd like to set")):
+    """Edits a goal entry based on ID"""
+    changeGoal = "UPDATE 2022_Goals SET goals = %s WHERE user = %s AND id = %s"
+    values = (newtext, str(ctx.author), id)
+    cursor.execute(changeGoal, values)
+    
 bot.run(BOT_TOKEN)
