@@ -2,9 +2,9 @@
 
 # Update created by Zac on 9/Jan
 
-# added new command edit goal
+# change edit goal command
 
-# Version 2.16.0
+# Version 2.17.0
 
 import asyncio
 from discord.commands import Option
@@ -491,5 +491,6 @@ async def edit_goal(ctx, id: Option(int, "Enter the ID corresponding to the goal
     changeGoal = "UPDATE 2022_Goals SET goals = %s WHERE user = %s AND id = %s"
     values = (newtext, str(ctx.author), id)
     cursor.execute(changeGoal, values)
+    await ctx.respond("Done")
     
 bot.run(BOT_TOKEN)
