@@ -2,9 +2,9 @@
 
 # Update created by Zac on 9/Jan
 
-# change edit goal command
+# change edit goal command to be beter
 
-# Version 2.17.0
+# Version 2.18.0
 
 import asyncio
 from discord.commands import Option
@@ -488,9 +488,20 @@ async def get_started(ctx):
 @bot.slash_command(guild_ids=[DEV_GUILD_ID, PROD_GUILD_ID])
 async def edit_goal(ctx, id: Option(int, "Enter the ID corresponding to the goal you wish to change"), newtext: Option(str, "Enter the new goal you'd like to set")):
     """Edits a goal entry based on ID"""
-    changeGoal = "UPDATE 2022_Goals SET goals = %s WHERE user = %s AND id = %s"
-    values = (newtext, str(ctx.author), id)
-    cursor.execute(changeGoal, values)
-    await ctx.respond("Done")
+    goalIsForUser = False
+    checkGoalAndId = "SELECT user FROM 2022_Goals WHERE id = %s"
+    values = (id,)
+    cursor.execute(checkGoalAndId, values)
+    for usernameEntry in cursor:
+        user, = usernameEntry
+        if user == str(ctx.author):
+            goalIsForUser = True
+    if goalIsForUser == True:
+        changeGoal = "UPDATE 2022_Goals SET goals = %s WHERE user = %s AND id = %s"
+        values = (newtext, str(ctx.author), id)
+        cursor.execute(changeGoal, values)
+        await ctx.respond(f"Perfect, you've replaced goal `{id}` with the text `{newtext}`")
+    else:
+        await ctx.respond("Something sus here bruh, idk what it is tho, maybe the ID you put is wrong?")
     
 bot.run(BOT_TOKEN)
