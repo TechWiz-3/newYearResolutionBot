@@ -2,9 +2,9 @@
 
 # Update created by Zac on 9/Jan
 
-# added db commit lol
+# simplified get started command
 
-# Version 2.18.1
+# Version 2.19.0
 
 import asyncio
 from discord.commands import Option
@@ -469,21 +469,25 @@ async def next_reminder(ctx):
 @bot.slash_command(guild_ids=[DEV_GUILD_ID, PROD_GUILD_ID])
 async def get_started(ctx):
     """Helps you get started :)"""
+    contentOne = "||**This is how I help you:**\n`/help` The help command is your go to command to understand anything, but here's the recommended sequence of commands:||"
+    contentTwo = "||Run**`/newyeargoal`** for **each** new year goal you wish to achieve.\nRun **`/view_goals`** to ensure that all your goals havee been logged.\nRun **`/remindme`** to set how often you'll be reminded.||"
+    contentThree = "||For more command use the `/help` command. If you enounter any issues pls ping `@Zac the Wise#1381` :)||"
+
     interaction = await ctx.respond(
-        f"Ayo {ctx.author.mention} so you want to get after those goals and make this year, YOUR year. Well GOOD NEWS, I'm here to help..."
+        f"Ayo {ctx.author.mention} so you want to get after those goals and make this year, YOUR year. Well GOOD NEWS, I'm here to help...\n{contentOne}\n{contentTwo}\n{contentThree}"
         )
-    async with ctx.typing():
-        await asyncio.sleep(7)
-    content = "**This is how I help you:**\n`/help` The help command is your go to command to understand anything, but here's the recommended sequence of commands:"
-    await interaction.followup.send(content=content)
-    async with ctx.typing():
-        await asyncio.sleep(10)
-    content = "Run**`/newyeargoal`** for **each** new year goal you wish to achieve.\nRun **`/view_goals`** to ensure that all your goals havee been logged.\nRun **`/remindme`** to set how often you'll be reminded."
-    await interaction.followup.send(content=content)
-    async with ctx.typing():
-        await asyncio.sleep(7)
-    content = "For more command use the `/help` command. If you enounter any issues pls ping `@Zac the Wise#1381` :)"
-    await interaction.followup.send(content=content)
+    # async with ctx.typing():
+    #     await asyncio.sleep(7)
+    # content = "**This is how I help you:**\n`/help` The help command is your go to command to understand anything, but here's the recommended sequence of commands:"
+    # await interaction.followup.send(content=content)
+    # async with ctx.typing():
+    #     await asyncio.sleep(10)
+    # content = "Run**`/newyeargoal`** for **each** new year goal you wish to achieve.\nRun **`/view_goals`** to ensure that all your goals havee been logged.\nRun **`/remindme`** to set how often you'll be reminded."
+    # await interaction.followup.send(content=content)
+    # async with ctx.typing():
+    #     await asyncio.sleep(7)
+    # content = "For more command use the `/help` command. If you enounter any issues pls ping `@Zac the Wise#1381` :)"
+    # await interaction.followup.send(content=content)
 
 @bot.slash_command(guild_ids=[DEV_GUILD_ID, PROD_GUILD_ID])
 async def edit_goal(ctx, id: Option(int, "Enter the ID corresponding to the goal you wish to change"), newtext: Option(str, "Enter the new goal you'd like to set")):
