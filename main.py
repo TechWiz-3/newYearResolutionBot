@@ -1,10 +1,10 @@
 # Created by #Zac the Wise#1381 with help from #iamkneel#2359
 
-# Update created by Zac on 9/Jan
+# Update created by Zac on 11/Jan
 
-# simplified get started command
+# fixed delete goal vulnerability
 
-# Version 2.19.0
+# Version 2.20.0
 
 import asyncio
 from discord.commands import Option
@@ -399,15 +399,28 @@ async def clear_goals(ctx, id: Option(int, "Enter the ID of the goal you wish to
             f"All goals deleted. {random.choice(allGoalsDeleted)}\nNow time to put new ones in `/newyeargoal`\n*Also, your reminders have been removed*"
             )
     else:
-        sql = "DELETE FROM 2022_Goals WHERE user = %s AND id = %s"
-        user = str(ctx.author)
-        goalId = int(id)
-        values = (user, goalId)
-        cursor.execute(sql, values)
-        db.commit()
-        await ctx.respond(
-            f"Specific goal deleted {random.choice(specificGoalDeleted)}"
-            )
+        userAndIdMatch = False
+        getUserFromGoal = "SELECT user FROM 2022_Goals WHERE id = %s"
+        values = (id,)
+        cursor.execute(getUserFromGoal, values)
+        for goalEntry in cursor:
+            userOfGoal, = goalEntry
+            if userOfGoal == str(ctx.author):
+                userAndIdMatch = True
+        if userAndIdMatch == True:
+            sql = "DELETE FROM 2022_Goals WHERE user = %s AND id = %s"
+            user = str(ctx.author)
+            goalId = int(id)
+            values = (user, goalId)
+            cursor.execute(sql, values)
+            db.commit()
+            await ctx.respond(
+                f"Specific goal deleted {random.choice(specificGoalDeleted)}"
+                )
+        else:
+            await ctx.respond(
+                f"Wow, you trying to delete somebody elses goals? That's malicious dude <:angry_pepe_ak47:930283816143171604> <:angry_pepe_ak47:930283816143171604>\n||If not that means you put the wrong ID||"
+            )   
 
 @bot.slash_command(guild_ids=[DEV_GUILD_ID, PROD_GUILD_ID])
 async def stop_reminding(ctx):
