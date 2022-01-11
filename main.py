@@ -2,9 +2,9 @@
 
 # Update created by Zac on 11/Jan
 
-# added police emoji lol
+# fixed a bug in the get_started command
 
-# Version 2.21.0
+# Version 2.21.1
 
 import asyncio
 from discord.commands import Option
@@ -487,7 +487,7 @@ async def get_started(ctx):
     contentTwo = "||Run**`/newyeargoal`** for **each** new year goal you wish to achieve.\nRun **`/view_goals`** to ensure that all your goals havee been logged.\nRun **`/remindme`** to set how often you'll be reminded.||"
     contentThree = "||For more command use the `/help` command. If you enounter any issues pls ping `@Zac the Wise#1381` :)||"
 
-    interaction = await ctx.respond(
+    await ctx.respond(
         f"Ayo {ctx.author.mention} so you want to get after those goals and make this year, YOUR year. Well GOOD NEWS, I'm here to help...\n{contentOne}\n{contentTwo}\n{contentThree}"
         )
     # async with ctx.typing():
