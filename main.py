@@ -2,9 +2,9 @@
 
 # Update created by Zac on 11/Jan
 
-# fixed delete goal vulnerability
+# added police emoji lol
 
-# Version 2.20.0
+# Version 2.21.0
 
 import asyncio
 from discord.commands import Option
@@ -418,8 +418,9 @@ async def clear_goals(ctx, id: Option(int, "Enter the ID of the goal you wish to
                 f"Specific goal deleted {random.choice(specificGoalDeleted)}"
                 )
         else:
+            policeEmoji = discord.utils.get(bot.emojis, name="pepe_police")
             await ctx.respond(
-                f"Wow, you trying to delete somebody elses goals? That's malicious dude <:angry_pepe_ak47:930283816143171604> <:angry_pepe_ak47:930283816143171604>\n||If not that means you put the wrong ID||"
+                f"Wow, you trying to delete somebody elses goals? That's malicious dude {policeEmoji} <:angry_pepe_ak47:930283816143171604>\n||If not that means you put the wrong ID||"
             )   
 
 @bot.slash_command(guild_ids=[DEV_GUILD_ID, PROD_GUILD_ID])
