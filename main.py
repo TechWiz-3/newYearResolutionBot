@@ -1,10 +1,10 @@
 # Created by #Zac the Wise#1381 with help from #iamkneel#2359
 
-# Update created by Zac on 11/Jan
+# Update created by Zac on 2/Feb
 
-# fixed a bug in the get_started command
+# improved best practises and naming conventions
 
-# Version 2.21.1
+# Version 2.22.0
 
 import asyncio
 from discord.commands import Option
@@ -16,8 +16,6 @@ from datetime import date, timedelta
 from discord.utils import get
 import discord
 import random
-# import aiohttp
-# from discord import Webhook
 
 load_dotenv()
 BOT_TOKEN = os.getenv("TOKEN")
@@ -37,23 +35,25 @@ db = mysql.connector.connect(
 )
 
 cursor = db.cursor(buffered=True)
-secondcursor = db.cursor(buffered=True)
-thirdcursor = db.cursor(buffered=True)
-fourthCursor = db.cursor(buffered=True)
-fifthCursor = db.cursor(buffered=True)
+second_cursor = db.cursor(buffered=True)
+third_cursor = db.cursor(buffered=True)
+fourth_cursor = db.cursor(buffered=True)
+fifth_cursor = db.cursor(buffered=True)
 
-reminderFunnyText = ["The force wishes me to remind you of your goals, here they are.", "Did you think I'd let you forget about your goals? NOT A CHANCE", "How's it going mate?", "*Mighty presense decscends from sky to deliver a reminder to you*", "Ay bro, it's been some time, keep working at it", "Gravity Destroyers 2022 checking in with you"]
-reminderForOneAchieved = ["You've made the first step, now it's time for the second one <:lezgooo:925286931221344256>", "Hard work, smart work let's go <:lezgooo:925286931221344256> <:lezgooo:925286931221344256>", "You got this baby, second goal achieve coming soon <:stronk_doge:925285801921769513>", "*Mighty presense decscends from sky to deliver a reminder to you*"]
-reminderForTwoAchieved = ["Two goals achieved mate, the thirds gonna be a special one ;)", "Someones going for their 3rd goal this year <:lezgooo:925286931221344256>", "Third times a charm"]
-reminderForThreePlusAchieved = ["This mans on a roll, keep it going bro", "Did you think I'd let you forget about your goals? NOT A CHANCE. You've come THIS far, next goal let's go", "Accountability session king achiever howsit going?", "Sup warrior, time to check in :sunglasses:"]
-specificGoalDeleted = ["Can someone explain why?", "Who deletes their goals huh", "You just deleted a goal bruh, better make it up by adding two more", "Insane", "What is the meaning of life????? Humans make me doubt myself :rolling_eyes:"]
-allGoalsDeleted = ["WTH THIS PEEP IS CRAZY", "Dude is on a KILLING RAMPAGE", "Somebody get the police, dude just deleted all his goals", "If you don't got goals you can't achieve em"]
-reminderDeleted = ["Oh no, why did you delete your reminder T_T", "He deleted his reminders :(", "Man doesn't want to be reminded anymore?? Is this real??"]
+reminder_funny_text = ["The force wishes me to remind you of your goals, here they are.", "Did you think I'd let you forget about your goals? NOT A CHANCE", "How's it going mate?", "*Mighty presense decscends from sky to deliver a reminder to you*", "Ay bro, it's been some time, keep working at it", "Gravity Destroyers 2022 checking in with you"]
+reminder_for_one_achieved = ["You've made the first step, now it's time for the second one <:lezgooo:925286931221344256>", "Hard work, smart work let's go <:lezgooo:925286931221344256> <:lezgooo:925286931221344256>", "You got this baby, second goal achieve coming soon <:stronk_doge:925285801921769513>", "*Mighty presense decscends from sky to deliver a reminder to you*"]
+reminder_for_two_achieved = ["Two goals achieved mate, the thirds gonna be a special one ;)", "Someones going for their 3rd goal this year <:lezgooo:925286931221344256>", "Third times a charm"]
+reminder_for_three_plus_achieved = ["This mans on a roll, keep it going bro", "Did you think I'd let you forget about your goals? NOT A CHANCE. You've come THIS far, next goal let's go", "Accountability session king achiever howsit going?", "Sup warrior, time to check in :sunglasses:"]
+specific_goal_deleted = ["Can someone explain why?", "Who deletes their goals huh", "You just deleted a goal bruh, better make it up by adding two more", "Insane", "What is the meaning of life????? Humans make me doubt myself :rolling_eyes:"]
+all_goals_deleted = ["WTH THIS PEEP IS CRAZY", "Dude is on a KILLING RAMPAGE", "Somebody get the police, dude just deleted all his goals", "If you don't got goals you can't achieve em"]
+reminder_deleted = ["Oh no, why did you delete your reminder T_T", "He deleted his reminders :(", "Man doesn't want to be reminded anymore?? Is this real??"]
 
-# class sql:
-#     def getGoals(self, cursorInstance):
-#         getGoals = "query here"
-#         return getGoals
+# hopefully will be able to use these classes for my queries in the future
+class sql:
+    def get_goals(self, cursor_instance, user):
+        get_goals = "SELECT * FROM 2022_Goals WHERE user = %s"
+        cursor_instance.execute(get_goals, user)
+        return cursor_instance
 
 @bot.event
 async def on_ready():
@@ -61,7 +61,7 @@ async def on_ready():
     channel = server.get_channel(867599113825812481) #g et bots channel
     await channel.send("<@760345587802964010> remember to run the initialisation command") # ping me to remind me to run init command
     while True:
-        # alternate between two bot statuses
+        # alternate between two bot statuses 
         await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name="you achieve your goals"))
         await asyncio.sleep(5)
         await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name="get started | /help"))
@@ -72,11 +72,11 @@ async def help(ctx):
     """Helps you use the bots commands"""
     about = f"**About Me**\nI'm a bot specifically created for Gravity Destroyers. My purpose is simple:\n<:agreentick:875244017833639956> Log users goals\n<:agreentick:875244017833639956> Remind users about their goals\n<:agreentick:875244017833639956> Help motivate and remind users to keep working at and achieve their goals :muscle:"
     await ctx.respond(
-        f"{about}\n\n**New Year Goal Command**\nTo use this command, type `/newyeargoal` and click space, enter or tab, then type in your goal, type one goal at a time and keep it to raw text.\n\n**View Goals Command**\nTo use this command, type `/view_goals`\n\n**View Ids Command**\nTo use this command, type `/view_ids`. Each goal will be displayed with it's corresponding ID in bold.\n\n**Goal Achieved**\nTo use this command, type `/goal_achieved` then press tab and enter the ID corresponding to the goal you wish to mark as achieved.\n\n**Remind Me Command**\nThis command instructs the bot to remind you of your goals. To use it type `/remindme` then press tab and enter how often you wish to be reminded of your goals in days."
+        f"{about}\n\n**New Year Goal Command**\nTo use this command, type `/new_year_goal` and click space, enter or tab, then type in your goal, type one goal at a time and keep it to raw text.\n\n**View Goals Command**\nTo use this command, type `/view_goals`\n\n**View Ids Command**\nTo use this command, type `/view_ids`. Each goal will be displayed with it's corresponding ID in bold.\n\n**Goal Achieved**\nTo use this command, type `/goal_achieved` then press tab and enter the ID corresponding to the goal you wish to mark as achieved.\n\n**Remind Me Command**\nThis command instructs the bot to remind you of your goals. To use it type `/remind_me` then press tab and enter how often you wish to be reminded of your goals in days."
     )
 
 @bot.slash_command(guild_ids=[DEV_GUILD_ID, PROD_GUILD_ID])
-async def newyeargoal(ctx, *, goal: Option(str, "Type the name of the goal (one only)", required=True)):
+async def new_year_goal(ctx, *, goal: Option(str, "Type the name of the goal (one only)", required=True)):
     """Log a goal, one at a time"""
     person = str(ctx.author) # get name
     personId = str(ctx.author.id) # get id
@@ -86,24 +86,25 @@ async def newyeargoal(ctx, *, goal: Option(str, "Type the name of the goal (one 
     cursor.execute(insertGoals, finalValues) # execute
     db.commit()
     await ctx.respond(
-        f"Yessir\nYour goal is `{goal}`\n**I've logged it for you, NOW LET'S GO GET IT <:lezgooo:923128327970099231>**\nOh and also, remember to do `/remindme` to let me know how often to remind you about it!"
+        f"Yessir\nYour goal is `{goal}`\n**I've logged it for you, NOW LET'S GO GET IT <:lezgooo:923128327970099231>**\nOh and also, remember to do `/remind_me` to let me know how often to remind you about it!"
         )
 
 @bot.slash_command(guild_ids=[DEV_GUILD_ID, PROD_GUILD_ID])
-async def remindme(ctx, *, days: Option(int, "Enter how often you'd like to be reminded in days", required=True)):  # time in days
+async def remind_me(ctx, *, days: Option(int, "Enter how often you'd like to be reminded in days", required=True)):  # time in days
     """Tells the bot to remind you about your goals every x days"""
     goalsSet = False # automatically assume that goals haven't been set
     checkGoals = "SELECT * FROM 2022_Goals WHERE user = %s" # check if goals have been set
     values = (str(ctx.author),) # get the users name
     cursor.execute(checkGoals, values) # execute
+    print(cursor, type(cursor))
     for entry in cursor: # loop through results if there are any
         goalsSet = True # goals indeed have been set
     if goalsSet == True: # go ahead to next check
         reminderSetPreviously = False # assume that a reminder has not been set before
         getReminders = "SELECT days FROM reminders WHERE user = %s" # find reminders set previously
         values = (str(ctx.author),) # users name
-        secondcursor.execute(getReminders, values) # execute
-        for reminder in secondcursor: # loop through results if they exist
+        second_cursor.execute(getReminders, values) # execute
+        for reminder in second_cursor: # loop through results if they exist
             reminderSetPreviously = True # reminder has been set prevously
         if reminderSetPreviously == True: # reminder has been set previously
             # tell them off
@@ -127,7 +128,7 @@ async def remindme(ctx, *, days: Option(int, "Enter how often you'd like to be r
             )
     elif goalsSet == False: # if goals haven't been set
             await ctx.respond(
-            "Well it's great that you want to be reminded, but make sure you set goals first `/newyeargoal` :grin:"
+            "Well it's great that you want to be reminded, but make sure you set goals first `/new_year_goal` :grin:"
             )
 
 @bot.slash_command(guild_ids=[DEV_GUILD_ID, PROD_GUILD_ID])
@@ -173,7 +174,7 @@ async def view_goals(ctx):
             f"Your goals are...\n\n{final}\nYou haven't achieved any of your {goalsCounter} goals, but that doesn't matter, **TRAIN HARD TRAIN SMART** (that's what Gravity Destroyers is for) and you'll get there <:lezgooo:925286931221344256> <:lezgooo:925286931221344256>"
         )
     elif goalsSet == False:
-        await ctx.respond("Ummm, you need to set your goals first before viewing them lol\n\n*However, I live go serve bright human ;) ... these commands may help...* `/help` `/newyeargoal`")
+        await ctx.respond("Ummm, you need to set your goals first before viewing them lol\n\n*However, I live go serve bright human ;) ... these commands may help...* `/help` `/new_year_goal`")
 
 @bot.slash_command(guild_ids=[DEV_GUILD_ID, PROD_GUILD_ID])
 async def view_ids(ctx):
@@ -234,7 +235,6 @@ async def initialise(ctx):
     if not ctx.author.guild_permissions.administrator:
         await ctx.send(content=f"**{ctx.author.mention} You don't have the right permissions for that.**\n||But between you and me, nice try lmao, sadly Zac foresaw that clever bois like you would try stuff like that\nAlso, DON'T TELL HIM I SAID THIS, imma delete the message||", delete_after = 7)
         return
-    counter = 0
     await ctx.send("Initialising...")
     while True:
         goals = ""
@@ -243,8 +243,8 @@ async def initialise(ctx):
         for (username, howOften) in cursor:  # loop through the results of the sql query
             sql = "SELECT user, next_date FROM nextDateReminder WHERE user = %s"
             value = (username,)
-            secondcursor.execute(sql, value)
-            for dateEntry in secondcursor:
+            second_cursor.execute(sql, value)
+            for dateEntry in second_cursor:
                 userForThirdQuery, unpackedDate = dateEntry
                 server = bot.get_guild(PROD_GUILD_ID)
                 reminderChannel = server.get_channel(867599113825812481)
@@ -253,12 +253,12 @@ async def initialise(ctx):
                 if unpackedDate == date.today():
                     sql = "SELECT goals,status,userId FROM 2022_Goals WHERE user = %s"  # request for the users goals in the goals table
                     userRequest = (userForThirdQuery,)
-                    thirdcursor.execute(sql, userRequest)  # execute sql query
+                    third_cursor.execute(sql, userRequest)  # execute sql query
                     statusCounter = 0
                     global memberObject
                     for (
                         goalAndStatus
-                    ) in thirdcursor:  # loop the the results of the latest query
+                    ) in third_cursor:  # loop the the results of the latest query
                         goal,status,idByMember = goalAndStatus #assign the variables returned
                         idByMember = int(idByMember)
                         try:
@@ -272,7 +272,7 @@ async def initialise(ctx):
                         elif status == 0:
                             goals += f'{slashEmoji} `{goal}`\n'   
                     if statusCounter == 0:
-                        sendFunnyText = random.choice(reminderFunnyText)
+                        sendFunnyText = random.choice(reminder_funny_text)
                         try:
                             await reminderChannel.send(
                                 f"{memberObject.mention}\n**{sendFunnyText}**\n\n{goals}"
@@ -282,7 +282,7 @@ async def initialise(ctx):
                                 f"{memberObject}\n**{sendFunnyText}**\n\n{goals}"
                                 )  # print the users goals
                     elif statusCounter == 1:
-                        sendFunnyText = random.choice(reminderForOneAchieved)
+                        sendFunnyText = random.choice(reminder_for_one_achieved)
                         try:
                             await reminderChannel.send(
                                 f"{memberObject.mention}\n**{sendFunnyText}**\n\n{goals}"
@@ -292,7 +292,7 @@ async def initialise(ctx):
                                 f"{memberObject}\n**{sendFunnyText}**\n\n{goals}"
                                 )  # print the users goals
                     elif statusCounter == 2:
-                        sendFunnyText = random.choice(reminderForTwoAchieved)
+                        sendFunnyText = random.choice(reminder_for_two_achieved)
                         try:
                             await reminderChannel.send(
                                 f"{memberObject.mention}\n**{sendFunnyText}**\n\n{goals}"
@@ -302,7 +302,7 @@ async def initialise(ctx):
                                 f"{memberObject}\n**{sendFunnyText}**\n\n{goals}"
                                 )  # print the users goals
                     elif statusCounter > 2:
-                        sendFunnyText = random.choice(reminderForThreePlusAchieved)
+                        sendFunnyText = random.choice(reminder_for_three_plus_achieved)
                         try:
                             await reminderChannel.send(
                                 f"{memberObject.mention}\n**{sendFunnyText}**\n\n{goals}"
@@ -316,18 +316,18 @@ async def initialise(ctx):
                     updateSql = "UPDATE nextDateReminder SET next_date = %s WHERE user = %s"
                     nextDate = date.today() + timedelta(days=howOften)
                     valuesForChangingDate = (nextDate, userForThirdQuery)
-                    fourthCursor.execute(updateSql, valuesForChangingDate)
+                    fourth_cursor.execute(updateSql, valuesForChangingDate)
                     db.commit()
                     #await ctx.send("**End of mighty reminder message**")
                 elif unpackedDate < date.today(): #if the table is outdated
                     print("Date smaller than current date triggered for", userForThirdQuery)
                     sql = "SELECT goals,status,userId FROM 2022_Goals WHERE user = %s"  # request for the users goals in the goals table
                     userRequest = (userForThirdQuery,)
-                    thirdcursor.execute(sql, userRequest)  # execute sql query
+                    third_cursor.execute(sql, userRequest)  # execute sql query
                     statusCounter = 0
                     for (
                         goalAndStatus
-                    ) in thirdcursor:  # loop the the results of the latest query
+                    ) in third_cursor:  # loop the the results of the latest query
                         goal,status,idByMember = goalAndStatus #assign the variables returned
                         try:
                             memberObject = bot.get_user(int(idByMember))
@@ -341,10 +341,10 @@ async def initialise(ctx):
                             goals += f'{slashEmoji} `{goal}`\n'
                     #print users goals to remind them
                     if statusCounter == 0:
-                        sendFunnyText = random.choice(reminderFunnyText)
+                        sendFunnyText = random.choice(reminder_funny_text)
                         await reminderChannel.send(f"{sendFunnyText}\n{goals}")  # print the users goals
                     elif statusCounter == 1:
-                        sendFunnyText = random.choice(reminderForOneAchieved)
+                        sendFunnyText = random.choice(reminder_for_one_achieved)
                         try:
                             await reminderChannel.send(
                                 f"{memberObject.mention}\n**{sendFunnyText}**\n\n{goals}"
@@ -354,7 +354,7 @@ async def initialise(ctx):
                                 f"{memberObject}\n**{sendFunnyText}**\n\n{goals}"
                                 )  # print the users goals
                     elif statusCounter == 2:
-                        sendFunnyText = random.choice(reminderForTwoAchieved)
+                        sendFunnyText = random.choice(reminder_for_two_achieved)
                         try:
                             await reminderChannel.send(
                                 f"{memberObject.mention}\n**{sendFunnyText}**\n\n{goals}"
@@ -364,7 +364,7 @@ async def initialise(ctx):
                                 f"{memberObject}\n**{sendFunnyText}**\n\n{goals}"
                                 )  # print the users goals
                     elif statusCounter > 2:
-                        sendFunnyText = random.choice(reminderForThreePlusAchieved)
+                        sendFunnyText = random.choice(reminder_for_three_plus_achieved)
                         try:
                             await reminderChannel.send(
                                 f"{memberObject.mention}\n**{sendFunnyText}**\n\n{goals}"
@@ -377,9 +377,9 @@ async def initialise(ctx):
                     updateSql = "UPDATE nextDateReminder SET next_date = %s WHERE user = %s"
                     nextDate = date.today() + timedelta(days=howOften)
                     valuesForChangingDate = (nextDate, userForThirdQuery)
-                    fourthCursor.execute(updateSql, valuesForChangingDate)
+                    fourth_cursor.execute(updateSql, valuesForChangingDate)
                     db.commit()
-                    await ctx.send("**End of mighty reminder message**")
+                    #await ctx.send("**End of mighty reminder message**")
         
         await asyncio.sleep(120)
 
@@ -396,7 +396,7 @@ async def clear_goals(ctx, id: Option(int, "Enter the ID of the goal you wish to
         cursor.execute(deleteDateReminderEntries, user)
         db.commit()
         await ctx.respond(
-            f"All goals deleted. {random.choice(allGoalsDeleted)}\nNow time to put new ones in `/newyeargoal`\n*Also, your reminders have been removed*"
+            f"All goals deleted. {random.choice(all_goals_deleted)}\nNow time to put new ones in `/new_year_goal`\n*Also, your reminders have been removed*"
             )
     else:
         userAndIdMatch = False
@@ -415,7 +415,7 @@ async def clear_goals(ctx, id: Option(int, "Enter the ID of the goal you wish to
             cursor.execute(sql, values)
             db.commit()
             await ctx.respond(
-                f"Specific goal deleted {random.choice(specificGoalDeleted)}"
+                f"Specific goal deleted {random.choice(specific_goal_deleted)}"
                 )
         else:
             policeEmoji = discord.utils.get(bot.emojis, name="pepe_police")
@@ -433,7 +433,7 @@ async def stop_reminding(ctx):
     cursor.execute(deleteDateReminderEntries, user)
     db.commit()
     await ctx.respond(
-        f"{random.choice(reminderDeleted)}\nDo `/remindme` again to change the interval. If not then we're sad to see you go... all the best"
+        f"{random.choice(reminder_deleted)}\nDo `/remind_me` again to change the interval. If not then we're sad to see you go... all the best"
     )
 
 @bot.slash_command(guild_ids=[DEV_GUILD_ID, PROD_GUILD_ID])
@@ -467,8 +467,8 @@ async def next_reminder(ctx):
         reminderSet = True
         howOften, = entry
     getNextReminderDate = "SELECT next_date FROM nextDateReminder WHERE user = %s"
-    secondcursor.execute(getNextReminderDate, values)
-    for dateEntry in secondcursor:
+    second_cursor.execute(getNextReminderDate, values)
+    for dateEntry in second_cursor:
         nextDate, = dateEntry
     if reminderSet == True:
         await ctx.respond(
@@ -477,14 +477,14 @@ async def next_reminder(ctx):
     elif reminderSet == False:
         umEmoji = discord.utils.get(bot.emojis, name="um")
         await ctx.respond(
-            f"{umEmoji} you need to set a reminder first before viewing it... `/remindme`"
+            f"{umEmoji} you need to set a reminder first before viewing it... `/remind_me`"
             )
 
 @bot.slash_command(guild_ids=[DEV_GUILD_ID, PROD_GUILD_ID])
 async def get_started(ctx):
     """Helps you get started :)"""
     contentOne = "||**This is how I help you:**\n`/help` The help command is your go to command to understand anything, but here's the recommended sequence of commands:||"
-    contentTwo = "||Run**`/newyeargoal`** for **each** new year goal you wish to achieve.\nRun **`/view_goals`** to ensure that all your goals havee been logged.\nRun **`/remindme`** to set how often you'll be reminded.||"
+    contentTwo = "||Run**`/new_year_goal`** for **each** new year goal you wish to achieve.\nRun **`/view_goals`** to ensure that all your goals havee been logged.\nRun **`/remind_me`** to set how often you'll be reminded.||"
     contentThree = "||For more command use the `/help` command. If you enounter any issues pls ping `@Zac the Wise#1381` :)||"
 
     await ctx.respond(
@@ -496,7 +496,7 @@ async def get_started(ctx):
     # await interaction.followup.send(content=content)
     # async with ctx.typing():
     #     await asyncio.sleep(10)
-    # content = "Run**`/newyeargoal`** for **each** new year goal you wish to achieve.\nRun **`/view_goals`** to ensure that all your goals havee been logged.\nRun **`/remindme`** to set how often you'll be reminded."
+    # content = "Run**`/new_year_goal`** for **each** new year goal you wish to achieve.\nRun **`/view_goals`** to ensure that all your goals havee been logged.\nRun **`/remind_me`** to set how often you'll be reminded."
     # await interaction.followup.send(content=content)
     # async with ctx.typing():
     #     await asyncio.sleep(7)
