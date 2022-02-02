@@ -2,9 +2,9 @@
 
 # Update created by Zac on 2/Feb
 
-# improved best practises and naming conventions
+# solved huge reminder bug
 
-# Version 2.22.0
+# Version 2.23.0
 
 import asyncio
 from discord.commands import Option
@@ -342,7 +342,7 @@ async def initialise(ctx):
                     #print users goals to remind them
                     if statusCounter == 0:
                         sendFunnyText = random.choice(reminder_funny_text)
-                        await reminderChannel.send(f"{sendFunnyText}\n{goals}")  # print the users goals
+                        await reminderChannel.send(f"{memberObject.mention}\n**{sendFunnyText}**\n\n{goals}")  # print the users goals
                     elif statusCounter == 1:
                         sendFunnyText = random.choice(reminder_for_one_achieved)
                         try:
