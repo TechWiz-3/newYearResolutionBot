@@ -22,12 +22,10 @@ Currently the bot is only functional in [one server](https://discord.gg/7Pjjf2XT
 `/get_started`  
 *Responds with a series of messages explaining the basic commands to begin using the bot*  
 
-`/newyeargoal`  
-`/newyeargoal goal`  
+`/newyeargoal <goal>`  
 *Logs a new goal*  
 
-`/remindme`  
-`/remindme days`  
+`/remindme <days>`  
 *Instructs the bot how often to remind the user about their goals in days*  
 
 `/view_goals`  
@@ -36,22 +34,19 @@ Currently the bot is only functional in [one server](https://discord.gg/7Pjjf2XT
 `/view_ids`  
 *Displays the users goals with their corresponding ID in the database. The ID is used for actions such as deleting a goal or marking it as achieved*  
 
-`/goal_achieved`  
-`/goal_achieved ID`  
+`/goal_achieved <ID>`  
 *Marks the goal with the specified ID as achieved*  
 
 `/stop_reminding`  
 *Instructs the bot to stop reminding the user of their goals* T_T  
 
-`/change_reminder_interval`  
-`/change_reminder_interval days`  
+`/change_reminder_interval <days>`  
 *Changes how often the bot reminds the user*  
   
 `/next_reminder`  
 *Displays how often the user is being reminded and the date of their next reminder*
 
-`/clear_goals`    
-`/cleargoals id`  
+`/clear_goals` or   `/cleargoals <id>`  
 *Deletes all goals and reminders or deletes a specific goal and preserves reminders.*
 
 ## Setup & Tools
