@@ -1,10 +1,10 @@
 # Created by #Zac the Wise#1381 with help from #iamkneel#2359
 
-# Update created by Zac on 2/Feb
+# Update created by Zac on 14/Feb
 
-# repush for railway 2
+# cleaned up code, new help command
 
-# Version 2.23.0
+# Version 3.1.0
 
 import asyncio
 from optparse import Values
@@ -59,48 +59,16 @@ all_goals_deleted = ["WTH THIS PEEP IS CRAZY", "Dude is on a KILLING RAMPAGE", "
 reminder_deleted = ["Oh no, why did you delete your reminder T_T", "He deleted his reminders :(", "Man doesn't want to be reminded anymore?? Is this real??"]
 reminder_channel_success_response = ["THAT'S THE WAY TO GO", "yeah boi", "now, let's get this show started", "great start bois n gorls", "xD", "lez get it now"]
 
-# hopefully will be able to use these classes for my queries in the future
-class sql:
-    def get_goals(self, cursor_instance, user):
-        get_goals = "SELECT * FROM 2022_Goals WHERE user = %s"
-        cursor_instance.execute(get_goals, user)
-        return cursor_instance
-
-# get a list of servers
-server_ids_list = [] # this list will be used for the slash command guild ids list
-# async def get_servers():
-#     for guild in bot.guilds:
-#         # add existing guilds to the guild list
-#         guild_id = int(guild.id)
-#         server_ids_list.append(guild_id)
-#         print(server_ids_list)
-
-# if the bot joins a new server
-
-# @bot.event
-# async def on_guild_join(guild):
-#     guild_id = int(guild.id)
-#     server_ids_list.append(guild_id) # add the server ID to the list of servers
-#     # add the server ID to the config table
-#     update_config_table = "INSERT INTO config (server_id) VALUES (%s)"
-#     values = (guild_id,)
-#     cursor.execute(update_config_table, values)
-#     db.commit()
-
 @bot.event
 async def on_ready():
-    #server = bot.get_guild(867597533458202644) # get Grav Destroyers server
-    #channel = server.get_channel(867599113825812481) # get bots channel
-    #await channel.send("<@760345587802964010> remember to run the initialisation command") # ping me to remind me to run init command
     await initialise_loop()
-    #await get_servers()
+    #await reminder_function.start()
     while True:
         # alternate between two bot statuses 
         await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name="you achieve your goals"))
         await asyncio.sleep(5)
         await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name="get started | /help"))
         await asyncio.sleep(5)
-        await reminder_function.start()
 
 @bot.slash_command(guild_ids=[DEV_GUILD_ID, PROD_GUILD_ID])
 async def help(ctx):
@@ -112,13 +80,17 @@ async def help(ctx):
     embed.add_field(name="View Ids Command", value="To use this command, type `/view_ids`. Each goal will be displayed with it's corresponding ID in bold.", inline=False)
     embed.add_field(name="Goal Achieved Command", value="To use this command, type `/goal_achieved` then press tab and enter the ID corresponding to the goal you wish to mark as achieved.", inline=False)
     embed.add_field(name="Remind Me Command", value="This command instructs the bot to remind you of your goals. To use it type `/remind_me` then press tab and enter how often you wish to be reminded of your goals in days.", inline=False)
-    embed.add_field(name="More command descriptions coming soon", value="lol", inline=False)
+    embed.add_field(name="Stop Reminding Commnad", value="This command stops the bot from reminding you about your goals, to use it type `/stop_reminding`", inline=False)
+    embed.add_field(name="Clear Goals Command", value="Removes all logged goals and reminders OR a single goal and leaves reminders. To delete all goals, type `/clear_goals`. To delete a specific goal type `/clear_goals id` the ID should be that of the goal you wish to delete, to get the ID’s for your goals type `/view_ids`", inline=False)
+    embed.add_field(name="Edit Goal Command", value="This command edits a goal based on it’s ID. To use this command type `/edit_goal id newgoal`", inline=False)
+    embed.add_field(name = "Next Reminder Command", value = "Shows you when your next goal reminder is. To use this command type `/next_reminder`", inline =False)
+    embed.add_field(name = "Change Reminder Interval Command", value = "Allows you to change how often you are reminded in days `/change_reminder_interval days`", inline=False)
     await ctx.respond(embed=embed)
 
 @bot.event
-async def on_application_command_error(ctx, error):
-    await ctx.send(f":weary: {error}")
-    pass
+async def on_application_command_error(ctx, error): # if slash command error occurs
+    await ctx.send(f":weary: {error}") # send the error
+
 @bot.slash_command(guild_ids=[PROD_GUILD_ID, DEV_GUILD_ID], default_permissions = False)
 @permissions.is_owner()
 @permissions.permission(user_id = 760345587802964010)
@@ -213,8 +185,8 @@ async def remind_me(ctx, *, days: Option(int, "Enter how often you'd like to be 
 @bot.slash_command(guild_ids=[DEV_GUILD_ID, PROD_GUILD_ID])
 async def view_goals(ctx):
     """Displays your currently logged and achieved goals"""
-    greenTickEmoji = discord.utils.get(bot.emojis, name="epicTick")
-    slashEmoji = discord.utils.get(bot.emojis, name="aslash")
+    greenTickEmoji = discord.utils.get(bot.emojis, name="epicTick") # get a tick emoji
+    slashEmoji = discord.utils.get(bot.emojis, name="aslash") # get a slash emoji
     goalsSet = False # variable that indicates that the user has sett their goals
     goals_message_list = ""
     goalsCounter = 0 # how many goals
@@ -247,13 +219,13 @@ async def view_goals(ctx):
 async def view_ids(ctx):
     """Displays each logged called and it's unique ID to access"""
     final_message = ""
-    author = (str(ctx.author),)
-    sql = "SELECT goals, id FROM 2022_Goals WHERE user = %s"
+    author = (str(ctx.author),) # gets the command invoker
+    sql = "SELECT goals, id FROM 2022_Goals WHERE user = %s" # searches the table for goals and ids with the user's name
     cursor.execute(sql, author)
-    for entry in cursor:
-        goal, goal_id = entry
-        final_message = final_message + f"**{goal}** `{goal_id}`\n"
-    await ctx.respond(final_message)
+    for entry in cursor: # loop through results
+        goal, goal_id = entry # unpack results
+        final_message = final_message + f"**{goal}** `{goal_id}`\n" # add to the final message the goal and goal id
+    await ctx.respond(final_message) # send the final list
 
 
 @bot.slash_command(guild_ids=[DEV_GUILD_ID, PROD_GUILD_ID])
@@ -262,23 +234,24 @@ async def goal_achieved(ctx, id: Option(int, "Enter the ID of the goal you wish 
     userGoalIdVerified = False
     achieved_goal_name = ""
     fetchByID = (id,)
-    cursor.execute("SELECT user, goals FROM 2022_Goals WHERE id = %s", fetchByID)
-    for userandGoal in cursor:
-        user, goal = userandGoal
-        if user == str(ctx.author):
-            userGoalIdVerified = True
-            achieved_goal_name = goal
-    if userGoalIdVerified == True:
+    cursor.execute("SELECT user, goals FROM 2022_Goals WHERE id = %s", fetchByID) # finds the goal corresponding to provided id
+    for userandGoal in cursor: # loops through results
+        user, goal = userandGoal # unpacks the resuts
+        if user == str(ctx.author): # if the user of the requested goal is equal to the command invoker
+            userGoalIdVerified = True # this right user
+            achieved_goal_name = goal # gets the text of the goal
+    if userGoalIdVerified == True: # if the user is correct
         value = (id,)
-        print(value)
         markAchieved = "UPDATE 2022_Goals SET status = '1' WHERE id = %s"
         cursor.execute(markAchieved, value)
         db.commit()
         await ctx.respond(
             f"**Congratulations...**\n<:pepe_hypers:925274715214458880> You have ACHIEVED `{achieved_goal_name}`\n**Collect your trophy:**\n:trophy:"
-        )
-    else:
-        await ctx.respond("Hmm, something sus be going on here, maybe you made an error with the id? I'm not sure... but I wasn't able to log the goal as achieved T_T")
+            )
+    elif userGoalIdVerified == False: # if it's the wrong user
+        await ctx.respond(
+            "Hmm, something sus be going on here, maybe you made an error with the id? I'm not sure... but I wasn't able to log the goal as achieved T_T"
+                )
 
 async def initialise_loop():
     # get each server and send a message to it's reminder channel
@@ -290,10 +263,8 @@ async def initialise_loop():
         server = bot.get_guild(int(server_id))
         reminder_channel = server.get_channel(int(reminder_channel_id))
         await reminder_channel.send("Initialising...")
-        # except:
-            # print(f"Attempted to get guild id and failed")
 
-@tasks.loop(minutes = 1.0)
+@tasks.loop(minutes = 2.0)
 async def reminder_function():
     print("I'm running")
     goals = ""
@@ -310,8 +281,6 @@ async def reminder_function():
         second_cursor.execute(sql, value)
         for dateEntry in second_cursor:
             userForThirdQuery, unpackedDate = dateEntry
-            server = bot.get_guild(PROD_GUILD_ID)
-            reminderChannel = server.get_channel(867599113825812481)
             slashEmoji = discord.utils.get(bot.emojis, name="aslash")
             greenTickEmoji = discord.utils.get(bot.emojis, name="epicTick")
             if unpackedDate == date.today():
@@ -370,7 +339,7 @@ async def reminder_function():
                             f"{memberObject.mention}\n**{sendFunnyText}**\n\n{goals}"
                             )  # print the users goals
                     except:
-                        await reminderChannel.send(
+                        await reminderChannelObject.send(
                             f"{memberObject}\n**{sendFunnyText}**\n\n{goals}"
                             )  # print the users goals
                 elif statusCounter > 2:
@@ -447,7 +416,7 @@ async def reminder_function():
                             f"{memberObject.mention}\n**{sendFunnyText}**\n\n{goals}"
                             )  # print the users goals
                     except:
-                        await reminderChannel.send(
+                        await reminderChannelObject.send(
                             f"{memberObject}\n**{sendFunnyText}**\n\n{goals}"
                             )  # print the users goals
                 elif statusCounter > 2:
@@ -466,187 +435,6 @@ async def reminder_function():
                 valuesForChangingDate = (nextDate, userForThirdQuery)
                 fourth_cursor.execute(updateSql, valuesForChangingDate)
                 db.commit()
-            
-
-@bot.command()
-async def initialise(ctx):
-    if not ctx.author.guild_permissions.administrator:
-        await ctx.send(content=f"**{ctx.author.mention} You don't have the right permissions for that.**\n||But between you and me, nice try lmao, sadly Zac foresaw that clever bois like you would try stuff like that\nAlso, DON'T TELL HIM I SAID THIS, imma delete the message||", delete_after = 7)
-        return
-    await ctx.send("Initialising...")
-    while True:
-        goals = ""
-        find_channel_id = 0
-        reminder_channel_found = False
-        reminder_channel_id_final = 0
-        global_server_id = 0
-        reminderChannelObject = None
-        sql = "SELECT user, days FROM reminders"  # select the username and their selected reminder interval
-        cursor.execute(sql)  # execute sql query
-        for (username, howOften) in cursor:  # loop through the results of the sql query
-            sql = "SELECT user, next_date FROM nextDateReminder WHERE user = %s"
-            value = (username,)
-            second_cursor.execute(sql, value)
-            for dateEntry in second_cursor:
-                userForThirdQuery, unpackedDate = dateEntry
-                server = bot.get_guild(PROD_GUILD_ID)
-                reminderChannel = server.get_channel(867599113825812481)
-                slashEmoji = discord.utils.get(bot.emojis, name="aslash")
-                greenTickEmoji = discord.utils.get(bot.emojis, name="epicTick")
-                if unpackedDate == date.today():
-                    get_goal_entry = "SELECT goals,status,userId,serverId FROM 2022_Goals WHERE user = %s"  # request for the users goals in the goals table
-                    userRequest = (userForThirdQuery,)
-                    third_cursor.execute(get_goal_entry, userRequest)  # execute sql query
-                    statusCounter = 0
-                    for (
-                        fullEntry
-                    ) in third_cursor:  # loop the the results of the latest query
-                        goal,status,idByMember,serverByMember = fullEntry #assign the variables returned
-                        find_channel_id = int(serverByMember) # variable used for finding the channel, it is the server id
-                        global_server_id = int(serverByMember) # used for getting the server object later on
-                        try:
-                            memberObject = bot.get_user(int(idByMember))
-                        except:
-                            memberObject = f'User mention failed {userForThirdQuery}'
-                            print('Issue occured, none was returned as memberObject as shown here', memberObject)
-                        if status == 1:
-                            goals += f'{greenTickEmoji} `{goal}`\n'
-                            statusCounter +=1
-                        elif status == 0:
-                            goals += f'{slashEmoji} `{goal}`\n'
-                    get_reminder_channel = "SELECT reminder_channel_id FROM config WHERE server_id = %s"
-                    values = (find_channel_id,)
-                    third_cursor.execute(get_reminder_channel, values)
-                    for unpacked_channel in third_cursor:
-                        # unpack the channel id
-                        reminder_channel_id_final, = unpacked_channel
-                        reminder_channel_id_final = int(reminder_channel_id_final)
-                        reminder_channel_found = True
-                    print("Reminder Channel Found:", reminder_channel_found)
-                    server = bot.get_guild(global_server_id)
-                    try:
-                        reminderChannelObject = server.get_channel(reminder_channel_id_final)
-                    except:
-                        print('MAY DAY MAY DAY, SOS, was unable to get reminder channel object')
-                    # print users goals to remind them
-                    if statusCounter == 0:
-                        sendFunnyText = random.choice(reminder_funny_text)
-                        await reminderChannelObject.send(f"{memberObject.mention}\n**{sendFunnyText}**\n\n{goals}")  # print the users goals
-                    elif statusCounter == 1:
-                        sendFunnyText = random.choice(reminder_for_one_achieved)
-                        try:
-                            await reminderChannelObject.send(
-                                f"{memberObject.mention}\n**{sendFunnyText}**\n\n{goals}"
-                                )  # print the users goals
-                        except:
-                            await reminderChannelObject.send(
-                                f"{memberObject}\n**{sendFunnyText}**\n\n{goals}"
-                                )  # print the users goals
-                    elif statusCounter == 2:
-                        sendFunnyText = random.choice(reminder_for_two_achieved)
-                        try:
-                            await reminderChannelObject.send(
-                                f"{memberObject.mention}\n**{sendFunnyText}**\n\n{goals}"
-                                )  # print the users goals
-                        except:
-                            await reminderChannel.send(
-                                f"{memberObject}\n**{sendFunnyText}**\n\n{goals}"
-                                )  # print the users goals
-                    elif statusCounter > 2:
-                        sendFunnyText = random.choice(reminder_for_three_plus_achieved)
-                        try:
-                            await reminderChannelObject.send(
-                                f"{memberObject.mention}\n**{sendFunnyText}**\n\n{goals}"
-                                ) # print the users goals
-                        except:
-                            await reminderChannelObject.send(
-                                f"{memberObject}\n**{sendFunnyText}**\n\n{goals}"
-                                )  # print the users goals
-                    goals = "" # reset goals variable
-                    updateSql = "UPDATE nextDateReminder SET next_date = %s WHERE user = %s"
-                    nextDate = date.today() + timedelta(days=howOften)
-                    valuesForChangingDate = (nextDate, userForThirdQuery)
-                    fourth_cursor.execute(updateSql, valuesForChangingDate)
-                    db.commit()
-
-                elif unpackedDate < date.today(): #if the table is outdated
-                    print("Date smaller than current date triggered for", userForThirdQuery)
-                    get_goal_entry = "SELECT goals,status,userId,serverId FROM 2022_Goals WHERE user = %s"  # request for the users goals in the goals table
-                    userRequest = (userForThirdQuery,)
-                    third_cursor.execute(get_goal_entry, userRequest)  # execute sql query
-                    statusCounter = 0
-                    for (
-                        fullEntry
-                    ) in third_cursor:  # loop the the results of the latest query
-                        goal,status,idByMember,serverByMember = fullEntry #assign the variables returned
-                        find_channel_id = int(serverByMember) # variable used for finding the channel, it is the server id
-                        global_server_id = int(serverByMember) # used for getting the server object later on
-                        try:
-                            memberObject = bot.get_user(int(idByMember))
-                        except:
-                            memberObject = f'User mention failed {userForThirdQuery}'
-                            print('Issue occured, none was returned as memberObject as shown here', memberObject)
-                        if status == 1:
-                            goals += f'{greenTickEmoji} `{goal}`\n'
-                            statusCounter +=1
-                        elif status == 0:
-                            goals += f'{slashEmoji} `{goal}`\n'
-                    get_reminder_channel = "SELECT reminder_channel_id FROM config WHERE server_id = %s"
-                    values = (find_channel_id,)
-                    third_cursor.execute(get_reminder_channel, values)
-                    for unpacked_channel in third_cursor:
-                        # unpack the channel id
-                        reminder_channel_id_final, = unpacked_channel
-                        reminder_channel_id_final = int(reminder_channel_id_final)
-                        reminder_channel_found = True
-                    print("Reminder Channel Found:", reminder_channel_found)
-                    server = bot.get_guild(global_server_id)
-                    try:
-                        reminderChannelObject = server.get_channel(reminder_channel_id_final)
-                    except:
-                        print('MAY DAY MAY DAY, SOS, was unable to get reminder channel object')
-                    # print users goals to remind them
-                    if statusCounter == 0:
-                        sendFunnyText = random.choice(reminder_funny_text)
-                        await reminderChannelObject.send(f"{memberObject.mention}\n**{sendFunnyText}**\n\n{goals}")  # print the users goals
-                    elif statusCounter == 1:
-                        sendFunnyText = random.choice(reminder_for_one_achieved)
-                        try:
-                            await reminderChannelObject.send(
-                                f"{memberObject.mention}\n**{sendFunnyText}**\n\n{goals}"
-                                )  # print the users goals
-                        except:
-                            await reminderChannelObject.send(
-                                f"{memberObject}\n**{sendFunnyText}**\n\n{goals}"
-                                )  # print the users goals
-                    elif statusCounter == 2:
-                        sendFunnyText = random.choice(reminder_for_two_achieved)
-                        try:
-                            await reminderChannelObject.send(
-                                f"{memberObject.mention}\n**{sendFunnyText}**\n\n{goals}"
-                                )  # print the users goals
-                        except:
-                            await reminderChannel.send(
-                                f"{memberObject}\n**{sendFunnyText}**\n\n{goals}"
-                                )  # print the users goals
-                    elif statusCounter > 2:
-                        sendFunnyText = random.choice(reminder_for_three_plus_achieved)
-                        try:
-                            await reminderChannelObject.send(
-                                f"{memberObject.mention}\n**{sendFunnyText}**\n\n{goals}"
-                                ) # print the users goals
-                        except:
-                            await reminderChannelObject.send(
-                                f"{memberObject}\n**{sendFunnyText}**\n\n{goals}"
-                                )  # print the users goals
-                    goals = "" # reset goals variable
-                    updateSql = "UPDATE nextDateReminder SET next_date = %s WHERE user = %s"
-                    nextDate = date.today() + timedelta(days=howOften)
-                    valuesForChangingDate = (nextDate, userForThirdQuery)
-                    fourth_cursor.execute(updateSql, valuesForChangingDate)
-                    db.commit()
-        
-        await asyncio.sleep(120)
 
 @bot.slash_command(guild_ids=[DEV_GUILD_ID, PROD_GUILD_ID])
 async def clear_goals(ctx, id: Option(int, "Enter the ID of the goal you wish to delete", required=False)):
@@ -776,6 +564,4 @@ async def edit_goal(ctx, id: Option(int, "Enter the ID corresponding to the goal
     else:
         await ctx.respond("Something sus here bruh, idk what it is tho, maybe the ID you put is wrong?")
 
-
-#bot.loop.create_task(reminder_function())    
 bot.run(BOT_TOKEN)

@@ -49,6 +49,9 @@ Currently the bot is only functional in [one server](https://discord.gg/7Pjjf2XT
 `/clear_goals` or   `/cleargoals <id>`  
 *Deletes all goals and reminders or deletes a specific goal and preserves reminders.*
 
+`/edit_goals <id> <new_goal>`
+*Edits a goal*
+
 ## Setup & Tools
 *The file `sqlConfig.py` contains the queries to create the three database tables used by the bot.*  
 
