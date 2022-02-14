@@ -12,7 +12,7 @@ The New Years Resolution Bot is coded in [*Pycord*](https://github.com/Pycord-De
 
 ### Where
 
-Currently the bot is only functional in [one server](https://discord.gg/7Pjjf2XTFw) as this bot was created specifically for that server. Functionality to allow use in other servers will be developed later on
+This bot was initially created for [one server](https://discord.gg/7Pjjf2XTFw) however we now have compatibility for **all** servers. Here's the [invite](https://discord.com/api/oauth2/authorize?client_id=922767657265168394&permissions=2147838976&scope=applications.commands%20bot).
 
 ## Commands
 
