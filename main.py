@@ -1,10 +1,10 @@
 # Created by #Zac the Wise#1381 with help from #iamkneel#2359
 
-# Update created by Zac on 14/Feb
+# Update created by Zac on 15/Feb
 
-# repush for railway
+# added an event function that updates tables if a user changes their name
 
-# Version 3.1.0
+# Version 3.2.0
 
 import asyncio
 from optparse import Values
@@ -563,5 +563,52 @@ async def edit_goal(ctx, id: Option(int, "Enter the ID corresponding to the goal
         await ctx.respond(f"Perfect, you've replaced goal `{id}` with the text `{newtext}`")
     else:
         await ctx.respond("Something sus here bruh, idk what it is tho, maybe the ID you put is wrong?")
+
+@bot.event
+async def on_user_update(before, after):
+    if before.name == after.name: # if the name is the same which means it hasn't been changed
+        # username not changed
+        pass
+    elif before.name != after.name:
+        member_in_goals = False
+        member_in_reminders = False
+        old_name = f"{before.name}#{before.discriminator}"
+        new_name = f"{after.name}#{after.discriminator}"
+        print(old_name)
+        print(new_name)
+        check_member = "SELECT * FROM 2022_Goals WHERE user = %s"
+        values = (old_name,)
+        cursor.execute(check_member, values)
+        for entry in cursor: # run through the results
+            member_in_goals = True # the member is in the goals table
+        if member_in_goals == True:
+            update_table = "UPDATE 2022_Goals SET user = %s WHERE user = %s" # update with new name where old name
+            values = (new_name, old_name)
+            cursor.execute(update_table, values) # excecute sql
+            # since goals are set we need to check the reminders table to update those as well
+            check_member_reminders = "SELECT * FROM reminders WHERE user = %s" # find any entries with users old name
+            values = (old_name,)
+            cursor.execute(check_member_reminders, values) # execute sql
+            for entry in cursor: # loop through results
+                member_in_reminders = True # confirm that the user has been found in the reminders table
+            if member_in_reminders == True:
+                # update both reminder tables with the users new name
+                update_reminders = "UPDATE reminders SET user = %s WHERE user = %s"
+                values = (new_name, old_name)
+                cursor.execute(update_reminders, values)
+                update_next_date_table = "UPDATE nextDateReminder SET user = %s WHERE user = %s"
+                values = (new_name, old_name)
+                cursor.execute(update_next_date_table, values)
+                db.commit()
+                await after.send(
+                    "**Hi there,**\nyour profile change has been noted and updated in our goal and reminder tables\nAnyways... KEEP GRINDING <:lezgooo:923128327970099231><:lezgooo:923128327970099231><:lezgooo:923128327970099231>"
+                        )
+            elif member_in_reminders == False:
+                print("Member not in reminders however is in goals table")
+                await after.send(
+                    "**Hi there,**\nyour profile change has been noted and updated in our goals table\nAnyways... KEEP GRINDING <:lezgooo:923128327970099231><:lezgooo:923128327970099231><:lezgooo:923128327970099231>"
+                        )
+        elif member_in_goals == False:
+            print("User changed however not in goals table")
 
 bot.run(BOT_TOKEN)

@@ -53,6 +53,17 @@ This bot was initially created for [one server](https://discord.gg/7Pjjf2XTFw) h
 *Edits a goal*
 
 ## Setup & Tools
+
+### Environment Variables
+ 
+The discord bot's token `TOKEN`  
+MySQL DB information:  
+`MYSQLHOST`  
+`MYSQLUSER`  
+`MYSQLPASSWORD`  
+`MYSQLDATABASE`  
+`MYSQLPORT`    
+
 *The file `sqlConfig.py` contains the queries to create the three database tables used by the bot.*  
 
 `2022_Goals` *is used for storing each users goals as well as their user ID and name, in the future it will also store the server ID of which the command was invoked in.*  
