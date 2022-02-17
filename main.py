@@ -2,9 +2,9 @@
 
 # Update created by Zac on 15/Feb
 
-# railway repush
+# huge bug fix wth
 
-# Version 3.2.0
+# Version 3.3.0
 
 import asyncio
 from optparse import Values
@@ -62,7 +62,7 @@ reminder_channel_success_response = ["THAT'S THE WAY TO GO", "yeah boi", "now, l
 @bot.event
 async def on_ready():
     await initialise_loop()
-    #await reminder_function.start()
+    await reminder_function.start()
     while True:
         # alternate between two bot statuses 
         await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name="you achieve your goals"))
