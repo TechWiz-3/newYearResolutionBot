@@ -52,8 +52,7 @@ This bot was initially created for [one server](https://discord.gg/7Pjjf2XTFw) h
 `/edit_goals <id> <new_goal>`
 *Edits a goal*
 
-## Setup & Tools
-
+## Setup
 ### Environment Variables
  
 The discord bot's token `TOKEN`  
@@ -63,6 +62,8 @@ MySQL DB information:
 `MYSQLPASSWORD`  
 `MYSQLDATABASE`  
 `MYSQLPORT`    
+
+### Tools
 
 *The file `sqlConfig.py` contains the queries to create the three database tables used by the bot.*  
 

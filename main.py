@@ -1,10 +1,10 @@
 # Created by #Zac the Wise#1381 with help from #iamkneel#2359
 
-# Update created by Zac on 15/Feb
+# Update created by Zac on 22/Feb
 
-# huge bug fix wth
+# made on_user_edit more sophisticated
 
-# Version 3.3.0
+# Version 3.4.0
 
 import asyncio
 from optparse import Values
@@ -70,7 +70,13 @@ async def on_ready():
         await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name="get started | /help"))
         await asyncio.sleep(5)
 
-@bot.slash_command(guild_ids=[DEV_GUILD_ID, PROD_GUILD_ID])
+@bot.event
+async def on_guild_join(guild):
+    server = bot.get_guild(864438892736282625)
+    log = server.get_channel(866217361115316284)
+    await log.send(f"New server joined\n{guild.id}\n{guild.member_count}\n{guild.name}")
+
+@bot.slash_command()
 async def help(ctx):
     """Helps you use the bots commands"""
     embed=discord.Embed(title="About Me", description="I'm a bot specifically created for Gravity Destroyers. My purpose is simple:\n<:agreentick:875244017833639956> Log users goals\n<:agreentick:875244017833639956> Remind users about their goals\n<:agreentick:875244017833639956> Help motivate and remind users to keep working at and achieve their goals :muscle:")
@@ -141,7 +147,7 @@ async def new_year_goal(ctx, *, goal: Option(str, "Type the name of the goal (on
     elif duplicate_existant == True:
         await ctx.respond("Wowa, steady on there. This goal is seems to be a duplicate of another, if you wish to remove a goal use the `/edit_goal` command.")
 
-@bot.slash_command(guild_ids=[DEV_GUILD_ID, PROD_GUILD_ID])
+@bot.slash_command()
 async def remind_me(ctx, *, days: Option(int, "Enter how often you'd like to be reminded in days", required=True)):  # time in days
     """Tells the bot to remind you about your goals every x days"""
     goalsSet = False # automatically assume that goals haven't been set
@@ -182,7 +188,7 @@ async def remind_me(ctx, *, days: Option(int, "Enter how often you'd like to be 
             "Well it's great that you want to be reminded, but make sure you set goals first `/new_year_goal` :grin:"
             )
 
-@bot.slash_command(guild_ids=[DEV_GUILD_ID, PROD_GUILD_ID])
+@bot.slash_command()
 async def view_goals(ctx):
     """Displays your currently logged and achieved goals"""
     greenTickEmoji = discord.utils.get(bot.emojis, name="epicTick") # get a tick emoji
@@ -215,7 +221,7 @@ async def view_goals(ctx):
     elif goalsSet == False: # respond to user that hasn't set goals
         await ctx.respond("Ummm, you need to set your goals first before viewing them lol\n\n*However, I live go serve bright human ;) ... these commands may help...* `/help` `/new_year_goal`")
 
-@bot.slash_command(guild_ids=[DEV_GUILD_ID, PROD_GUILD_ID])
+@bot.slash_command()
 async def view_ids(ctx):
     """Displays each logged called and it's unique ID to access"""
     final_message = ""
@@ -228,7 +234,7 @@ async def view_ids(ctx):
     await ctx.respond(final_message) # send the final list
 
 
-@bot.slash_command(guild_ids=[DEV_GUILD_ID, PROD_GUILD_ID])
+@bot.slash_command()
 async def goal_achieved(ctx, id: Option(int, "Enter the ID of the goal you wish to mark as achieved", required=True)):
     """Log when you achieve a goal by goal ID"""
     userGoalIdVerified = False
@@ -436,7 +442,7 @@ async def reminder_function():
                 fourth_cursor.execute(updateSql, valuesForChangingDate)
                 db.commit()
 
-@bot.slash_command(guild_ids=[DEV_GUILD_ID, PROD_GUILD_ID])
+@bot.slash_command()
 async def clear_goals(ctx, id: Option(int, "Enter the ID of the goal you wish to delete", required=False)):
     """Delete all logged goals, or a specific goal based on ID"""
     if id == None:
@@ -476,7 +482,7 @@ async def clear_goals(ctx, id: Option(int, "Enter the ID of the goal you wish to
                 f"Wow, you trying to delete somebody elses goals? That's malicious dude {policeEmoji} <:angry_pepe_ak47:930283816143171604>\n||If not that means you put the wrong ID||"
             )   
 
-@bot.slash_command(guild_ids=[DEV_GUILD_ID, PROD_GUILD_ID])
+@bot.slash_command()
 async def stop_reminding(ctx):
     """Stops the bot from reminding you about your goals"""
     deleteReminderEntries = "DELETE FROM reminders WHERE user = %s"
@@ -489,7 +495,7 @@ async def stop_reminding(ctx):
         f"{random.choice(reminder_deleted)}\nDo `/remind_me` again to change the interval. If not then we're sad to see you go... all the best"
     )
 
-@bot.slash_command(guild_ids=[DEV_GUILD_ID, PROD_GUILD_ID])
+@bot.slash_command()
 async def change_reminder_interval(ctx, how_often: Option(int, "Enter how often in days you wish to be reminded", required=True)):
     """Adjusts how often you're reminded of your goals"""
     adjustInterval = "UPDATE reminders SET days = %s WHERE user = %s"
@@ -507,7 +513,7 @@ async def change_reminder_interval(ctx, how_often: Option(int, "Enter how often 
         f"{cooldoge} Well, that went well. Your interval is now `{how_often}` day(s). Achievement time babyy"
         )
 
-@bot.slash_command(guild_ids=[DEV_GUILD_ID, PROD_GUILD_ID])
+@bot.slash_command()
 async def next_reminder(ctx):
     """Shows you how often you'll be reminded as well as your next reminder date"""
     reminderSet = False
@@ -533,7 +539,7 @@ async def next_reminder(ctx):
             f"{umEmoji} you need to set a reminder first before viewing it... `/remind_me`"
             )
 
-@bot.slash_command(guild_ids=[DEV_GUILD_ID, PROD_GUILD_ID])
+@bot.slash_command()
 async def get_started(ctx):
     """Helps you get started :)"""
     contentOne = "||**This is how I help you:**\n`/help` The help command is your go to command to understand anything, but here's the recommended sequence of commands:||"
@@ -544,7 +550,7 @@ async def get_started(ctx):
         f"Ayo {ctx.author.mention} so you want to get after those goals and make this year, YOUR year. Well GOOD NEWS, I'm here to help...\n{contentOne}\n{contentTwo}\n{contentThree}"
         )
 
-@bot.slash_command(guild_ids=[DEV_GUILD_ID, PROD_GUILD_ID])
+@bot.slash_command()
 async def edit_goal(ctx, id: Option(int, "Enter the ID corresponding to the goal you wish to change"), newtext: Option(str, "Enter the new goal you'd like to set")):
     """Edits a goal entry based on ID"""
     goalIsForUser = False
@@ -566,10 +572,10 @@ async def edit_goal(ctx, id: Option(int, "Enter the ID corresponding to the goal
 
 @bot.event
 async def on_user_update(before, after):
-    if before.name == after.name: # if the name is the same which means it hasn't been changed
-        # username not changed
+    if before.name == after.name and before.discriminator == after.discriminator: # if the name and the discriminator is the same which means they haven't been changed
+        # username not changed and # discrim not changed
         pass
-    elif before.name != after.name:
+    elif before.name != after.name or before.discriminator != after.discriminator:
         member_in_goals = False
         member_in_reminders = False
         old_name = f"{before.name}#{before.discriminator}"
@@ -610,5 +616,4 @@ async def on_user_update(before, after):
                         )
         elif member_in_goals == False:
             print("User changed however not in goals table")
-
 bot.run(BOT_TOKEN)
