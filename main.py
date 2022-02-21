@@ -2,9 +2,9 @@
 
 # Update created by Zac on 22/Feb
 
-# made on_user_edit more sophisticated
+# made everything global slash commands
 
-# Version 3.4.0
+# Version 3.4.1
 
 import asyncio
 from optparse import Values
@@ -97,7 +97,7 @@ async def help(ctx):
 async def on_application_command_error(ctx, error): # if slash command error occurs
     await ctx.send(f":weary: {error}") # send the error
 
-@bot.slash_command(guild_ids=[PROD_GUILD_ID, DEV_GUILD_ID], default_permissions = False)
+@bot.slash_command(default_permissions = False)
 @permissions.is_owner()
 @permissions.permission(user_id = 760345587802964010)
 async def config_reminder_channel(ctx, reminder_channel: Option(discord.TextChannel, "Reminder channel", required = True)):
@@ -121,7 +121,7 @@ async def config_reminder_channel(ctx, reminder_channel: Option(discord.TextChan
         db.commit()
         await ctx.respond(f"<:agreentick:875244017833639956> Sucess {random.choice(reminder_channel_success_response)}")
 
-@bot.slash_command(guild_ids=[PROD_GUILD_ID, DEV_GUILD_ID])
+@bot.slash_command()
 async def new_year_goal(ctx, *, goal: Option(str, "Type the name of the goal (one only)", required=True)):
     """Log a goal, one at a time"""
     person = str(ctx.author) # get name
