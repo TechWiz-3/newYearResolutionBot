@@ -2,12 +2,11 @@
 
 # Update created by Zac on 22/Feb
 
-# made everything global slash commands
+# fixed a small config reminder channel bug, adjusted the reminder_config command so that owners and admins can use it, migrated to ids
 
-# Version 3.4.1
+# Version 4.0.0
 
 import asyncio
-from optparse import Values
 from discord.commands import Option
 from discord.ext import commands
 from discord.ext import tasks
@@ -16,7 +15,7 @@ import os
 import mysql.connector
 from datetime import date, timedelta
 from discord.utils import get
-from discord.commands import permissions
+#from discord.commands import permissions
 import discord
 import random
 
@@ -98,28 +97,27 @@ async def on_application_command_error(ctx, error): # if slash command error occ
     await ctx.send(f":weary: {error}") # send the error
 
 @bot.slash_command(default_permissions = False)
-@permissions.is_owner()
-@permissions.permission(user_id = 760345587802964010)
 async def config_reminder_channel(ctx, reminder_channel: Option(discord.TextChannel, "Reminder channel", required = True)):
-    server_logged = False
-    get_servers_config = "SELECT server_id FROM config WHERE server_id = %s" # checks if the server is in the config table
-    values = (ctx.guild.id,)
-    cursor.execute(get_servers_config, values)
-    for entry in cursor:
-        server_logged = True
-    if server_logged == True:
-        await ctx.respond("You server is already logged in my table, I'm updating the channel for you :)")
-        insert_reminder_channel = "UPDATE config SET reminder_channel_id = %s WHERE server_id = %s"
-        values = (str(reminder_channel.id), str(ctx.guild.id))
-        cursor.execute(insert_reminder_channel, values)
-        db.commit()
-        await ctx.send(f"<:agreentick:875244017833639956> Sucess {random.choice(reminder_channel_success_response)}")
-    elif server_logged == False:
-        insert_reminder_channel = "INSERT INTO config (server_id, reminder_channel_id) VALUES (%s, %s)"
-        values = (str(ctx.guild.id), str(reminder_channel.id))
-        cursor.execute(insert_reminder_channel, values)
-        db.commit()
-        await ctx.respond(f"<:agreentick:875244017833639956> Sucess {random.choice(reminder_channel_success_response)}")
+    if ctx.author.guild_permissions.administrator or ctx.author.id == 760345587802964010:
+        server_logged = False
+        get_servers_config = "SELECT server_id FROM config WHERE server_id = %s" # checks if the server is in the config table
+        values = (ctx.guild.id,)
+        cursor.execute(get_servers_config, values)
+        for entry in cursor:
+            server_logged = True
+        if server_logged == True:
+            await ctx.respond("You server is already logged in my table, I'm updating the channel for you :)")
+            insert_reminder_channel = "UPDATE config SET reminder_channel_id = %s WHERE server_id = %s"
+            values = (str(reminder_channel.id), str(ctx.guild.id))
+            cursor.execute(insert_reminder_channel, values)
+            db.commit()
+            await ctx.send(f"<:agreentick:875244017833639956> Sucess {random.choice(reminder_channel_success_response)}")
+        elif server_logged == False:
+            insert_reminder_channel = "INSERT INTO config (server_id, reminder_channel_id) VALUES (%s, %s)"
+            values = (str(ctx.guild.id), str(reminder_channel.id))
+            cursor.execute(insert_reminder_channel, values)
+            db.commit()
+            await ctx.respond(f"<:agreentick:875244017833639956> Sucess {random.choice(reminder_channel_success_response)}")
 
 @bot.slash_command()
 async def new_year_goal(ctx, *, goal: Option(str, "Type the name of the goal (one only)", required=True)):
@@ -151,15 +149,15 @@ async def new_year_goal(ctx, *, goal: Option(str, "Type the name of the goal (on
 async def remind_me(ctx, *, days: Option(int, "Enter how often you'd like to be reminded in days", required=True)):  # time in days
     """Tells the bot to remind you about your goals every x days"""
     goalsSet = False # automatically assume that goals haven't been set
-    checkGoals = "SELECT * FROM 2022_Goals WHERE user = %s" # check if goals have been set
-    values = (str(ctx.author),) # get the users name
+    checkGoals = "SELECT * FROM 2022_Goals WHERE userId = %s" # check if goals have been set
+    values = (str(ctx.author.id),) # get the users name
     cursor.execute(checkGoals, values) # execute
     for entry in cursor: # loop through results if there are any
         goalsSet = True # goals indeed have been set
     if goalsSet == True: # go ahead to next check
         reminderSetPreviously = False # assume that a reminder has not been set before
-        getReminders = "SELECT days FROM reminders WHERE user = %s" # find reminders set previously
-        values = (str(ctx.author),) # users name
+        getReminders = "SELECT days FROM reminders WHERE userId = %s" # find reminders set previously
+        values = (str(ctx.author.id),) # users name
         second_cursor.execute(getReminders, values) # execute
         for reminder in second_cursor: # loop through results if they exist
             reminderSetPreviously = True # reminder has been set prevously
@@ -170,14 +168,14 @@ async def remind_me(ctx, *, days: Option(int, "Enter how often you'd like to be 
                     )
         else: # if reminder hasn't been set previously
             # finally execute remind me command
-            setReminder = "INSERT INTO reminders (user, days) VALUES (%s, %s)" # insert days interval
-            values = (str(ctx.author), days)
+            setReminder = "INSERT INTO reminders (user, days, userId) VALUES (%s, %s, %s)" # insert days interval
+            values = (str(ctx.author), days, str(ctx.author.id))
             cursor.execute(setReminder, values) # execute
             # set next reminder to today
             nextReminder = str(date.today()).replace(",", "-").replace(" ", "") # do i even need all the replace replace
-            values = (str(ctx.author), nextReminder)
+            values = (str(ctx.author), nextReminder, str(ctx.author.id))
             # insert date into db
-            setDate = "INSERT INTO nextDateReminder (user, next_date) VALUES (%s, %s)"
+            setDate = "INSERT INTO nextDateReminder (user, next_date, userId) VALUES (%s, %s, %s)"
             cursor.execute(setDate, values)
             db.commit()
             await ctx.respond(
@@ -197,10 +195,10 @@ async def view_goals(ctx):
     goals_message_list = ""
     goalsCounter = 0 # how many goals
     goalsAchievedCounter = 0 # how many goals have been achieved
-    author = (str(ctx.author),)
+    author_id = (str(ctx.author.id),)
     # get the users goals, status represents whether the goal has been achieved or not
-    getGoals = "SELECT goals, status FROM 2022_Goals WHERE user = %s"
-    cursor.execute(getGoals, author) # get each goal and corresponding status for the user
+    getGoals = "SELECT goals, status FROM 2022_Goals WHERE userId = %s"
+    cursor.execute(getGoals, author_id) # get each goal and corresponding status for the user
     for goalAndStatus in cursor: # loop through results
         goal,status = goalAndStatus # assign the results
         goalsSet = True # user has set their goals
@@ -225,8 +223,8 @@ async def view_goals(ctx):
 async def view_ids(ctx):
     """Displays each logged called and it's unique ID to access"""
     final_message = ""
-    author = (str(ctx.author),) # gets the command invoker
-    sql = "SELECT goals, id FROM 2022_Goals WHERE user = %s" # searches the table for goals and ids with the user's name
+    author = (str(ctx.author.id),) # gets the command invoker
+    sql = "SELECT goals, id FROM 2022_Goals WHERE userId = %s" # searches the table for goals and ids with the user's name
     cursor.execute(sql, author)
     for entry in cursor: # loop through results
         goal, goal_id = entry # unpack results
@@ -240,11 +238,11 @@ async def goal_achieved(ctx, id: Option(int, "Enter the ID of the goal you wish 
     userGoalIdVerified = False
     achieved_goal_name = ""
     fetchByID = (id,)
-    cursor.execute("SELECT user, goals FROM 2022_Goals WHERE id = %s", fetchByID) # finds the goal corresponding to provided id
+    cursor.execute("SELECT userId, goals FROM 2022_Goals WHERE id = %s", fetchByID) # finds the goal corresponding to provided id
     for userandGoal in cursor: # loops through results
-        user, goal = userandGoal # unpacks the resuts
-        if user == str(ctx.author): # if the user of the requested goal is equal to the command invoker
-            userGoalIdVerified = True # this right user
+        userId, goal = userandGoal # unpacks the resuts
+        if userId == str(ctx.author.id): # if the user of the requested goal is equal to the command invoker
+            userGoalIdVerified = True # this is the right user
             achieved_goal_name = goal # gets the text of the goal
     if userGoalIdVerified == True: # if the user is correct
         value = (id,)
@@ -279,31 +277,31 @@ async def reminder_function():
     reminder_channel_id_final = 0
     global_server_id = 0
     reminderChannelObject = None
-    sql = "SELECT user, days FROM reminders"  # select the username and their selected reminder interval
+    sql = "SELECT userId, days FROM reminders"  # select the username and their selected reminder interval
     cursor.execute(sql)  # execute sql query
-    for (username, howOften) in cursor:  # loop through the results of the sql query
-        sql = "SELECT user, next_date FROM nextDateReminder WHERE user = %s"
-        value = (username,)
+    for (user_id, howOften) in cursor:  # loop through the results of the sql query
+        sql = "SELECT userId, next_date FROM nextDateReminder WHERE userId = %s"
+        value = (user_id,)
         second_cursor.execute(sql, value)
         for dateEntry in second_cursor:
-            userForThirdQuery, unpackedDate = dateEntry
+            user_id_for_third_query, unpackedDate = dateEntry
             slashEmoji = discord.utils.get(bot.emojis, name="aslash")
             greenTickEmoji = discord.utils.get(bot.emojis, name="epicTick")
             if unpackedDate == date.today():
-                get_goal_entry = "SELECT goals,status,userId,serverId FROM 2022_Goals WHERE user = %s"  # request for the users goals in the goals table
-                userRequest = (userForThirdQuery,)
+                get_goal_entry = "SELECT user,goals,status,userId,serverId FROM 2022_Goals WHERE userId = %s"  # request for the users goals in the goals table
+                userRequest = (user_id_for_third_query,)
                 third_cursor.execute(get_goal_entry, userRequest)  # execute sql query
                 statusCounter = 0
                 for (
                     fullEntry
                 ) in third_cursor:  # loop the the results of the latest query
-                    goal,status,idByMember,serverByMember = fullEntry #assign the variables returned
+                    user,goal,status,idByMember,serverByMember = fullEntry #assign the variables returned
                     find_channel_id = int(serverByMember) # variable used for finding the channel, it is the server id
                     global_server_id = int(serverByMember) # used for getting the server object later on
                     try:
                         memberObject = bot.get_user(int(idByMember))
                     except:
-                        memberObject = f'User mention failed {userForThirdQuery}'
+                        memberObject = f'User mention failed <@{user_id_for_third_query}> i.e {user}'
                         print('Issue occured, none was returned as memberObject as shown here', memberObject)
                     if status == 1:
                         goals += f'{greenTickEmoji} `{goal}`\n'
@@ -359,16 +357,16 @@ async def reminder_function():
                             f"{memberObject}\n**{sendFunnyText}**\n\n{goals}"
                             )  # print the users goals
                 goals = "" # reset goals variable
-                updateSql = "UPDATE nextDateReminder SET next_date = %s WHERE user = %s"
+                updateSql = "UPDATE nextDateReminder SET next_date = %s WHERE userId = %s"
                 nextDate = date.today() + timedelta(days=howOften)
-                valuesForChangingDate = (nextDate, userForThirdQuery)
+                valuesForChangingDate = (nextDate, user_id_for_third_query)
                 fourth_cursor.execute(updateSql, valuesForChangingDate)
                 db.commit()
 
             elif unpackedDate < date.today(): #if the table is outdated
-                print("Date smaller than current date triggered for", userForThirdQuery)
-                get_goal_entry = "SELECT goals,status,userId,serverId FROM 2022_Goals WHERE user = %s"  # request for the users goals in the goals table
-                userRequest = (userForThirdQuery,)
+                print("Date smaller than current date triggered for", user_id_for_third_query)
+                get_goal_entry = "SELECT goals,status,userId,serverId FROM 2022_Goals WHERE userId = %s"  # request for the users goals in the goals table
+                userRequest = (user_id_for_third_query,)
                 third_cursor.execute(get_goal_entry, userRequest)  # execute sql query
                 statusCounter = 0
                 for (
@@ -380,7 +378,7 @@ async def reminder_function():
                     try:
                         memberObject = bot.get_user(int(idByMember))
                     except:
-                        memberObject = f'User mention failed {userForThirdQuery}'
+                        memberObject = f'User mention failed {user_id_for_third_query}'
                         print('Issue occured, none was returned as memberObject as shown here', memberObject)
                     if status == 1:
                         goals += f'{greenTickEmoji} `{goal}`\n'
@@ -436,9 +434,9 @@ async def reminder_function():
                             f"{memberObject}\n**{sendFunnyText}**\n\n{goals}"
                             )  # print the users goals
                 goals = "" # reset goals variable
-                updateSql = "UPDATE nextDateReminder SET next_date = %s WHERE user = %s"
+                updateSql = "UPDATE nextDateReminder SET next_date = %s WHERE userId = %s"
                 nextDate = date.today() + timedelta(days=howOften)
-                valuesForChangingDate = (nextDate, userForThirdQuery)
+                valuesForChangingDate = (nextDate, user_id_for_third_query)
                 fourth_cursor.execute(updateSql, valuesForChangingDate)
                 db.commit()
 
@@ -446,10 +444,10 @@ async def reminder_function():
 async def clear_goals(ctx, id: Option(int, "Enter the ID of the goal you wish to delete", required=False)):
     """Delete all logged goals, or a specific goal based on ID"""
     if id == None:
-        deleteGoals = "DELETE FROM 2022_Goals WHERE user = %s"
-        deleteReminderEntries = "DELETE FROM reminders WHERE user = %s"
-        deleteDateReminderEntries = "Delete FROM nextDateReminder WHERE user = %s"
-        user = (str(ctx.author),)
+        deleteGoals = "DELETE FROM 2022_Goals WHERE userId = %s"
+        deleteReminderEntries = "DELETE FROM reminders WHERE userId = %s"
+        deleteDateReminderEntries = "Delete FROM nextDateReminder WHERE userId = %s"
+        user = (str(ctx.author.id),)
         cursor.execute(deleteGoals, user)
         cursor.execute(deleteReminderEntries, user)
         cursor.execute(deleteDateReminderEntries, user)
@@ -459,16 +457,16 @@ async def clear_goals(ctx, id: Option(int, "Enter the ID of the goal you wish to
             )
     else:
         userAndIdMatch = False
-        getUserFromGoal = "SELECT user FROM 2022_Goals WHERE id = %s"
+        getUserFromGoal = "SELECT userId FROM 2022_Goals WHERE id = %s"
         values = (id,)
         cursor.execute(getUserFromGoal, values)
         for goalEntry in cursor:
             userOfGoal, = goalEntry
-            if userOfGoal == str(ctx.author):
+            if str(userOfGoal) == str(ctx.author.id):
                 userAndIdMatch = True
         if userAndIdMatch == True:
-            sql = "DELETE FROM 2022_Goals WHERE user = %s AND id = %s"
-            user = str(ctx.author)
+            sql = "DELETE FROM 2022_Goals WHERE userId = %s AND id = %s"
+            user = str(ctx.author.id)
             goalId = int(id)
             values = (user, goalId)
             cursor.execute(sql, values)
@@ -485,9 +483,9 @@ async def clear_goals(ctx, id: Option(int, "Enter the ID of the goal you wish to
 @bot.slash_command()
 async def stop_reminding(ctx):
     """Stops the bot from reminding you about your goals"""
-    deleteReminderEntries = "DELETE FROM reminders WHERE user = %s"
-    deleteDateReminderEntries = "Delete FROM nextDateReminder WHERE user = %s"
-    user = (str(ctx.author),)
+    deleteReminderEntries = "DELETE FROM reminders WHERE userId = %s"
+    deleteDateReminderEntries = "Delete FROM nextDateReminder WHERE userId = %s"
+    user = (str(ctx.author.id),)
     cursor.execute(deleteReminderEntries, user)
     cursor.execute(deleteDateReminderEntries, user)
     db.commit()
@@ -498,13 +496,13 @@ async def stop_reminding(ctx):
 @bot.slash_command()
 async def change_reminder_interval(ctx, how_often: Option(int, "Enter how often in days you wish to be reminded", required=True)):
     """Adjusts how often you're reminded of your goals"""
-    adjustInterval = "UPDATE reminders SET days = %s WHERE user = %s"
-    values = (how_often, str(ctx.author))
+    adjustInterval = "UPDATE reminders SET days = %s WHERE userId = %s" # update the reminders table and set the days interval to the new value
+    values = (how_often, str(ctx.author.id))
     cursor.execute(adjustInterval, values)
-    adjustIntervalDate = "UPDATE nextDateReminder SET next_date = %s WHERE user = %s"
+    adjustIntervalDate = "UPDATE nextDateReminder SET next_date = %s WHERE userId = %s" # update the next date reminder table, to remind the user immediately
     values = (
         str(date.today()),
-        str(ctx.author)
+        str(ctx.author.id)
         )
     cursor.execute(adjustIntervalDate, values)
     db.commit()
@@ -516,24 +514,24 @@ async def change_reminder_interval(ctx, how_often: Option(int, "Enter how often 
 @bot.slash_command()
 async def next_reminder(ctx):
     """Shows you how often you'll be reminded as well as your next reminder date"""
-    reminderSet = False
-    howOften = 0
-    nextDate = None
-    getReminderInterval = "SELECT days FROM reminders WHERE user = %s"
-    values = (str(ctx.author),)
-    cursor.execute(getReminderInterval, values)
+    reminder_set = False
+    how_often = 0
+    next_date = None
+    get_reminder_interval = "SELECT days FROM reminders WHERE userId = %s" # find the reminder interval
+    user = (str(ctx.author.id),)
+    cursor.execute(get_reminder_interval, user)
     for entry in cursor:
-        reminderSet = True
-        howOften, = entry
-    getNextReminderDate = "SELECT next_date FROM nextDateReminder WHERE user = %s"
-    second_cursor.execute(getNextReminderDate, values)
+        reminder_set = True # confirms that a reminder has been set
+        how_often, = entry # store the days interval in how_often
+    get_next_reminder_date = "SELECT next_date FROM nextDateReminder WHERE userId = %s" # find the new reminder date
+    second_cursor.execute(get_next_reminder_date, user)
     for dateEntry in second_cursor:
-        nextDate, = dateEntry
-    if reminderSet == True:
+        next_date, = dateEntry # store the next date in next_date
+    if reminder_set == True:
         await ctx.respond(
-            f"You have set to be reminded every `{howOften}` day(s) and your next reminder is on `{nextDate}` meanwhile... KEEP GRINDING <:lezgooo:925286931221344256>"
+            f"You have set to be reminded every `{how_often}` day(s) and your next reminder is on `{next_date}` meanwhile... KEEP GRINDING <:lezgooo:925286931221344256>"
             )    
-    elif reminderSet == False:
+    elif reminder_set == False: # if a reminder hasn't been found in the table
         umEmoji = discord.utils.get(bot.emojis, name="um")
         await ctx.respond(
             f"{umEmoji} you need to set a reminder first before viewing it... `/remind_me`"
@@ -554,20 +552,22 @@ async def get_started(ctx):
 async def edit_goal(ctx, id: Option(int, "Enter the ID corresponding to the goal you wish to change"), newtext: Option(str, "Enter the new goal you'd like to set")):
     """Edits a goal entry based on ID"""
     goalIsForUser = False
-    checkGoalAndId = "SELECT user FROM 2022_Goals WHERE id = %s"
+    checkGoalAndId = "SELECT userId FROM 2022_Goals WHERE id = %s" # looks for the goal with that id
     values = (id,)
     cursor.execute(checkGoalAndId, values)
-    for usernameEntry in cursor:
-        user, = usernameEntry
-        if user == str(ctx.author):
-            goalIsForUser = True
+    for userid_entry in cursor:
+        user, = userid_entry
+        if str(user) == str(ctx.author.id): # checks if the user and goal creator are the same
+            goalIsForUser = True # confirms that the goal creator and command in invoker are the same
     if goalIsForUser == True:
-        changeGoal = "UPDATE 2022_Goals SET goals = %s WHERE user = %s AND id = %s"
-        values = (newtext, str(ctx.author), id)
+        # goes ahead and updated the goal
+        changeGoal = "UPDATE 2022_Goals SET goals = %s WHERE userId = %s AND id = %s"
+        values = (newtext, str(ctx.author.id), id)
         cursor.execute(changeGoal, values)
         db.commit()
         await ctx.respond(f"Perfect, you've replaced goal `{id}` with the text `{newtext}`")
     else:
+        # if the goal doesn't belong to the command invoker
         await ctx.respond("Something sus here bruh, idk what it is tho, maybe the ID you put is wrong?")
 
 @bot.event
