@@ -98,6 +98,7 @@ async def on_application_command_error(ctx, error): # if slash command error occ
 
 @bot.slash_command(default_permissions = False)
 async def config_reminder_channel(ctx, reminder_channel: Option(discord.TextChannel, "Reminder channel", required = True)):
+    """Sets the server's reminder channel"""
     if ctx.author.guild_permissions.administrator or ctx.author.id == 760345587802964010:
         server_logged = False
         get_servers_config = "SELECT server_id FROM config WHERE server_id = %s" # checks if the server is in the config table
@@ -472,7 +473,7 @@ async def clear_goals(ctx, id: Option(int, "Enter the ID of the goal you wish to
             cursor.execute(sql, values)
             db.commit()
             await ctx.respond(
-                f"Specific goal deleted {random.choice(specific_goal_deleted)}"
+                f"Specific goal deleted. {random.choice(specific_goal_deleted)}"
                 )
         else:
             policeEmoji = discord.utils.get(bot.emojis, name="pepe_police")

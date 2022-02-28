@@ -65,7 +65,7 @@ MySQL DB information:
 
 ### Tools
 
-*The file `sqlConfig.py` contains the queries to create the three database tables used by the bot.*  
+*The file [`sqlConfig.py`](https://github.com/TechWiz-3/newYearsResolutionBot/blob/main/tools/sqlConfig.py) contains the queries to create the three database tables used by the bot.*  
 
 `2022_Goals` *is used for storing each users goals as well as their user ID and name, in the future it will also store the server ID of which the command was invoked in.*  
 
