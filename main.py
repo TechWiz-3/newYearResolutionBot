@@ -617,4 +617,5 @@ async def on_user_update(before, after):
                         )
         elif member_in_goals == False:
             print("User changed however not in goals table")
+            
 bot.run(BOT_TOKEN)
