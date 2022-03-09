@@ -65,13 +65,9 @@ This bot was initially created for [one server](https://discord.gg/7Pjjf2XTFw) h
 ## Setup
 ### Environment Variables
  
+Create a `.env` witth the following variables
 The discord bot's token `TOKEN`  
-MySQL DB information:  
-`MYSQLHOST`  
-`MYSQLUSER`  
-`MYSQLPASSWORD`  
-`MYSQLDATABASE`  
-`MYSQLPORT`    
+MySQL DB information: `MYSQLHOST` `MYSQLUSER``MYSQLPASSWORD``MYSQLDATABASE``MYSQLPORT`    
 
 ### Tools
 
