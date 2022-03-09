@@ -3,6 +3,9 @@
 # New Years Resolution Bot #
 Accountability incoming...
 -----------
+![Image](https://img.shields.io/badge/Release%3A-4.0.0-yellowgreen)
+### Invite
+<a class="btn btn-success" href="https://discord.com/api/oauth2/authorize?client_id=922767657265168394&permissions=2147838976&scope=applications.commands%20bot" role="button">Invite Me</a>
 ### What
 The New Years Resolution Bot is a discord bot created to motivate users to log their new year resolutions, remind them about these resolutions and provide accountability and motivation to help achieve those goals. 
 
@@ -20,7 +23,10 @@ This bot was initially created for [one server](https://discord.gg/7Pjjf2XTFw) h
 *Displays a information about the capabilities of the bot as well as a list of commands and their users*
 
 `/get_started`  
-*Responds with a series of messages explaining the basic commands to begin using the bot*  
+*Responds with a message explaining the basic commands to begin using the bot*  
+
+`/config_reminder_channel`
+*Sets the server's reminder channel to enable reminding*
 
 `/newyeargoal <goal>`  
 *Logs a new goal*  
@@ -67,8 +73,10 @@ MySQL DB information:
 
 *The file [`sqlConfig.py`](https://github.com/TechWiz-3/newYearsResolutionBot/blob/main/tools/sqlConfig.py) contains the queries to create the three database tables used by the bot.*  
 
-`2022_Goals` *is used for storing each users goals as well as their user ID and name, in the future it will also store the server ID of which the command was invoked in.*  
+`2022_Goals` *is used for storing each users goals as well as their user id and name, in the future it will also store the server ID of which the command was invoked in.*  
 
-`reminders` *stores the uername and how often (in days) the user wishes to be reminded.*  
+`reminders` *stores the uername, user id and how often (in days) the user wishes to be reminded.*  
 
-`nextDateReminder` *stores the next date each user should be reminded on.*    
+`nextDateReminder` *stores the username, user id and next date each user should be reminded on.*    
+  
+`config` *stores server ids and their preferred reminder channel id*
