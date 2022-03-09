@@ -1,10 +1,10 @@
 # Created by #Zac the Wise#1381 with help from #iamkneel#2359
 
-# Update created by Zac on 22/Feb
+# Update created by Zac on 8/Mar
 
-# fixed a small config reminder channel bug, adjusted the reminder_config command so that owners and admins can use it, migrated to ids
+# fixed a wrong emoji id and added a colour for the help command embed
 
-# Version 4.0.0
+# Version 4.1.0
 
 import asyncio
 from discord.commands import Option
@@ -78,7 +78,7 @@ async def on_guild_join(guild):
 @bot.slash_command()
 async def help(ctx):
     """Helps you use the bots commands"""
-    embed=discord.Embed(title="About Me", description="I'm a bot specifically created for Gravity Destroyers. My purpose is simple:\n<:agreentick:875244017833639956> Log users goals\n<:agreentick:875244017833639956> Remind users about their goals\n<:agreentick:875244017833639956> Help motivate and remind users to keep working at and achieve their goals :muscle:")
+    embed=discord.Embed(title="About Me", description="I'm a bot specifically created for Gravity Destroyers. My purpose is simple:\n<:agreentick:875244017833639956> Log users goals\n<:agreentick:875244017833639956> Remind users about their goals\n<:agreentick:875244017833639956> Help motivate and remind users to keep working at and achieve their goals :muscle:", colour = discord.Color.yellow()) ##ebd534
     embed.add_field(name="Config Reminder Channel Command", value=":warning: **Extremely important command.**\nWithout setting a channel, the reminder function won't work. To use this command, type `/config_reminder_channel` and enter the channel you in your server you wish to for goal reminders.", inline=False)
     embed.add_field(name="New Year Goal Command", value="To use this command, type `/new_year_goal` and click space, enter or tab, then type in your goal, type one goal at a time and keep it to raw text.", inline=False)
     embed.add_field(name="View Goals Command", value="To use this command, type `/view_goals`", inline=False)
@@ -608,7 +608,7 @@ async def on_user_update(before, after):
                 cursor.execute(update_next_date_table, values)
                 db.commit()
                 await after.send(
-                    "**Hi there,**\nyour profile change has been noted and updated in our goal and reminder tables\nAnyways... KEEP GRINDING <:lezgooo:923128327970099231><:lezgooo:923128327970099231><:lezgooo:923128327970099231>"
+                    "**Hi there,**\nyour profile change has been noted and updated in our goal and reminder tables\nAnyways... KEEP GRINDING <:lezgooo:925286931221344256>"
                         )
             elif member_in_reminders == False:
                 print("Member not in reminders however is in goals table")
