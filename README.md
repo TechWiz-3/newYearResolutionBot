@@ -83,5 +83,5 @@ MySQL DB information: `MYSQLHOST` `MYSQLUSER` `MYSQLPASSWORD` `MYSQLDATABASE` `M
 `config` *stores server ids and their preferred reminder channel id*
 
 ## Hosting
-Currently RailwayApp is used for hosting.
+Currently RailwayApp is used for hosting.  
 [![Deploy on Railway](https://railway.app/button.svg)](https://railway.app?referralCode=6KJ1hh)
