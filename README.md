@@ -66,7 +66,7 @@ This bot was initially created for [one server](https://discord.gg/7Pjjf2XTFw) h
 ## Setup
 ### Environment Variables
  
-Create a `.env` witth the following variables  
+Create a `.env` or set environment variables with the following values  
 The discord bot's token `TOKEN`    
 MySQL DB information: `MYSQLHOST` `MYSQLUSER` `MYSQLPASSWORD` `MYSQLDATABASE` `MYSQLPORT`    
 
@@ -81,3 +81,7 @@ MySQL DB information: `MYSQLHOST` `MYSQLUSER` `MYSQLPASSWORD` `MYSQLDATABASE` `M
 `nextDateReminder` *stores the username, user id and next date each user should be reminded on.*    
   
 `config` *stores server ids and their preferred reminder channel id*
+
+## Hosting
+Currently RailwayApp is used for hosting.
+[![Deploy on Railway](https://railway.app/button.svg)](https://railway.app?referralCode=6KJ1hh)
