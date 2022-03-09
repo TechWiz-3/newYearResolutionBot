@@ -3,7 +3,11 @@
 # New Years Resolution Bot #
 Accountability incoming...
 -----------
-![Image](https://img.shields.io/badge/Release%3A-4.0.0-yellowgreen)
+![Image](https://img.shields.io/badge/License-GPLv3-blue.svg?style=for-the-badge&logo=gnu)
+![image](https://img.shields.io/github/v/release/TechWiz-3/newYearsResolutionBot?color=green&logo=semantic-release&sort=semver&style=for-the-badge)
+![Image](https://img.shields.io/github/last-commit/TechWiz-3/newYearsResolutionBot?color=yellow&logo=github&style=for-the-badge)
+![Image](https://img.shields.io/github/commit-activity/m/TechWiz-3/newYearsResolutionBot?color=yellowgreen&logo=git&style=for-the-badge)
+![Image](https://img.shields.io/badge/Language-Python-important?style=for-the-badge&logo=python&logoColor=turqoise)
 ### Invite
 <a class="btn btn-success" href="https://discord.com/api/oauth2/authorize?client_id=922767657265168394&permissions=2147838976&scope=applications.commands%20bot" role="button">Invite Me</a>
 ### What
