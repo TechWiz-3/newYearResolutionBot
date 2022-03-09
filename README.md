@@ -7,8 +7,8 @@ Accountability incoming...
 ![image](https://img.shields.io/github/v/release/TechWiz-3/newYearsResolutionBot?color=green&logo=semantic-release&sort=semver&style=for-the-badge)
 ![Image](https://img.shields.io/github/last-commit/TechWiz-3/newYearsResolutionBot?color=yellow&logo=github&style=for-the-badge)
 ![Image](https://img.shields.io/github/commit-activity/m/TechWiz-3/newYearsResolutionBot?color=yellowgreen&logo=git&style=for-the-badge)
-![Image](https://img.shields.io/badge/Language-Python-important?style=for-the-badge&logo=python&logoColor=turqoise&color=9cf)
-![Image](https://img.shields.io/badge/Host-Railway-success?style=for-the-badge&logo=railway)
+![Image](https://img.shields.io/badge/python-3.9-informational?style=for-the-badge&logo=python&logoColor=yellow)
+![Image](https://img.shields.io/badge/Host-Railway-blueviolet?style=for-the-badge&logo=railway)
 ### Invite
 <a class="btn btn-success" href="https://discord.com/api/oauth2/authorize?client_id=922767657265168394&permissions=2147838976&scope=applications.commands%20bot" role="button">Invite Me</a>
 ### What
