@@ -4,7 +4,7 @@
 
 # fixed a wrong emoji id and added a colour for the help command embed
 
-# Version 4.1.0
+# Version 4.2.0
 
 import asyncio
 from discord.commands import Option
@@ -613,7 +613,7 @@ async def on_user_update(before, after):
             elif member_in_reminders == False:
                 print("Member not in reminders however is in goals table")
                 await after.send(
-                    "**Hi there,**\nyour profile change has been noted and updated in our goals table\nAnyways... KEEP GRINDING <:lezgooo:923128327970099231><:lezgooo:923128327970099231><:lezgooo:923128327970099231>"
+                    "**Hi there,**\nyour profile change has been noted and updated in our goals table\nAnyways... KEEP GRINDING <:lezgooo:925286931221344256>"
                         )
         elif member_in_goals == False:
             print("User changed however not in goals table")
