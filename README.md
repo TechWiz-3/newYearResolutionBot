@@ -3,7 +3,7 @@
 # New Years Resolution Bot #
 Accountability incoming...
 -----------
-![Image](https://img.shields.io/badge/License-GPLv3-blue.svg?style=for-the-badge&logo=gnu)
+[![Image](https://img.shields.io/badge/License-GPLv3-blue.svg?style=for-the-badge&logo=gnu)](https://github.com/TechWiz-3/newYearsResolutionBot/blob/main/LICENSE)
 ![image](https://img.shields.io/github/v/release/TechWiz-3/newYearsResolutionBot?color=green&logo=semantic-release&sort=semver&style=for-the-badge)
 ![Image](https://img.shields.io/github/last-commit/TechWiz-3/newYearsResolutionBot?color=yellow&logo=github&style=for-the-badge)
 ![Image](https://img.shields.io/github/commit-activity/m/TechWiz-3/newYearsResolutionBot?color=yellowgreen&logo=git&style=for-the-badge)
