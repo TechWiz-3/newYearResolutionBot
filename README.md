@@ -1,5 +1,5 @@
 
-![Image](./data/banner.png "banner"))
+![Image](./data/banner.png "banner")
 # New Years Resolution Bot #
 Accountability incoming...
 -----------
