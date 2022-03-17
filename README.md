@@ -1,5 +1,5 @@
 
-![Image](https://cdn.discordapp.com/emojis/925286931221344256.png?size=60 "lezgoo")
+![Image](./data/banner.png "banner"))
 # New Years Resolution Bot #
 Accountability incoming...
 -----------
