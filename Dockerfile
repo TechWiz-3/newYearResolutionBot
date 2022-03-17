@@ -15,4 +15,4 @@ RUN apt-get install -y python3 python3-pip #or some other packages too
 RUN pip3 install -r requirements.txt
 
 # Start the bot.
-CMD ["python3", "src/main.py"]
+CMD ["python3", "./src/main.py"]

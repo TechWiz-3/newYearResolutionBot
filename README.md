@@ -1,6 +1,5 @@
 
-![Image](./data/banner.png "banner")
-# New Years Resolution Bot #
+![Image](./data/banner.png "banner")  
 Accountability incoming...
 -----------
 [![Image](https://img.shields.io/badge/License-GPLv3-blue.svg?style=for-the-badge&logo=gnu)](https://github.com/TechWiz-3/newYearsResolutionBot/blob/main/LICENSE)
