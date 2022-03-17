@@ -11,7 +11,8 @@ Accountability incoming...
 ![Image](https://img.shields.io/badge/Host-Railway-blueviolet?style=for-the-badge&logo=railway)
 ![Image](https://img.shields.io/tokei/lines/github/TechWiz-3/newYearsResolutionBot?color=36b2f5&logo=visual%20studio%20code&logoColor=0078d7&style=for-the-badge)
 ### Invite
-<a class="btn btn-success" href="https://discord.com/api/oauth2/authorize?client_id=922767657265168394&permissions=2147838976&scope=applications.commands%20bot" role="button">Invite Me</a>
+<a href src = "https://discord.com/api/oauth2/authorize?client_id=922767657265168394&permissions=2147838976&scope=applications.commands%20bot"><img src="./data/lezgoo_top.png" alt="lezgooinvite" width="40"/></a>  
+Click the image for invite
 ### What
 The New Years Resolution Bot is a discord bot created to motivate users to log their new year resolutions, remind them about these resolutions and provide accountability and motivation to help achieve those goals. 
 
@@ -26,12 +27,12 @@ This bot was initially created for [one server](https://discord.gg/7Pjjf2XTFw) h
 ## Commands
 
 `/help`  
-*Displays a information about the capabilities of the bot as well as a list of commands and their users*
+*Displays a information about the capabilities of the bot as well as a list of commands and their uses*
 
 `/get_started`  
 *Responds with a message explaining the basic commands to begin using the bot*  
 
-`/config_reminder_channel`
+`/config_reminder_channel`  
 *Sets the server's reminder channel to enable reminding*
 
 `/newyeargoal <goal>`  
@@ -61,7 +62,7 @@ This bot was initially created for [one server](https://discord.gg/7Pjjf2XTFw) h
 `/clear_goals` or   `/cleargoals <id>`  
 *Deletes all goals and reminders or deletes a specific goal and preserves reminders.*
 
-`/edit_goals <id> <new_goal>`
+`/edit_goals <id> <new_goal>`  
 *Edits a goal*
 
 ## Setup
@@ -84,5 +85,10 @@ MySQL DB information: `MYSQLHOST` `MYSQLUSER` `MYSQLPASSWORD` `MYSQLDATABASE` `M
 `config` *stores server ids and their preferred reminder channel id*
 
 ## Hosting
-Currently RailwayApp is used for hosting.  
+Currently RailwayApp is used for hosting. 
+
 [![Deploy on Railway](https://railway.app/button.svg)](https://railway.app?referralCode=6KJ1hh)
+
+## License
+
+The New Year Resolution Bot is licensed under the GPL 3.0 license. See the [`LICENSE`](./LICENSE) file for more information.
