@@ -1,12 +1,10 @@
 from discord.commands import (  # Importing the decorator that makes slash commands.
-    slash_command,commands
+    slash_command,Option
 )
 from discord.ext import commands
-from discord import cog
 from dotenv import load_dotenv
 import os
-import mysql.connector
-from discord.commands import Option
+import mysql.connector as connector
 
 load_dotenv()
 DB_HOST = os.getenv("MYSQLHOST")
@@ -15,7 +13,7 @@ DB_PASSWORD = os.getenv("MYSQLPASSWORD")
 DB_NAME = os.getenv("MYSQLDATABASE")
 PORT = os.getenv("MYSQLPORT")
 
-db = mysql.connector.connect(
+db = connector.connect(
     host=DB_HOST, user=DB_USER, password=DB_PASSWORD, database=DB_NAME, port=PORT
 )
 

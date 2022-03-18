@@ -1,15 +1,11 @@
 import asyncio
-from discord.commands import Option
 from discord.ext import commands
-from discord.ext import tasks
 from dotenv import load_dotenv
 import os
 import mysql.connector
-from datetime import date, timedelta
 from discord.utils import get
 #from discord.commands import permissions
 import discord
-import random
 from cogs.tasks import reminder_function
 
 load_dotenv()
