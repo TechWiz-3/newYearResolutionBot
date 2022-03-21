@@ -62,7 +62,7 @@ This bot was initially created for [one server](https://discord.gg/7Pjjf2XTFw) h
 *Deletes all goals and reminders or deletes a specific goal and preserves reminders.*
 
 `/edit_goals <id> <new_goal>`  
-*Edits a goal*
+*Edits a goal with the given id*
 
 ## Setup
 ### Environment Variables
