@@ -11,6 +11,7 @@ class Help(commands.Cog):
     @slash_command()
     async def help(self, ctx):
         """Helps you use the bots commands"""
+        print(f"Help command invoked by {ctx.author.name} in {ctx.channel.name}")
         embed=discord.Embed(title="About Me", description="I'm a bot specifically created for Gravity Destroyers. My purpose is simple:\n<:agreentick:875244017833639956> Log users goals\n<:agreentick:875244017833639956> Remind users about their goals\n<:agreentick:875244017833639956> Help motivate and remind users to keep working at and achieve their goals :muscle:", colour = discord.Color.yellow()) ##ebd534
         embed.add_field(name="Config Reminder Channel Command", value=":warning: **Extremely important command.**\nWithout setting a channel, the reminder function won't work. To use this command, type `/config_reminder_channel` and enter the channel you in your server you wish to for goal reminders.", inline=False)
         embed.add_field(name="New Year Goal Command", value="To use this command, type `/new_year_goal` and click space, enter or tab, then type in your goal, type one goal at a time and keep it to raw text.", inline=False)
@@ -23,11 +24,16 @@ class Help(commands.Cog):
         embed.add_field(name="Edit Goal Command", value="This command edits a goal based on it’s ID. To use this command type `/edit_goal id newgoal`", inline=False)
         embed.add_field(name = "Next Reminder Command", value = "Shows you when your next goal reminder is. To use this command type `/next_reminder`", inline =False)
         embed.add_field(name = "Change Reminder Interval Command", value = "Allows you to change how often you are reminded in days `/change_reminder_interval days`", inline=False)
-        await ctx.respond(embed=embed)
+        try:
+            await ctx.respond(embed=embed)
+            print("Responded successfully")
+        except:
+            print("Help command response failed")
 
     @slash_command()
     async def get_started(self, ctx):
         """Helps you get started :)"""
+        print(f"Get started command invoked by {ctx.author.name} in {ctx.channel.name}")
         contentOne = "||This is how I help you:\n`/help` The help command is your go to command to understand anything, but here's the recommended sequence of commands:||"
         contentTwo = "||Run`/new_year_goal` for **each** new year goal you wish to achieve.\nRun `/view_goals` to ensure that all your goals havee been logged.\nRun `/remind_me` to set how often you'll be reminded.||"
         contentThree = "||For more command use the `/help` command. If you enounter any issues pls ping `@Zac the Wise#1381` :)||"
