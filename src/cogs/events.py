@@ -44,6 +44,7 @@ class Events(commands.Cog):
     @commands.Cog.listener()
     async def on_application_command_error(self, ctx, error): # if slash command error occurs
         await ctx.send(f":weary: {error}") # send the error
+        #if isinstance(error, commands.MissingPermissions):
     
     @commands.Cog.listener()
     async def on_ready(self):
