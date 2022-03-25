@@ -2,9 +2,9 @@
 
 # Update created by Zac on 17/Mar
 
-# huge cogs update, however not finalised
+# updated help command with try except, added error handling, added mariaconfig
 
-# Version 5.0.0
+# Version 5.1.0
 
 import asyncio
 from discord.commands import Option
