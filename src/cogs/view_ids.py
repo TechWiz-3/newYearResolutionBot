@@ -35,7 +35,7 @@ class ViewIds(commands.Cog):
         cursor.execute(sql, author)
         for entry in cursor: # loop through results
             goal, goal_id = entry # unpack results
-            final_message = final_message + f"**{goal}** `{goal_id}`\n" # add to the final message the goal and goal id
+            final_message = final_message + f"`{goal}`\t`{goal_id}`\n" # add to the final message the goal and goal id
         await ctx.respond(final_message) # send the final list
 
 def setup(bot):
