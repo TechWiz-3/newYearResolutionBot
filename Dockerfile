@@ -7,11 +7,11 @@ WORKDIR /usr/src/bot
 COPY . /usr/src/bot
 
 # install dependencies
-RUN apt-get update
-RUN apt-get install -y python3 python3-pip git #or some other packages too
-# and other stuff if you wanna
+RUN apt-get update # update apt-get
+# install pip and python
+RUN apt-get install -y python3 python3-pip git
 
-# Install bot reqs
+# Install bot requirements from requirements.txt
 RUN pip3 install -r ./src/requirements.txt
 
 # Start the bot.
