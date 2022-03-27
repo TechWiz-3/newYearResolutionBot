@@ -4,7 +4,7 @@
 
 # updated help command with try except, added error handling, added mariaconfig
 
-# Version 5.1.0
+# Version 5.2.0
 
 import asyncio
 from discord.commands import Option
