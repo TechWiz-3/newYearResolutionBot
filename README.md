@@ -70,7 +70,6 @@ This bot was initially created for [one server](https://discord.gg/7Pjjf2XTFw) h
 Create a `.env` or set environment variables with the following values  
 The discord bot's token `TOKEN`    
 MySQL DB information: `MYSQLHOST` `MYSQLUSER` `MYSQLPASSWORD` `MYSQLDATABASE` `MYSQLPORT`    
-
 ### Tools
 
 *The file [`sqlConfig.py`](https://github.com/TechWiz-3/newYearsResolutionBot/blob/main/tools/sqlConfig.py) contains the queries to create the four database tables used by the bot.*  
@@ -83,8 +82,27 @@ MySQL DB information: `MYSQLHOST` `MYSQLUSER` `MYSQLPASSWORD` `MYSQLDATABASE` `M
   
 `config` *stores server ids and their preferred reminder channel id*
 
+## Folder Organisation
+[**`src`**](./src/)  
+Contains all the bot's source code. Including [`main.py`](./src/main.py) and the [`cogs`](./src/cogs) folder  
+
+[**`tools`**](./tools/)  
+Contains database setup and migration programs.
+
+[**`data`**](./data/)  
+Contains media assets used in the repositories readme's
+
+### Other files
+[**`Dockerfile`**](./Dockerfile)  
+Contains the [instructions](https://docs.docker.com/engine/reference/builder/) for the bot's image build.  
+
+[**`backlogs.md`**](./backlogs.md)  
+Contains future features to work on (though the list is may not be complete)  
+
 ## Hosting
-Currently RailwayApp is used for hosting. 
+The bot is hosted using [Docker](https://www.docker.com/) run on a  Network Attached Storage device.
+
+While I no longer use RailwayApp, I still highly recommend it for free hosting.
 
 [![Deploy on Railway](https://railway.app/button.svg)](https://railway.app?referralCode=6KJ1hh)
 
