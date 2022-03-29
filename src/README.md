@@ -1,3 +1,4 @@
+![Image](/data/src_banner_final.png "banner")  
 # Source
 This folder contains all the source code for the bot itself.
 
