@@ -1,1 +1,1 @@
-![Image](/data/cogs_banner.png "banner")  
+![Image](/data/cogs_banner_v2.png "banner")  
