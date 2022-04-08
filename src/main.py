@@ -6,25 +6,19 @@
 
 # Version 5.2.0
 
-import asyncio
-from discord.commands import Option
 from discord.ext import commands
-from discord.ext import tasks
 from dotenv import load_dotenv
-import os
-import mysql.connector
-from datetime import date, timedelta
+from os import getenv
 from discord.utils import get
 #from discord.commands import permissions
-import discord
-import random
+from discord import Intents
 
 load_dotenv()
-BOT_TOKEN = os.getenv("TOKEN")
+BOT_TOKEN = getenv("TOKEN")
 DEV_GUILD_ID = 864438892736282625
 PROD_GUILD_ID = 867597533458202644
 
-intents = discord.Intents.all()
+intents = Intents.all()
 bot = commands.Bot(command_prefix="goals!", intents=intents)
             
 bot.load_extension('cogs.new_year_goal')
