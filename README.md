@@ -106,6 +106,16 @@ While I no longer use RailwayApp, I still highly recommend it for free hosting.
 
 [![Deploy on Railway](https://railway.app/button.svg)](https://railway.app?referralCode=6KJ1hh)
 
+## Examples
+#### Logging a new goal
+![Image](./data/examples/new_goal_demo.png "new goal demo") 
+![Image](./data/examples/new_goal_demo2.png "new goal demo 2") 
+#### Setting a reminder
+![Image](./data/examples/remind_me_demo.png "reminder demo")   
+#### Viewing the reminder set
+![Image](./data/examples/next_reminder_demo.png "next reminder command demo")   
+#### Example reminder
+![Image](./data/examples/reminder_demo.png "reminder demo")
 ## License
 
 The New Year Resolution Bot is licensed under the GPL 3.0 license. See the [`LICENSE`](./LICENSE) file for more information.
