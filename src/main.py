@@ -2,9 +2,9 @@
 
 # Update created by Zac on 17/Mar
 
-# updated help command with try except, added error handling, added mariaconfig
+# updated help command and made it cleaner, removed init message from events.py
 
-# Version 5.2.0
+# Version 5.3.0
 
 from discord.ext import commands
 from dotenv import load_dotenv

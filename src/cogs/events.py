@@ -66,7 +66,7 @@ class Events(commands.Cog):
             print("Init loop; server id: ", reminder_channel_id)
             server = self.bot.get_guild(int(server_id))
             reminder_channel = server.get_channel(int(reminder_channel_id))
-            await reminder_channel.send("Initialising...")
+            #await reminder_channel.send("Initialising...")
 
     @commands.Cog.listener()
     async def on_user_update(self, before, after):
