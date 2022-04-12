@@ -48,7 +48,7 @@ class Events(commands.Cog):
     
     @commands.Cog.listener()
     async def on_ready(self):
-        await Events.initialise_loop(self)
+        #await Events.initialise_loop(self)
         await reminder_function.start(self.bot)
         while True:
             # alternate between two bot statuses 
@@ -57,15 +57,15 @@ class Events(commands.Cog):
             await self.bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name="get started | /help"))
             await asyncio.sleep(5)
     
-    async def initialise_loop(self):
-        # get each server and send a message to it's reminder channel
-        get_servers_and_channels = "SELECT server_id, reminder_channel_id FROM config"
-        cursor.execute(get_servers_and_channels)
-        for entry in cursor:
-            server_id, reminder_channel_id = entry
-            print("Init loop; server id: ", reminder_channel_id)
-            server = self.bot.get_guild(int(server_id))
-            reminder_channel = server.get_channel(int(reminder_channel_id))
+    # async def initialise_loop(self):
+    #     # get each server and send a message to it's reminder channel
+    #     get_servers_and_channels = "SELECT server_id, reminder_channel_id FROM config"
+    #     cursor.execute(get_servers_and_channels)
+    #     for entry in cursor:
+    #         server_id, reminder_channel_id = entry
+    #         print("Init loop; server id: ", reminder_channel_id)
+    #         server = self.bot.get_guild(int(server_id))
+    #         reminder_channel = server.get_channel(int(reminder_channel_id))
             #await reminder_channel.send("Initialising...")
 
     # @commands.Cog.listener()
