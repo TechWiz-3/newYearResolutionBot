@@ -2,6 +2,7 @@
 ![Image](./data/banner.png "banner")  
 Accountability incoming...
 -----------
+[![wakatime](https://wakatime.com/badge/user/ca36faea-acc3-45d7-acc1-fb14861b9144/project/56a899c7-a274-4205-9932-cfe56af94500.svg?style=for-the-badge)](https://wakatime.com/badge/user/ca36faea-acc3-45d7-acc1-fb14861b9144/project/56a899c7-a274-4205-9932-cfe56af94500)
 [![Image](https://img.shields.io/badge/License-GPLv3-blue.svg?style=for-the-badge&logo=gnu)](https://github.com/TechWiz-3/newYearsResolutionBot/blob/main/LICENSE)
 ![image](https://img.shields.io/github/v/release/TechWiz-3/newYearsResolutionBot?color=green&logo=semantic-release&sort=semver&style=for-the-badge)
 ![Image](https://img.shields.io/github/last-commit/TechWiz-3/newYearsResolutionBot?color=yellow&logo=github&style=for-the-badge)
@@ -72,7 +73,7 @@ The discord bot's token `TOKEN`
 MySQL DB information: `MYSQLHOST` `MYSQLUSER` `MYSQLPASSWORD` `MYSQLDATABASE` `MYSQLPORT`    
 ### Tools
 
-*The file [`sqlConfig.py`](https://github.com/TechWiz-3/newYearsResolutionBot/blob/main/tools/sqlConfig.py) contains the queries to create the four database tables used by the bot.*  
+*The file *[`sqlConfig.py`](https://github.com/TechWiz-3/newYearsResolutionBot/blob/main/tools/sqlConfig.py)* contains the queries to create the four database tables used by the bot.*  
 
 `2022_Goals` *is used for storing each users goals as well as their user id and name, in the future it will also store the server ID of which the command was invoked in.*  
 
@@ -114,7 +115,7 @@ While I no longer use RailwayApp, I still highly recommend it for free hosting.
 ![Image](./data/examples/remind_me_demo.png "reminder demo")   
 ![Image](./data/examples/remind_me_demo2.png "reminder demo 2")   
 #### Viewing the reminder set
-![Image](./data/examples/next_reminder_demo.png "next reminder command demo")   
+![Image](./data/examples/next_reminder_demo.png "next reminder command demo")
 #### Example reminder
 ![Image](./data/examples/reminder_demo.png "reminder demo")
 ## License
