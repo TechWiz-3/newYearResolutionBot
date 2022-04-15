@@ -41,21 +41,24 @@ class Events(commands.Cog):
         log = server.get_channel(866217361115316284)
         await log.send(f"New server joined\n{guild.id}\n{guild.member_count}\n{guild.name}")
 
-    @commands.Cog.listener()
-    async def on_application_command_error(self, ctx, error): # if slash command error occurs
-        await ctx.send(f":weary: {error}") # send the error
-        #if isinstance(error, commands.MissingPermissions):
+    # @commands.Cog.listener()
+    # async def on_application_command_error(self, ctx, error): # if slash command error occurs
+    #     await ctx.send(f":weary: {error}") # send the error
+    #     #if isinstance(error, commands.MissingPermissions):
     
     @commands.Cog.listener()
     async def on_ready(self):
         #await Events.initialise_loop(self)
         await reminder_function.start(self.bot)
-        while True:
-            # alternate between two bot statuses 
-            await self.bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name="you achieve your goals"))
-            await asyncio.sleep(5)
-            await self.bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name="get started | /help"))
-            await asyncio.sleep(5)
+        try:
+            while True:
+                # alternate between two bot statuses 
+                await self.bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name="you achieve your goals"))
+                await asyncio.sleep(5)
+                await self.bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name="get started | /help"))
+                await asyncio.sleep(5)
+        except Exception as error:
+            print(f"Status setup failed due to \n{error}")
     
     # async def initialise_loop(self):
     #     # get each server and send a message to it's reminder channel
