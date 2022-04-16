@@ -23,7 +23,7 @@ cursor.execute("CREATE TABLE 2022_Goals (id INT AUTO_INCREMENT PRIMARY KEY, user
 cursor.execute("CREATE TABLE reminders (id INT AUTO_INCREMENT PRIMARY KEY, user VARCHAR(50), days SMALLINT UNSIGNED, userId VARCHAR(50))")
 
 # create the next-date table
-cursor.execute("CREATE TABLE nextDateReminder (id INT AUTO_INCREMENT PRIMARY KEY, user VARCHAR(50), next_date SMALLINT UNSIGNED, userId VARCHAR(50))")
+cursor.execute("CREATE TABLE nextDateReminder (id INT AUTO_INCREMENT PRIMARY KEY, user VARCHAR(50), next_date DATE, userId VARCHAR(50))")
 
 # create the server configuration table
 cursor.execute("CREATE TABLE config (id INT AUTO_INCREMENT PRIMARY KEY, server_id VARCHAR(50), reminder_channel_id VARCHAR(50))")
