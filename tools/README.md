@@ -1,6 +1,6 @@
 # Tools
-[`mariaConfig.py`](./tools/mariaConfig.py)  
+[`mariaConfig.py`](./mariaConfig.py)  
 Newer DB configuration file
 
-[`sqlConfig`](./tools/sqlConfig.py)  
+[`sqlConfig`](./sqlConfig.py)  
 Older DB configuration file
