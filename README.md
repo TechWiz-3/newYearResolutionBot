@@ -1,6 +1,5 @@
 
 ![Image](./data/banner.png "banner")  
-Accountability incoming...
 -----------
 [![wakatime](https://wakatime.com/badge/user/ca36faea-acc3-45d7-acc1-fb14861b9144/project/56a899c7-a274-4205-9932-cfe56af94500.svg?style=for-the-badge)](https://wakatime.com/badge/user/ca36faea-acc3-45d7-acc1-fb14861b9144/project/56a899c7-a274-4205-9932-cfe56af94500)
 [![Image](https://img.shields.io/badge/License-GPLv3-blue.svg?style=for-the-badge&logo=gnu)](https://github.com/TechWiz-3/newYearsResolutionBot/blob/main/LICENSE)
