@@ -2,17 +2,17 @@ from discord.commands import (  # Importing the decorator that makes slash comma
     slash_command
 )
 from discord.ext import commands
-import discord
 from dotenv import load_dotenv
-import os
+from os import getenv
 import mysql.connector
+from discord.utils import get
 
 load_dotenv()
-DB_HOST = os.getenv("MYSQLHOST")
-DB_USER = os.getenv("MYSQLUSER")
-DB_PASSWORD = os.getenv("MYSQLPASSWORD")
-DB_NAME = os.getenv("MYSQLDATABASE")
-PORT = os.getenv("MYSQLPORT")
+DB_HOST = getenv("MYSQLHOST")
+DB_USER = getenv("MYSQLUSER")
+DB_PASSWORD = getenv("MYSQLPASSWORD")
+DB_NAME = getenv("MYSQLDATABASE")
+PORT = getenv("MYSQLPORT")
 
 db = mysql.connector.connect(
     host=DB_HOST, user=DB_USER, password=DB_PASSWORD, database=DB_NAME, port=PORT
@@ -25,8 +25,9 @@ class ViewGoals(commands.Cog):
     @slash_command()
     async def view_goals(self, ctx):
         """Displays your currently logged and achieved goals"""
-        greenTickEmoji = discord.utils.get(self.bot.emojis, name="epicTick") # get a tick emoji
-        slashEmoji = discord.utils.get(self.bot.emojis, name="aslash") # get a slash emoji
+        db.commit()
+        greenTickEmoji = get(self.bot.emojis, name="epicTick") # get a tick emoji
+        slashEmoji = get(self.bot.emojis, name="aslash") # get a slash emoji
         goalsSet = False # variable that indicates that the user has sett their goals
         goals_message_list = ""
         goalsCounter = 0 # how many goals
