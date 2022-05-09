@@ -62,9 +62,7 @@ class RemindMe(commands.Cog):
                 cursor.execute(setDate, values)
                 db.commit()
                 await ctx.respond(
-                    f"Going to be reminding you every `{days}`\nTo check your next reminder `/next_reminder`\n\n\
-                    *Good job bruh, now time to get to work <:stronk_doge:925285801921769513> <:lezgooo:925286931221344256> \
-                    If you need help, we got you <#867600399879372820>*"
+                    f"Going to be reminding you every `{days}`\nTo check your next reminder `/next_reminder`\n\n*Good job bruh, now time to get to work <:stronk_doge:925285801921769513> <:lezgooo:925286931221344256>\nIf you need help, we got you <#867600399879372820>*"
                 )
         elif goalsSet == False: # if goals haven't been set
                 await ctx.respond(

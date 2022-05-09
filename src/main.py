@@ -2,7 +2,7 @@
 
 # Update created by Zac on 17/Mar
 
-# migrate to maria db locally, add commit() at the front of all commands
+# fix DB bug, fix indentation bugs
 
 # Version 6.0.0 PRE RELEASE
 

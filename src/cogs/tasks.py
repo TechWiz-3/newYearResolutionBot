@@ -49,7 +49,7 @@ async def reminder_function(bot):
             slashEmoji = get(bot.emojis, name="aslash")
             greenTickEmoji = get(bot.emojis, name="epicTick")
             if unpackedDate == date.today():
-                get_goal_entry = "SELECT user, goals, status, user_id, server_id FROM goal WHERE user_id = %s"  # request for the users goals in the goals table
+                get_goal_entry = "SELECT user, goal, status, user_id, server_id FROM goal WHERE user_id = %s"  # request for the users goals in the goals table
                 userRequest = (user_id_for_third_query,)
                 third_cursor.execute(get_goal_entry, userRequest)  # execute sql query
                 statusCounter = 0

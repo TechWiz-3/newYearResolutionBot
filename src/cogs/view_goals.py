@@ -47,14 +47,11 @@ class ViewGoals(commands.Cog):
                 goals_message_list += f"{slashEmoji} `{goal}`\n"
         if goalsAchievedCounter > 0:
             await ctx.respond(
-                f"Your goals are...\n\n{goals_message_list}\n**<:pepe_hypers:925274715214458880> \
-                You have achieved __{goalsAchievedCounter}__ out of __{goalsCounter}__ goals**\n\
-                KEEP GRINDING <:pepebuff:874499841407983647> <:pepebuff:874499841407983647>"
+                f"Your goals are...\n\n{goals_message_list}\n**<:pepe_hypers:925274715214458880> You have achieved __{goalsAchievedCounter}__ out of __{goalsCounter}__ goals**\nKEEP GRINDING <:pepebuff:874499841407983647> <:pepebuff:874499841407983647>"
             )
         elif goalsSet == True:
             await ctx.respond(
-                f"Your goals are...\n\n{goals_message_list}\nYou haven't achieved any of your \
-                    {goalsCounter} goals, but that doesn't matter, **TRAIN HARD TRAIN SMART** (that's what Gravity Destroyers is for) and you'll get there <:lezgooo:925286931221344256> <:lezgooo:925286931221344256>"
+                f"Your goals are...\n\n{goals_message_list}\nYou haven't achieved any of your {goalsCounter} goals, but that doesn't matter, **TRAIN HARD TRAIN SMART** (that's what Gravity Destroyers is for) and you'll get there <:lezgooo:925286931221344256> <:lezgooo:925286931221344256>"
             )
         elif goalsSet == False: # respond to user that hasn't set goals
             await ctx.respond("Ummm, you need to set your goals first before viewing them lol\n\n*However, I live go serve bright human ;) ... these commands may help...* `/help` `/new_year_goal`")

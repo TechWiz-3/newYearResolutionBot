@@ -61,9 +61,7 @@ class NewYearGoal(commands.Cog):
                 await ctx.respond("Sorry, datebase seems to be seriously bugged up rn ;(")
             else:
                 await ctx.respond(
-                    "An error occured while connecting to the database \
-                    however an attempt to reconnect was successful, \
-                    if you run the command again, it should work :pray:"
+                    "An error occured while connecting to the database however an attempt to reconnect was successful, if you run the command again, it should work :pray:"
                         )
 
 
