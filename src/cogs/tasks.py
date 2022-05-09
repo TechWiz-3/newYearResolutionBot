@@ -38,18 +38,18 @@ async def reminder_function(bot):
     reminder_channel_id_final = 0
     global_server_id = 0
     reminderChannelObject = None
-    sql = "SELECT userId, days FROM reminders"  # select the username and their selected reminder interval
+    sql = "SELECT user_id, days FROM reminder"  # select the username and their selected reminder interval
     cursor.execute(sql)  # execute sql query
     for (user_id, howOften) in cursor:  # loop through the results of the sql query
-        sql = "SELECT userId, next_date FROM nextDateReminder WHERE userId = %s"
+        sql = "SELECT user_id, next_date FROM next_reminder WHERE user_id = %s"
         value = (user_id,)
         second_cursor.execute(sql, value)
         for dateEntry in second_cursor:
             user_id_for_third_query, unpackedDate = dateEntry
-            slashEmoji = discord.utils.get(bot.emojis, name="aslash")
-            greenTickEmoji = discord.utils.get(bot.emojis, name="epicTick")
+            slashEmoji = get(bot.emojis, name="aslash")
+            greenTickEmoji = get(bot.emojis, name="epicTick")
             if unpackedDate == date.today():
-                get_goal_entry = "SELECT user,goals,status,userId,serverId FROM 2022_Goals WHERE userId = %s"  # request for the users goals in the goals table
+                get_goal_entry = "SELECT user, goals, status, user_id, server_id FROM goal WHERE user_id = %s"  # request for the users goals in the goals table
                 userRequest = (user_id_for_third_query,)
                 third_cursor.execute(get_goal_entry, userRequest)  # execute sql query
                 statusCounter = 0
@@ -123,7 +123,7 @@ async def reminder_function(bot):
                             f"{memberObject}\n**{sendFunnyText}**\n\n{goals}"
                             )  # print the users goals
                 goals = "" # reset goals variable
-                updateSql = "UPDATE nextDateReminder SET next_date = %s WHERE userId = %s"
+                updateSql = "UPDATE next_reminder SET next_date = %s WHERE user_id = %s"
                 nextDate = date.today() + timedelta(days=howOften)
                 valuesForChangingDate = (nextDate, user_id_for_third_query)
                 fourth_cursor.execute(updateSql, valuesForChangingDate)
@@ -131,7 +131,7 @@ async def reminder_function(bot):
 
             elif unpackedDate < date.today(): #if the table is outdated
                 print("Date smaller than current date triggered for", user_id_for_third_query)
-                get_goal_entry = "SELECT goals,status,userId,serverId FROM 2022_Goals WHERE userId = %s"  # request for the users goals in the goals table
+                get_goal_entry = "SELECT goal, status, user_id, server_id FROM goal WHERE user_id = %s"  # request for the users goals in the goals table
                 userRequest = (user_id_for_third_query,)
                 third_cursor.execute(get_goal_entry, userRequest)  # execute sql query
                 statusCounter = 0
@@ -205,7 +205,7 @@ async def reminder_function(bot):
                             f"{memberObject}\n**{sendFunnyText}**\n\n{goals}"
                             )  # print the users goals
                 goals = "" # reset goals variable
-                updateSql = "UPDATE nextDateReminder SET next_date = %s WHERE userId = %s"
+                updateSql = "UPDATE next_reminder SET next_date = %s WHERE user_id = %s"
                 nextDate = date.today() + timedelta(days=howOften)
                 valuesForChangingDate = (nextDate, user_id_for_third_query)
                 fourth_cursor.execute(updateSql, valuesForChangingDate)

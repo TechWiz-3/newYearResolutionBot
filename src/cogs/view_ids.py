@@ -34,7 +34,7 @@ class ViewIds(commands.Cog):
         final_message = ""
         author = (str(ctx.author.id),) # gets the command invoker
         goals_logged = False
-        sql = "SELECT goals, id FROM 2022_Goals WHERE userId = %s" # searches the table for goals and ids with the user's name
+        sql = "SELECT goal, id FROM goal WHERE user_id = %s" # searches the table for goals and ids with the user's name
         cursor.execute(sql, author)
         for entry in cursor: # loop through results
             goals_logged = True

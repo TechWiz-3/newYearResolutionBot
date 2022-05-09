@@ -26,13 +26,13 @@ class GoalAchieved(commands.Cog):
         self.bot = bot
 
     @slash_command()
-    async def goal_achieved(self, ctx, id: Option(int, "Enter the ID of the goal you wish to mark as achieved", required=True)):
+    async def goal_achieved(self, ctx, id: Option(int, "Enter the ID of the goal you wish to mark as achieved", required=True)):  # type: ignore
         """Log when you achieve a goal by goal ID"""
         db.commit()
         userGoalIdVerified = False
         achieved_goal_name = ""
         fetchByID = (id,)
-        cursor.execute("SELECT userId, goals FROM 2022_Goals WHERE id = %s", fetchByID) # finds the goal corresponding to provided id
+        cursor.execute("SELECT user_id, goal FROM goal WHERE id = %s", fetchByID) # finds the goal corresponding to provided id
         for userandGoal in cursor: # loops through results
             userId, goal = userandGoal # unpacks the resuts
             if userId == str(ctx.author.id): # if the user of the requested goal is equal to the command invoker
@@ -40,7 +40,7 @@ class GoalAchieved(commands.Cog):
                 achieved_goal_name = goal # gets the text of the goal
         if userGoalIdVerified == True: # if the user is correct
             value = (id,)
-            markAchieved = "UPDATE 2022_Goals SET status = '1' WHERE id = %s"
+            markAchieved = "UPDATE goal SET status = '1' WHERE id = %s"
             cursor.execute(markAchieved, value)
             db.commit()
             await ctx.respond(

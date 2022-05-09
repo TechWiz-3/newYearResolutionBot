@@ -46,20 +46,21 @@ class ClearGoals(commands.Cog):
         """Delete all logged goals, or a specific goal based on ID"""
         db.commit()
         if id == None:
-            deleteGoals = "DELETE FROM 2022_Goals WHERE userId = %s"
-            deleteReminderEntries = "DELETE FROM reminders WHERE userId = %s"
-            deleteDateReminderEntries = "Delete FROM nextDateReminder WHERE userId = %s"
+            deleteGoals = "DELETE FROM goal WHERE user_id = %s"
+            deleteReminderEntries = "DELETE FROM reminder WHERE user_id = %s"
+            deleteDateReminderEntries = "Delete FROM next_reminder WHERE user_id = %s"
             user = (str(ctx.author.id),)
             cursor.execute(deleteGoals, user)
             cursor.execute(deleteReminderEntries, user)
             cursor.execute(deleteDateReminderEntries, user)
             db.commit()
             await ctx.respond(
-                f"All goals deleted. {random.choice(all_goals_deleted)}\nNow time to put new ones in `/new_year_goal`\n*Also, your reminders have been removed*"
+                f"All goals deleted. {random.choice(all_goals_deleted)}\nNow time to put new\
+                 ones in `/new_year_goal`\n*Also, your reminders have been removed*"
                 )
         else:
             userAndIdMatch = False
-            getUserFromGoal = "SELECT userId FROM 2022_Goals WHERE id = %s"
+            getUserFromGoal = "SELECT user_id FROM goals WHERE id = %s"
             values = (id,)
             cursor.execute(getUserFromGoal, values)
             for goalEntry in cursor:
@@ -67,7 +68,7 @@ class ClearGoals(commands.Cog):
                 if str(userOfGoal) == str(ctx.author.id):
                     userAndIdMatch = True
             if userAndIdMatch == True:
-                sql = "DELETE FROM 2022_Goals WHERE userId = %s AND id = %s"
+                sql = "DELETE FROM goal WHERE user_id = %s AND id = %s"
                 user = str(ctx.author.id)
                 goalId = int(id)
                 values = (user, goalId)

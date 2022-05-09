@@ -26,11 +26,11 @@ class EditGoal(commands.Cog):
         self.bot = bot
 
     @slash_command()
-    async def edit_goal(self, ctx, id: Option(int, "Enter the ID corresponding to the goal you wish to change"), newtext: Option(str, "Enter the new goal you'd like to set")):
+    async def edit_goal(self, ctx, id: Option(int, "Enter the ID corresponding to the goal you wish to change"), newtext: Option(str, "Enter the new goal you'd like to set")):  # type: ignore
         """Edits a goal entry based on ID"""
         db.commit()
         goalIsForUser = False
-        checkGoalAndId = "SELECT userId FROM 2022_Goals WHERE id = %s" # looks for the goal with that id
+        checkGoalAndId = "SELECT user_id FROM goal WHERE id = %s" # looks for the goal with that id
         values = (id,)
         cursor.execute(checkGoalAndId, values)
         for userid_entry in cursor:
@@ -39,7 +39,7 @@ class EditGoal(commands.Cog):
                 goalIsForUser = True # confirms that the goal creator and command in invoker are the same
         if goalIsForUser == True:
             # goes ahead and updated the goal
-            changeGoal = "UPDATE 2022_Goals SET goals = %s WHERE userId = %s AND id = %s"
+            changeGoal = "UPDATE goal SET goal = %s WHERE user_id = %s AND id = %s"
             values = (newtext, str(ctx.author.id), id)
             cursor.execute(changeGoal, values)
             db.commit()

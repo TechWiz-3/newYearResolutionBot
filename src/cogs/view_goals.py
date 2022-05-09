@@ -34,7 +34,7 @@ class ViewGoals(commands.Cog):
         goalsAchievedCounter = 0 # how many goals have been achieved
         author_id = (str(ctx.author.id),)
         # get the users goals, status represents whether the goal has been achieved or not
-        getGoals = "SELECT goals, status FROM 2022_Goals WHERE userId = %s"
+        getGoals = "SELECT goal, status FROM goal WHERE user_id = %s"
         cursor.execute(getGoals, author_id) # get each goal and corresponding status for the user
         for goalAndStatus in cursor: # loop through results
             goal,status = goalAndStatus # assign the results
@@ -47,11 +47,14 @@ class ViewGoals(commands.Cog):
                 goals_message_list += f"{slashEmoji} `{goal}`\n"
         if goalsAchievedCounter > 0:
             await ctx.respond(
-                f"Your goals are...\n\n{goals_message_list}\n**<:pepe_hypers:925274715214458880> You have achieved __{goalsAchievedCounter}__ out of __{goalsCounter}__ goals**\nKEEP GRINDING <:pepebuff:874499841407983647> <:pepebuff:874499841407983647>"
+                f"Your goals are...\n\n{goals_message_list}\n**<:pepe_hypers:925274715214458880> \
+                You have achieved __{goalsAchievedCounter}__ out of __{goalsCounter}__ goals**\n\
+                KEEP GRINDING <:pepebuff:874499841407983647> <:pepebuff:874499841407983647>"
             )
         elif goalsSet == True:
             await ctx.respond(
-                f"Your goals are...\n\n{goals_message_list}\nYou haven't achieved any of your {goalsCounter} goals, but that doesn't matter, **TRAIN HARD TRAIN SMART** (that's what Gravity Destroyers is for) and you'll get there <:lezgooo:925286931221344256> <:lezgooo:925286931221344256>"
+                f"Your goals are...\n\n{goals_message_list}\nYou haven't achieved any of your \
+                    {goalsCounter} goals, but that doesn't matter, **TRAIN HARD TRAIN SMART** (that's what Gravity Destroyers is for) and you'll get there <:lezgooo:925286931221344256> <:lezgooo:925286931221344256>"
             )
         elif goalsSet == False: # respond to user that hasn't set goals
             await ctx.respond("Ummm, you need to set your goals first before viewing them lol\n\n*However, I live go serve bright human ;) ... these commands may help...* `/help` `/new_year_goal`")

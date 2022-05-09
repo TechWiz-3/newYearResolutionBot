@@ -32,22 +32,23 @@ class NextReminder(commands.Cog):
         reminder_set = False
         how_often = 0
         next_date = None
-        get_reminder_interval = "SELECT days FROM reminders WHERE userId = %s" # find the reminder interval
+        get_reminder_interval = "SELECT days FROM reminder WHERE user_id = %s" # find the reminder interval
         user = (str(ctx.author.id),)
         cursor.execute(get_reminder_interval, user)
         for entry in cursor:
             reminder_set = True # confirms that a reminder has been set
             how_often, = entry # store the days interval in how_often
-        get_next_reminder_date = "SELECT next_date FROM nextDateReminder WHERE userId = %s" # find the new reminder date
+        get_next_reminder_date = "SELECT next_date FROM next_reminder WHERE user_id = %s" # find the new reminder date
         second_cursor.execute(get_next_reminder_date, user)
         for dateEntry in second_cursor:
             next_date, = dateEntry # store the next date in next_date
         if reminder_set == True:
             await ctx.respond(
-                f"You have set to be reminded every `{how_often}` day(s) and your next reminder is on `{next_date}` meanwhile... KEEP GRINDING <:lezgooo:925286931221344256>"
+                f"You have set to be reminded every `{how_often}` day(s) and your next reminder is on `{next_date}`\
+                 meanwhile... KEEP GRINDING <:lezgooo:925286931221344256>"
                 )    
         elif reminder_set == False: # if a reminder hasn't been found in the table
-            umEmoji = discord.utils.get(self.bot.emojis, name="um")
+            umEmoji = get(self.bot.emojis, name="um")
             await ctx.respond(
                 f"{umEmoji} you need to set a reminder first before viewing it... `/remind_me`"
                 )

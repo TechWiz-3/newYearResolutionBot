@@ -31,14 +31,14 @@ class RemindMe(commands.Cog):
         """Tells the bot to remind you about your goals every x days"""
         db.commit()       
         goalsSet = False # automatically assume that goals haven't been set
-        checkGoals = "SELECT * FROM 2022_Goals WHERE userId = %s" # check if goals have been set
+        checkGoals = "SELECT * FROM goal WHERE user_id = %s" # check if goals have been set
         values = (str(ctx.author.id),) # get the users name
         cursor.execute(checkGoals, values) # execute
         for entry in cursor: # loop through results if there are any
             goalsSet = True # goals indeed have been set
         if goalsSet == True: # go ahead to next check
             reminderSetPreviously = False # assume that a reminder has not been set before
-            getReminders = "SELECT days FROM reminders WHERE userId = %s" # find reminders set previously
+            getReminders = "SELECT days FROM reminder WHERE user_id = %s" # find reminders set previously
             values = (str(ctx.author.id),) # users name
             second_cursor.execute(getReminders, values) # execute
             for reminder in second_cursor: # loop through results if they exist
@@ -51,18 +51,20 @@ class RemindMe(commands.Cog):
                         )
             else: # if reminder hasn't been set previously
                 # finally execute remind me command
-                setReminder = "INSERT INTO reminders (user, days, userId) VALUES (%s, %s, %s)" # insert days interval
+                setReminder = "INSERT INTO reminder (user, days, user_id) VALUES (%s, %s, %s)" # insert days interval
                 values = (str(ctx.author), days, str(ctx.author.id))
                 cursor.execute(setReminder, values) # execute
                 # set next reminder to today
                 nextReminder = str(date.today()).replace(",", "-").replace(" ", "") # do i even need all the replace replace
                 values = (str(ctx.author), nextReminder, str(ctx.author.id))
                 # insert date into db
-                setDate = "INSERT INTO nextDateReminder (user, next_date, userId) VALUES (%s, %s, %s)"
+                setDate = "INSERT INTO next_reminder (user, next_date, user_id) VALUES (%s, %s, %s)"
                 cursor.execute(setDate, values)
                 db.commit()
                 await ctx.respond(
-                    f"Going to be reminding you every `{days}`\nTo check your next reminder `/next_reminder`\n\n*Good job bruh, now time to get to work <:stronk_doge:925285801921769513> <:lezgooo:925286931221344256> If you need help, we got you <#867600399879372820>*"
+                    f"Going to be reminding you every `{days}`\nTo check your next reminder `/next_reminder`\n\n\
+                    *Good job bruh, now time to get to work <:stronk_doge:925285801921769513> <:lezgooo:925286931221344256> \
+                    If you need help, we got you <#867600399879372820>*"
                 )
         elif goalsSet == False: # if goals haven't been set
                 await ctx.respond(

@@ -36,7 +36,7 @@ class NewYearGoal(commands.Cog):
             status = False # set status if achieved to false
             duplicate_existant = False
             # check if the new goal is a duplicate
-            check_goals = "SELECT * FROM 2022_Goals WHERE user = %s AND goals = %s" # checks for a goal from the user
+            check_goals = "SELECT * FROM goal WHERE user = %s AND goal = %s" # checks for a goal from the user
             values = (person, goal)
             cursor.execute(check_goals, values)
             for entry in cursor: # loop through the results if they exist
@@ -44,7 +44,7 @@ class NewYearGoal(commands.Cog):
                 print(entry)
             if duplicate_existant == False:
                 finalValues = (person, goal, status, personId, serverId)
-                insertGoals = "INSERT INTO 2022_Goals (user, goals, status, userId, serverId) VALUES (%s, %s, %s, %s, %s)"
+                insertGoals = "INSERT INTO goal (user, goal, status, user_id, server_id) VALUES (%s, %s, %s, %s, %s)"
                 cursor.execute(insertGoals, finalValues) # execute
                 db.commit()
                 lez_goo_emoji = discord_getter(self.bot.emojis, name='lezgooo')
