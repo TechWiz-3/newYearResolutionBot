@@ -51,6 +51,7 @@ class Events(commands.Cog):
         #await Events.initialise_loop(self)
         await reminder_function.start(self.bot)
         try:
+            await self.bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name="you achieve your goals"))
             while True:
                 # alternate between two bot statuses 
                 await self.bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name="you achieve your goals"))

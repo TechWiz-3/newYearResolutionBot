@@ -30,6 +30,7 @@ class ViewIds(commands.Cog):
     @slash_command()
     async def view_ids(self, ctx):
         """Displays each logged called and it's unique ID to access"""
+        db.commit()
         final_message = ""
         author = (str(ctx.author.id),) # gets the command invoker
         goals_logged = False

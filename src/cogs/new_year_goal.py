@@ -16,12 +16,6 @@ DB_PASSWORD = getenv("MYSQLPASSWORD")
 DB_NAME = getenv("MYSQLDATABASE")
 PORT = getenv("MYSQLPORT")
 
-# db = connector.connect(
-#     host=DB_HOST, user=DB_USER, password=DB_PASSWORD, database=DB_NAME, port=PORT
-# )
-
-# cursor = db.cursor(buffered=True)
-
 cursor,db = connect()
 
 class NewYearGoal(commands.Cog):
@@ -30,11 +24,12 @@ class NewYearGoal(commands.Cog):
         self.bot = bot
 
     @slash_command()
-    async def new_year_goal(self, ctx, *, goal: Option(str, "Type the name of the goal (one only)", required=True)):
+    async def new_year_goal(self, ctx, *, goal: Option(str, "Type the name of the goal (one only)", required=True)):  # type: ignore
         """Log a goal, one at a time"""
         global cursor
         global db
         try:
+            db.commit()
             person = str(ctx.author) # get name
             personId = str(ctx.author.id) # get id
             serverId = str(ctx.guild.id) # get server id and assign it as a string
@@ -59,7 +54,17 @@ class NewYearGoal(commands.Cog):
             elif duplicate_existant == True:
                 await ctx.respond("Wowa, steady on there. This goal is seems to be a duplicate of another, if you wish to remove a goal use the `/edit_goal` command.")
         except db_errors:
-            cursor,db = connect()
+            try:
+                cursor,db = connect()
+            except Exception as error:
+                print("Attempt at reconnecting to DB failed", error)
+                await ctx.respond("Sorry, datebase seems to be seriously bugged up rn ;(")
+            else:
+                await ctx.respond(
+                    "An error occured while connecting to the database \
+                    however an attempt to reconnect was successful, \
+                    if you run the command again, it should work :pray:"
+                        )
 
 
 def setup(bot):

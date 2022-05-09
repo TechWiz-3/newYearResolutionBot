@@ -29,6 +29,7 @@ class RemindMe(commands.Cog):
     @slash_command()
     async def remind_me(self, ctx, *, days: Option(int, "Enter how often you'd like to be reminded in days", required=True)):  # time in days
         """Tells the bot to remind you about your goals every x days"""
+        db.commit()       
         goalsSet = False # automatically assume that goals haven't been set
         checkGoals = "SELECT * FROM 2022_Goals WHERE userId = %s" # check if goals have been set
         values = (str(ctx.author.id),) # get the users name

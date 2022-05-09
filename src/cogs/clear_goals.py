@@ -42,8 +42,9 @@ class ClearGoals(commands.Cog):
         self.bot = bot
 
     @slash_command()
-    async def clear_goals(self, ctx, id: Option(int, "Enter the ID of the goal you wish to delete", required=False)):
+    async def clear_goals(self, ctx, id: Option(int, "Enter the ID of the goal you wish to delete", required=False)):  # type: ignore
         """Delete all logged goals, or a specific goal based on ID"""
+        db.commit()
         if id == None:
             deleteGoals = "DELETE FROM 2022_Goals WHERE userId = %s"
             deleteReminderEntries = "DELETE FROM reminders WHERE userId = %s"
@@ -76,7 +77,7 @@ class ClearGoals(commands.Cog):
                     f"Specific goal deleted. {random.choice(specific_goal_deleted)}"
                     )
             else:
-                policeEmoji = discord.utils.get(self.bot.emojis, name="pepe_police")
+                policeEmoji = get(self.bot.emojis, name="pepe_police")
                 await ctx.respond(
                     f"Wow, you trying to delete somebody elses goals? That's malicious dude {policeEmoji} <:angry_pepe_ak47:930283816143171604>\n||If not that means you put the wrong ID||"
                 )   

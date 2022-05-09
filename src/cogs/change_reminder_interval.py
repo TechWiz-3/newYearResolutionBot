@@ -2,13 +2,13 @@ from discord.commands import (  # Importing the decorator that makes slash comma
     slash_command
 )
 from discord.ext import commands
-import discord
 from dotenv import load_dotenv
 import os
-import mysql.connector
 from datetime import date
 from discord.utils import get
 from discord.commands import Option
+from cogs.functions.db_functions import connect
+from mysql.connector import errors as db_errors
 
 load_dotenv()
 DB_HOST = os.getenv("MYSQLHOST")
@@ -17,32 +17,45 @@ DB_PASSWORD = os.getenv("MYSQLPASSWORD")
 DB_NAME = os.getenv("MYSQLDATABASE")
 PORT = os.getenv("MYSQLPORT")
 
-db = mysql.connector.connect(
-    host=DB_HOST, user=DB_USER, password=DB_PASSWORD, database=DB_NAME, port=PORT
-)
-cursor = db.cursor(buffered=True)
+cursor,db = connect()
 
 class ChangeReminderInterval(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
     @slash_command()
-    async def change_reminder_interval(self, ctx, how_often: Option(int, "Enter how often in days you wish to be reminded", required=True)):
+    async def change_reminder_interval(self, ctx, how_often: Option(int, "Enter how often in days you wish to be reminded", required=True)):  # type: ignore
         """Adjusts how often you're reminded of your goals"""
-        adjustInterval = "UPDATE reminders SET days = %s WHERE userId = %s" # update the reminders table and set the days interval to the new value
-        values = (how_often, str(ctx.author.id))
-        cursor.execute(adjustInterval, values)
-        adjustIntervalDate = "UPDATE nextDateReminder SET next_date = %s WHERE userId = %s" # update the next date reminder table, to remind the user immediately
-        values = (
-            str(date.today()),
-            str(ctx.author.id)
-            )
-        cursor.execute(adjustIntervalDate, values)
-        db.commit()
-        cooldoge = discord.utils.get(self.bot.emojis, name="cooldoge")
-        await ctx.respond(
-            f"{cooldoge} Well, that went well. Your interval is now `{how_often}` day(s). Achievement time babyy"
-            )
+        global cursor
+        global db
+        try:
+            db.commit()
+            adjustInterval = "UPDATE reminders SET days = %s WHERE userId = %s" # update the reminders table and set the days interval to the new value
+            values = (how_often, str(ctx.author.id))
+            cursor.execute(adjustInterval, values)
+            adjustIntervalDate = "UPDATE nextDateReminder SET next_date = %s WHERE userId = %s" # update the next date reminder table, to remind the user immediately
+            values = (
+                str(date.today()),
+                str(ctx.author.id)
+                )
+            cursor.execute(adjustIntervalDate, values)
+            db.commit()
+            cooldoge = get(self.bot.emojis, name="cooldoge")
+            await ctx.respond(
+                f"{cooldoge} Well, that went well. Your interval is now `{how_often}` day(s). Achievement time babyy"
+                )
+        except db_errors:
+            try:
+                cursor,db = connect()
+            except Exception as error:
+                print("Attempt at reconnecting to DB failed", error)
+                await ctx.respond("Sorry, datebase seems to be seriously bugged up rn ;(")
+            else:
+                await ctx.respond(
+                    "An error occured while connecting to the database \
+                    however an attempt to reconnect was successful, \
+                    if you run the command again, it should work"
+                        )
 
 def setup(bot):
     bot.add_cog(ChangeReminderInterval(bot))

@@ -28,6 +28,7 @@ class NextReminder(commands.Cog):
     @slash_command()
     async def next_reminder(self, ctx):
         """Shows you how often you'll be reminded as well as your next reminder date"""
+        db.commit()
         reminder_set = False
         how_often = 0
         next_date = None

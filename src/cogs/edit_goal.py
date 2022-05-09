@@ -28,6 +28,7 @@ class EditGoal(commands.Cog):
     @slash_command()
     async def edit_goal(self, ctx, id: Option(int, "Enter the ID corresponding to the goal you wish to change"), newtext: Option(str, "Enter the new goal you'd like to set")):
         """Edits a goal entry based on ID"""
+        db.commit()
         goalIsForUser = False
         checkGoalAndId = "SELECT userId FROM 2022_Goals WHERE id = %s" # looks for the goal with that id
         values = (id,)

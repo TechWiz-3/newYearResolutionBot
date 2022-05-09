@@ -28,6 +28,7 @@ class GoalAchieved(commands.Cog):
     @slash_command()
     async def goal_achieved(self, ctx, id: Option(int, "Enter the ID of the goal you wish to mark as achieved", required=True)):
         """Log when you achieve a goal by goal ID"""
+        db.commit()
         userGoalIdVerified = False
         achieved_goal_name = ""
         fetchByID = (id,)

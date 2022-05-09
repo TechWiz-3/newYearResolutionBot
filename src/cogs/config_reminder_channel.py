@@ -37,6 +37,7 @@ class ConfigReminderChannel(commands.Cog):
     async def config_reminder_channel(self, ctx, reminder_channel: Option(discord.TextChannel, "Reminder channel", required = True)):
         """Sets the server's reminder channel"""
         if ctx.author.guild_permissions.administrator or ctx.author.id == 760345587802964010:
+            db.commit()
             server_logged = False
             get_servers_config = "SELECT server_id FROM config WHERE server_id = %s" # checks if the server is in the config table
             values = (ctx.guild.id,)
