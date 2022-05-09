@@ -2,9 +2,9 @@
 
 # Update created by Zac on 17/Mar
 
-# updated help command and made it cleaner, removed init message from events.py
+# migrate to maria db locally, add commit() at the front of all commands
 
-# Version 5.3.0
+# Version 6.0.0 PRE RELEASE
 
 from discord.ext import commands
 from dotenv import load_dotenv
