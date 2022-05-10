@@ -77,9 +77,9 @@ class ClearGoals(commands.Cog):
                     f"Specific goal deleted. {random.choice(specific_goal_deleted)}"
                     )
             else:
-                policeEmoji = get(self.bot.emojis, name="pepe_police")
+                police_emoji = get(self.bot.emojis, name="pepe_police")
                 await ctx.respond(
-                    f"Wow, you trying to delete somebody elses goals? That's malicious dude {policeEmoji} <:angry_pepe_ak47:930283816143171604>\n||If not that means you put the wrong ID||"
+                    f"Wow, you trying to delete somebody elses goals? That's malicious dude {police_emoji} <:angry_pepe_ak47:930283816143171604>\n||If not that means you put the wrong ID||"
                 )   
 
 def setup(bot):
