@@ -72,7 +72,9 @@ The discord bot's token `TOKEN`
 MySQL DB information: `MYSQLHOST` `MYSQLUSER` `MYSQLPASSWORD` `MYSQLDATABASE` `MYSQLPORT`    
 ### Tools
 
-*The file *[`sqlConfig.py`](https://github.com/TechWiz-3/newYearsResolutionBot/blob/main/tools/sqlConfig.py)* contains the queries to create the four database tables used by the bot.*  
+Useful tools and setup guides in [tools](./tools/)  
+
+### DB Logic
 
 `2022_Goals` *is used for storing each users goals as well as their user id and name, in the future it will also store the server ID of which the command was invoked in.*  
 
@@ -100,7 +102,7 @@ Contains the [instructions](https://docs.docker.com/engine/reference/builder/) f
 Contains future features to work on (though the list is may not be complete)  
 
 ## Hosting
-The bot is hosted using [Docker](https://www.docker.com/) run on a  Network Attached Storage device.
+The bot is hosted using [Docker](https://www.docker.com/) run on a  Network Attached Storage device. Tools on Docker and MYSQL database setup in [tools](./tools/) and a [guide here](./tools/DOCKERWORKFLOW.md).
 
 While I no longer use RailwayApp, I still highly recommend it for free hosting.
 
