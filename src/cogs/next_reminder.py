@@ -44,8 +44,7 @@ class NextReminder(commands.Cog):
             next_date, = dateEntry # store the next date in next_date
         if reminder_set == True:
             await ctx.respond(
-                f"You have set to be reminded every `{how_often}` day(s) and your next reminder is on `{next_date}`\
-                 meanwhile... KEEP GRINDING <:lezgooo:925286931221344256>"
+                f"You have set to be reminded every `{how_often}` day(s) and your next reminder is on `{next_date}` meanwhile... KEEP GRINDING <:lezgooo:925286931221344256>"
                 )    
         elif reminder_set == False: # if a reminder hasn't been found in the table
             umEmoji = get(self.bot.emojis, name="um")

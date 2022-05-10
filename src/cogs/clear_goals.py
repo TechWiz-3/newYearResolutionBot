@@ -55,8 +55,7 @@ class ClearGoals(commands.Cog):
             cursor.execute(deleteDateReminderEntries, user)
             db.commit()
             await ctx.respond(
-                f"All goals deleted. {random.choice(all_goals_deleted)}\nNow time to put new\
-                 ones in `/new_year_goal`\n*Also, your reminders have been removed*"
+                f"All goals deleted. {random.choice(all_goals_deleted)}\nNow time to put new ones in `/new_year_goal`\n*Also, your reminders have been removed*"
                 )
         else:
             userAndIdMatch = False
