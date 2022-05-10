@@ -29,24 +29,24 @@ class GoalAchieved(commands.Cog):
     async def goal_achieved(self, ctx, id: Option(int, "Enter the ID of the goal you wish to mark as achieved", required=True)):  # type: ignore
         """Log when you achieve a goal by goal ID"""
         db.commit()
-        userGoalIdVerified = False
+        user_goal_id_verified = False
         achieved_goal_name = ""
-        fetchByID = (id,)
-        cursor.execute("SELECT user_id, goal FROM goal WHERE id = %s", fetchByID) # finds the goal corresponding to provided id
+        fetch_by_id = (id,)
+        cursor.execute("SELECT user_id, goal FROM goal WHERE id = %s", fetch_by_id) # finds the goal corresponding to provided id
         for userandGoal in cursor: # loops through results
-            userId, goal = userandGoal # unpacks the resuts
-            if userId == str(ctx.author.id): # if the user of the requested goal is equal to the command invoker
-                userGoalIdVerified = True # this is the right user
+            user_id, goal = userandGoal # unpacks the resuts
+            if user_id == str(ctx.author.id): # if the user of the requested goal is equal to the command invoker
+                user_goal_id_verified = True # this is the right user
                 achieved_goal_name = goal # gets the text of the goal
-        if userGoalIdVerified == True: # if the user is correct
+        if user_goal_id_verified == True: # if the user is correct
             value = (id,)
-            markAchieved = "UPDATE goal SET status = '1' WHERE id = %s"
-            cursor.execute(markAchieved, value)
+            mark_achieved = "UPDATE goal SET status = '1' WHERE id = %s"
+            cursor.execute(mark_achieved, value)
             db.commit()
             await ctx.respond(
                 f"**Congratulations...**\n<:pepe_hypers:925274715214458880> You have ACHIEVED `{achieved_goal_name}`\n**Collect your trophy:**\n:trophy:"
                 )
-        elif userGoalIdVerified == False: # if it's the wrong user
+        elif user_goal_id_verified == False: # if it's the wrong user
             await ctx.respond(
                 "Hmm, something sus be going on here, maybe you made an error with the id? I'm not sure... but I wasn't able to log the goal as achieved T_T"
                     )

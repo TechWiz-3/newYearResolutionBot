@@ -31,8 +31,8 @@ class NewYearGoal(commands.Cog):
         try:
             db.commit()
             person = str(ctx.author) # get name
-            personId = str(ctx.author.id) # get id
-            serverId = str(ctx.guild.id) # get server id and assign it as a string
+            person_id = str(ctx.author.id) # get id
+            server_id = str(ctx.guild.id) # get server id and assign it as a string
             status = False # set status if achieved to false
             duplicate_existant = False
             # check if the new goal is a duplicate
@@ -43,9 +43,9 @@ class NewYearGoal(commands.Cog):
                 duplicate_existant = True # confirm through this variable that another duplicate exists
                 print(entry)
             if duplicate_existant == False:
-                finalValues = (person, goal, status, personId, serverId)
-                insertGoals = "INSERT INTO goal (user, goal, status, user_id, server_id) VALUES (%s, %s, %s, %s, %s)"
-                cursor.execute(insertGoals, finalValues) # execute
+                final_values = (person, goal, status, person_id, server_id)
+                insert_goals = "INSERT INTO goal (user, goal, status, user_id, server_id) VALUES (%s, %s, %s, %s, %s)"
+                cursor.execute(insert_goals, final_values) # execute
                 db.commit()
                 lez_goo_emoji = discord_getter(self.bot.emojis, name='lezgooo')
                 await ctx.respond(

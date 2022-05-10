@@ -35,11 +35,11 @@ class StopReminding(commands.Cog):
         """Stops the bot from reminding you about your goals"""
         # write code to check if reminders have been set first
         db.commit()
-        deleteReminderEntries = "DELETE FROM reminder WHERE user_id = %s"
-        deleteDateReminderEntries = "Delete FROM next_reminder WHERE user_id = %s"
+        delete_reminder_entries = "DELETE FROM reminder WHERE user_id = %s"
+        delete_date_reminder_entries = "Delete FROM next_reminder WHERE user_id = %s"
         user = (str(ctx.author.id),)
-        cursor.execute(deleteReminderEntries, user)
-        cursor.execute(deleteDateReminderEntries, user)
+        cursor.execute(delete_reminder_entries, user)
+        cursor.execute(delete_date_reminder_entries, user)
         db.commit()
         await ctx.respond(
             f"{random.choice(reminder_deleted)}\nDo `/remind_me` again to change the interval. If not then we're sad to see you go... all the best"

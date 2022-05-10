@@ -47,9 +47,9 @@ class NextReminder(commands.Cog):
                 f"You have set to be reminded every `{how_often}` day(s) and your next reminder is on `{next_date}` meanwhile... KEEP GRINDING <:lezgooo:925286931221344256>"
                 )    
         elif reminder_set == False: # if a reminder hasn't been found in the table
-            umEmoji = get(self.bot.emojis, name="um")
+            um_emoji = get(self.bot.emojis, name="um")
             await ctx.respond(
-                f"{umEmoji} you need to set a reminder first before viewing it... `/remind_me`"
+                f"{um_emoji} you need to set a reminder first before viewing it... `/remind_me`"
                 )
 
 def setup(bot):

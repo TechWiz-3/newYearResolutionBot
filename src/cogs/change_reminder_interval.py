@@ -30,15 +30,15 @@ class ChangeReminderInterval(commands.Cog):
         global db
         try:
             db.commit()
-            adjustInterval = "UPDATE reminder SET days = %s WHERE user_id = %s" # update the reminders table and set the days interval to the new value
+            adjust_interval = "UPDATE reminder SET days = %s WHERE user_id = %s" # update the reminders table and set the days interval to the new value
             values = (how_often, str(ctx.author.id))
-            cursor.execute(adjustInterval, values)
-            adjustIntervalDate = "UPDATE next_reminder SET next_date = %s WHERE user_id = %s" # update the next date reminder table, to remind the user immediately
+            cursor.execute(adjust_interval, values)
+            adjust_interval_date = "UPDATE next_reminder SET next_date = %s WHERE user_id = %s" # update the next date reminder table, to remind the user immediately
             values = (
                 str(date.today()),
                 str(ctx.author.id)
                 )  # set values to today's date and the user's id
-            cursor.execute(adjustIntervalDate, values)
+            cursor.execute(adjust_interval_date, values)
             db.commit()
             cooldoge = get(self.bot.emojis, name="cooldoge")
             await ctx.respond(

@@ -29,19 +29,19 @@ class EditGoal(commands.Cog):
     async def edit_goal(self, ctx, id: Option(int, "Enter the ID corresponding to the goal you wish to change"), newtext: Option(str, "Enter the new goal you'd like to set")):  # type: ignore
         """Edits a goal entry based on ID"""
         db.commit()
-        goalIsForUser = False
-        checkGoalAndId = "SELECT user_id FROM goal WHERE id = %s" # looks for the goal with that id
+        goal_is_for_user = False
+        check_goal_and_id = "SELECT user_id FROM goal WHERE id = %s" # looks for the goal with that id
         values = (id,)
-        cursor.execute(checkGoalAndId, values)
+        cursor.execute(check_goal_and_id, values)
         for userid_entry in cursor:
             user, = userid_entry
             if str(user) == str(ctx.author.id): # checks if the user and goal creator are the same
-                goalIsForUser = True # confirms that the goal creator and command in invoker are the same
-        if goalIsForUser == True:
+                goal_is_for_user = True # confirms that the goal creator and command in invoker are the same
+        if goal_is_for_user == True:
             # goes ahead and updated the goal
-            changeGoal = "UPDATE goal SET goal = %s WHERE user_id = %s AND id = %s"
+            change_goal = "UPDATE goal SET goal = %s WHERE user_id = %s AND id = %s"
             values = (newtext, str(ctx.author.id), id)
-            cursor.execute(changeGoal, values)
+            cursor.execute(change_goal, values)
             db.commit()
             await ctx.respond(f"Perfect, you've replaced goal `{id}` with the text `{newtext}`")
         else:

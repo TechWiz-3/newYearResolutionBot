@@ -79,12 +79,12 @@ class Help(commands.Cog):
     async def get_started(self, ctx):
         """Helps you get started :)"""
         print(f"Get started command invoked by {ctx.author.name} in {ctx.channel.name}")
-        contentOne = "||`/help` The help command is your go to command to understand anything, but here's the recommended sequence of commands:||"
-        contentTwo = "||Run`/new_year_goal` for **each** new year goal you wish to achieve.\n\nRun `/view_goals` to ensure that all your goals havee been logged.\n\nRun `/remind_me` to set how often you'll be reminded.||"
-        contentThree = "||For more command use the `/help` command. If you enounter any issues pls ping `@Zac the Wise#1381` :)||"
+        content_one = "||`/help` The help command is your go to command to understand anything, but here's the recommended sequence of commands:||"
+        content_two = "||Run`/new_year_goal` for **each** new year goal you wish to achieve.\n\nRun `/view_goals` to ensure that all your goals havee been logged.\n\nRun `/remind_me` to set how often you'll be reminded.||"
+        content_three = "||For more command use the `/help` command. If you enounter any issues pls ping `@Zac the Wise#1381` :)||"
 
         await ctx.respond(
-            f"Ayo {ctx.author.mention} so you want to get after those goals and make this year, your year. Well GOOD NEWS, I'm here to help...\n\n{contentOne}\n\n{contentTwo}\n\n{contentThree}"
+            f"Ayo {ctx.author.mention} so you want to get after those goals and make this year, your year. Well GOOD NEWS, I'm here to help...\n\n{content_one}\n\n{content_two}\n\n{content_three}"
             )
 
 def setup(bot):

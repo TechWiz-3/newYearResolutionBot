@@ -2,7 +2,7 @@
 
 # Update created by Zac on 17/Mar
 
-# fix DB bug, fix indentation bugs
+# variables update
 
 # Version 6.0.0 PRE RELEASE
 

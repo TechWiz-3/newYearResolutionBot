@@ -46,31 +46,31 @@ class ClearGoals(commands.Cog):
         """Delete all logged goals, or a specific goal based on ID"""
         db.commit()
         if id == None:
-            deleteGoals = "DELETE FROM goal WHERE user_id = %s"
-            deleteReminderEntries = "DELETE FROM reminder WHERE user_id = %s"
-            deleteDateReminderEntries = "Delete FROM next_reminder WHERE user_id = %s"
+            delete_goals = "DELETE FROM goal WHERE user_id = %s"
+            delete_reminder_entries = "DELETE FROM reminder WHERE user_id = %s"
+            delete_date_reminder_entries = "Delete FROM next_reminder WHERE user_id = %s"
             user = (str(ctx.author.id),)
-            cursor.execute(deleteGoals, user)
-            cursor.execute(deleteReminderEntries, user)
-            cursor.execute(deleteDateReminderEntries, user)
+            cursor.execute(delete_goals, user)
+            cursor.execute(delete_reminder_entries, user)
+            cursor.execute(delete_date_reminder_entries, user)
             db.commit()
             await ctx.respond(
                 f"All goals deleted. {random.choice(all_goals_deleted)}\nNow time to put new ones in `/new_year_goal`\n*Also, your reminders have been removed*"
                 )
         else:
-            userAndIdMatch = False
-            getUserFromGoal = "SELECT user_id FROM goals WHERE id = %s"
+            user_and_id_match = False
+            get_user_from_goal = "SELECT user_id FROM goals WHERE id = %s"
             values = (id,)
-            cursor.execute(getUserFromGoal, values)
+            cursor.execute(get_user_from_goal, values)
             for goalEntry in cursor:
-                userOfGoal, = goalEntry
-                if str(userOfGoal) == str(ctx.author.id):
-                    userAndIdMatch = True
-            if userAndIdMatch == True:
+                user_of_goal, = goalEntry
+                if str(user_of_goal) == str(ctx.author.id):
+                    user_and_id_match = True
+            if user_and_id_match == True:
                 sql = "DELETE FROM goal WHERE user_id = %s AND id = %s"
                 user = str(ctx.author.id)
-                goalId = int(id)
-                values = (user, goalId)
+                goal_id = int(id)
+                values = (user, goal_id)
                 cursor.execute(sql, values)
                 db.commit()
                 await ctx.respond(
