@@ -1,6 +1,6 @@
 # Tools
 
-[`Docker Workflow and GUide`](./DOCKERWORKFLOW.md)  
+[`Docker Workflow and Guide`](./DOCKERWORKFLOW.md)  
 A guide that would have helped me a ton when I was first setting up my DB and when using Docker CLI
 
 [`Automated docker update and run`](./run_container)  
