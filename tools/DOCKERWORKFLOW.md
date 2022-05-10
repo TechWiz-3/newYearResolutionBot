@@ -26,3 +26,9 @@ Setting up the DB and allowing access can be pretty hard, as a beginner I spent 
 `CREATE USER ’dbusername’@‘hostname(localhost or IP)' IDENTIFIED BY ’yourpasswdhere’;`  
 `GRANT ALL ON dbusername.* to 'user'@'hostname' IDENTIFIED BY 'yourpasswdhere' WITH GRANT OPTION;`  
 `FLUSH PRIVELEGES;`
+
+## Useful Resources
+[Remote access to DB](https://webdock.io/en/docs/how-guides/database-guides/how-enable-remote-access-your-mariadbmysql-database)  
+[Local host access from docker](https://stackoverflow.com/questions/24319662/from-inside-of-a-docker-container-how-do-i-connect-to-the-localhost-of-the-mach)  
+[`docker run` documentation](https://docs.docker.com/engine/reference/commandline/run/)  
+[An `env.list` tutorial that saved me](https://www.youtube.com/watch?v=DeeEzir3rjY)
