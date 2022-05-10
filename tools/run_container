@@ -1,0 +1,57 @@
+#!/bin/bash
+
+# Created by Zac the Wise
+
+set -o errexit  # exits if an error occurs
+
+seperate="------------------------------------------------------------------------"
+
+black_green=$(tput setaf 2 && tput setab 0)  # green foreground black background
+black=$(tput setaf 2)  # black background
+blue=$(tput setaf 4)  # blue foreground
+white=$(tput setaf 7)  # white foreground
+reset_f=$(tput setaf 9)  # reset foreground
+reset_b=$(tput setab 9)  # reset background
+reset=$(tput sgr0)  # resets the entire look
+emphasise=$(tput smso)
+bold=$(tput bold)
+YELLOW=$(tput    setaf 3)
+PURPLE=$(tput    setaf 5)
+
+clear
+echo -e "${emphasise}${black_green}Update+run container script created by ${YELLOW}Zac the Wise ${PURPLE}for simple docker automation\n"
+echo $reset"Alrighttyyy, assuming we're in the repo root folder let's get going."
+sleep 1
+
+echo $seperate
+sleep 1
+echo -n "Git pull? [y/n]: "
+read pull_ans
+if [ "$pull_ans" == "y" ] ; then
+    echo $seperate
+    echo "GIT PULL"
+    sleep 1
+    git pull
+    sleep 1
+    echo $seperate
+fi
+
+echo -n "Enter the tag you wish to use: "
+read tag
+
+echo "Your tag: $tag"  # if you enter the wrong tag, the sleep will allow an easy Ctrl-C
+sleep 2
+
+echo $seperate
+sleep 1
+echo "${bold}DOCKER BUILD${reset}"
+#sudo docker build --tag "$tag" .
+
+echo $seperate
+sleep 1
+echo "${bold}DOCKER RUN${reset}"
+#sudo docker run -d --name NewYearResolutionBot --network="host" --env-file ./env.list "$tag"
+
+sleep 1
+echo $seperate
+echo "Thank you, happy goalbot-ing"
