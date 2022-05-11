@@ -1,17 +1,21 @@
 #!/bin/bash
 
 # Created by Zac the Wise
+# Copied from my railwayAppGDBot and automation repos
+# https://github.com/TechWiz-3/automation/blob/main/docker-automation/run_container
 
 set -o errexit  # exits if an error occurs
 
 seperate="------------------------------------------------------------------------"
 
-black_green=$(tput setaf 2 && tput setab 0)  # green foreground black background
-reset=$(tput sgr0)      # resets the entire look
-emphasise=$(tput smso)  # emphasis affect
-bold=$(tput bold)       # bold affect
-yellow=$(tput setaf 3)  # yellow foreground
-purple=$(tput setaf 5)  # purple foreground
+if [[ $(which tput) ]] ; then
+    black_green=$(tput setaf 2 && tput setab 0)  # green foreground black background
+    reset=$(tput sgr0)      # resets the entire look
+    emphasise=$(tput smso)  # emphasis affect
+    bold=$(tput bold)       # bold affect
+    yellow=$(tput setaf 3)  # yellow foreground
+    purple=$(tput setaf 5)  # purple foreground
+fi
 
 clear
 echo -e "${emphasise}${black_green}Update+run container script created by ${yellow}Zac the Wise ${purple}for simple docker automation\n"
@@ -45,7 +49,50 @@ sudo docker build --tag "$tag" .
 echo $seperate
 sleep 1
 echo "${bold}DOCKER RUN${reset}"
-sudo docker run -d --name NewYearResolutionBot --network="host" --env-file ./env.list "$tag"
+sudo docker run -d --name NewYearResolutionBot --network="host" --env-file ./env.list "$tag" || err_no=$?
+if [[ $err_no -eq 125 ]] ; then
+    echo $seperate
+    echo -n "IF the above error says that your selected container name is already taken up then press [y] otherwise press [n] "
+    read error_is_same_name
+    if [[ "$error_is_same_name" == "y" ]] ; then
+        echo -n "Would you like to run the docker run command again but change the name of the container? [y/n] "
+        read change_cont_name
+        if [[ "$change_cont_name" == "y" ]] ; then
+            echo -n "New container name: "
+            read new_cont_name
+            sleep 2  # affords some time for a Ctrl-C if a mistake occured
+            echo $seperate
+            sleep 1
+            echo "${bold}DOCKER RUN${reset}"
+            sudo docker run -d --name "$new_cont_name" --network="host" --env-file ./env.list "$tag"
+        else   
+            echo $seperate
+            sleep 1
+            echo "Information about the container with the same name:"
+            sleep 1
+            sudo docker ps -a --filter "name=RowanBot"
+            echo $seperate
+            echo -n "Would you like to delete it? [y/n] "
+            read delete_dupl_cont
+            if [[ "$delete_dupl_cont" == "y" ]] ; then
+                # in the future, use sed and docker ps to get the container ID for deletion
+                echo -n "Please enter container ID as shown above, for deletion: "
+                read dupl_cont_id
+                sudo docker stop "$dupl_cont_id"
+                sudo docker rm "$dupl_cont_id"
+                sleep 2
+                echo "Initiating docker run command in 2 seconds"
+                sleep 2
+                echo $seperate
+                sleep 1
+                echo "${bold}DOCKER RUN${reset}"
+                sudo docker run -d --name "NewYearResolutionBot" --network="host" --env-file ./env.list "$tag"
+            fi
+        fi
+    else
+        echo -e "No error handling for this exception at the current time, however we would REALLY appreciate it if you reported the issue here https://github.com/TechWiz-3/automation and explain the error, why it occured (if you know) and what would prefer the script do. If you're a more hands on person we'd love it if pull request"
+    fi
+fi
 
 sleep 1
 echo $seperate
