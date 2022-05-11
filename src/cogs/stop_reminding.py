@@ -16,8 +16,13 @@ DB_NAME = os.getenv("MYSQLDATABASE")
 PORT = os.getenv("MYSQLPORT")
 
 db = mysql.connector.connect(
-    host=DB_HOST, user=DB_USER, password=DB_PASSWORD, database=DB_NAME, port=PORT
-)
+    host=DB_HOST,
+    user=DB_USER,
+    password=DB_PASSWORD,
+    database=DB_NAME,
+    port=PORT,
+    pool_size=24
+        )
 cursor = db.cursor(buffered=True)
 
 reminder_deleted = [
