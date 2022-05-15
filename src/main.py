@@ -2,7 +2,7 @@
 
 # Update created by Zac on 17/Mar
 
-# variables update
+# change poolsize
 
 # Version 6.0.0 PRE RELEASE
 

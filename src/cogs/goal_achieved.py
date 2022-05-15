@@ -6,23 +6,9 @@ from dotenv import load_dotenv
 import os
 import mysql.connector
 from discord.commands import Option
+from cogs.functions.db_functions import connect
 
-load_dotenv()
-DB_HOST = os.getenv("MYSQLHOST")
-DB_USER = os.getenv("MYSQLUSER")
-DB_PASSWORD = os.getenv("MYSQLPASSWORD")
-DB_NAME = os.getenv("MYSQLDATABASE")
-PORT = os.getenv("MYSQLPORT")
-
-db = mysql.connector.connect(
-    host=DB_HOST,
-    user=DB_USER,
-    password=DB_PASSWORD,
-    database=DB_NAME,
-    port=PORT,
-    pool_size=24
-        )
-cursor = db.cursor(buffered=True)
+cursor,db=connect()
 
 class GoalAchieved(commands.Cog):
 

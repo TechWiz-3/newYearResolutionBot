@@ -21,6 +21,7 @@ db = mysql.connector.connect(
     password=DB_PASSWORD,
     database=DB_NAME,
     port=PORT,
+    pool_name="nreminderpool",
     pool_size=24
         )
 cursor = db.cursor(buffered=True)

@@ -4,7 +4,6 @@ import os
 import mysql.connector
 from datetime import date, timedelta
 from discord.utils import get
-import discord
 import random
 
 load_dotenv()
@@ -20,6 +19,7 @@ db = mysql.connector.connect(
     password=DB_PASSWORD,
     database=DB_NAME,
     port=PORT,
+    pool_name="taskspool",
     pool_size=32
         )
 

@@ -16,8 +16,9 @@ def connect():
         user=DB_USER,
         password=DB_PASSWORD,
         database=DB_NAME,
-        port=PORT
-        pool_size=24
+        port=PORT,
+        pool_size=24,
+        pool_name="resolutionpool"
     )
     cursor = db.cursor(buffered=True)
 

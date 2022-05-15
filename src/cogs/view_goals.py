@@ -6,23 +6,9 @@ from dotenv import load_dotenv
 from os import getenv
 import mysql.connector
 from discord.utils import get
+from cogs.functions.db_functions import connect
 
-load_dotenv()
-DB_HOST = getenv("MYSQLHOST")
-DB_USER = getenv("MYSQLUSER")
-DB_PASSWORD = getenv("MYSQLPASSWORD")
-DB_NAME = getenv("MYSQLDATABASE")
-PORT = getenv("MYSQLPORT")
-
-db = mysql.connector.connect(
-    host=DB_HOST,
-    user=DB_USER,
-    password=DB_PASSWORD,
-    database=DB_NAME,
-    port=PORT,
-    pool_size=24
-        )
-cursor = db.cursor(buffered=True)
+cursor,db=connect()
 
 class ViewGoals(commands.Cog):
     def __init__(self, bot):

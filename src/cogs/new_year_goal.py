@@ -9,13 +9,6 @@ from mysql.connector import errors as db_errors
 from discord.utils import get as discord_getter
 from cogs.functions.db_functions import connect
 
-load_dotenv()
-DB_HOST = getenv("MYSQLHOST")
-DB_USER = getenv("MYSQLUSER")
-DB_PASSWORD = getenv("MYSQLPASSWORD")
-DB_NAME = getenv("MYSQLDATABASE")
-PORT = getenv("MYSQLPORT")
-
 cursor,db = connect()
 
 class NewYearGoal(commands.Cog):

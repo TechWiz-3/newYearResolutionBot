@@ -21,6 +21,7 @@ db = mysql.connector.connect(
     password=DB_PASSWORD,
     database=DB_NAME,
     port=PORT,
+    pool_name="remindmepool",
     pool_size=24
         )
 
