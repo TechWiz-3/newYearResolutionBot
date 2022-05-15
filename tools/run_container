@@ -70,7 +70,7 @@ if [[ $err_no -eq 125 ]] ; then
             sleep 1
             echo "Information about the container with the same name:"
             sleep 1
-            sudo docker ps -a --filter "name=RowanBot"
+            sudo docker ps -a --filter "name=NewYearResolutionBot"
             echo $seperate
             echo -n "Would you like to delete it? [y/n] "
             read delete_dupl_cont
