@@ -7,7 +7,7 @@ import os
 import mysql.connector
 from discord.utils import get
 import random
-from cogs.functions.db_functions import connect
+from cogs.functions.db_functions import connect,disconnect
 
 cursor,db=connect()
 
@@ -35,6 +35,7 @@ class StopReminding(commands.Cog):
         await ctx.respond(
             f"{random.choice(reminder_deleted)}\nDo `/remind_me` again to change the interval. If not then we're sad to see you go... all the best"
         )
+        disconnect(cursor,db)
 
 def setup(bot):
     bot.add_cog(StopReminding(bot))

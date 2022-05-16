@@ -7,6 +7,7 @@ import os
 import mysql.connector
 from discord.commands import Option
 from datetime import date
+from cogs.functions.db_functions import disconnect
 
 load_dotenv()
 DB_HOST = os.getenv("MYSQLHOST")
@@ -74,6 +75,7 @@ class RemindMe(commands.Cog):
                 await ctx.respond(
                 "Well it's great that you want to be reminded, but make sure you set goals first `/new_year_goal` :grin:"
                 )
+        disconnect(cursor,db)
 
 def setup(bot):
     bot.add_cog(RemindMe(bot))

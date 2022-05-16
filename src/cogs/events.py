@@ -7,7 +7,7 @@ from discord.utils import get
 #from discord.commands import permissions
 import discord
 from cogs.tasks import reminder_function
-from cogs.functions.db_functions import connect
+from cogs.functions.db_functions import connect,disconnect
 
 cursor,db=connect()
 

@@ -6,9 +6,8 @@ from dotenv import load_dotenv
 from os import getenv
 import mysql.connector
 from discord.utils import get
-from cogs.functions.db_functions import connect
+from cogs.functions.db_functions import connect,disconnect
 
-cursor,db=connect()
 
 class ViewGoals(commands.Cog):
     def __init__(self, bot):
@@ -16,6 +15,7 @@ class ViewGoals(commands.Cog):
     @slash_command()
     async def view_goals(self, ctx):
         """Displays your currently logged and achieved goals"""
+        cursor,db=connect()
         db.commit()
         green_tick_emoji = get(self.bot.emojis, name="epicTick") # get a tick emoji
         slash_emoji = get(self.bot.emojis, name="aslash") # get a slash emoji
@@ -46,6 +46,7 @@ class ViewGoals(commands.Cog):
             )
         elif goals_set == False: # respond to user that hasn't set goals
             await ctx.respond("Ummm, you need to set your goals first before viewing them lol\n\n*However, I live go serve bright human ;) ... these commands may help...* `/help` `/new_year_goal`")
+        disconnect(cursor,db)
 
 def setup(bot):
     bot.add_cog(ViewGoals(bot))

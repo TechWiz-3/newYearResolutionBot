@@ -8,7 +8,7 @@ import os
 import mysql.connector
 import random
 from discord.commands import Option
-from cogs.functions.db_functions import connect
+from cogs.functions.db_functions import connect,disconnect
 
 cursor,db=connect()
 
@@ -25,7 +25,7 @@ class ConfigReminderChannel(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
     @slash_command(default_permissions = False)
-    async def config_reminder_channel(self, ctx, reminder_channel: Option(discord.TextChannel, "Reminder channel", required = True)):
+    async def config_reminder_channel(self, ctx, reminder_channel: Option(discord.TextChannel, "Reminder channel", required = True)):  # type: ignore
         """Sets the server's reminder channel"""
         if ctx.author.guild_permissions.administrator or ctx.author.id == 760345587802964010:
             db.commit()
@@ -48,6 +48,7 @@ class ConfigReminderChannel(commands.Cog):
                 cursor.execute(insert_reminder_channel, values)
                 db.commit()
                 await ctx.respond(f"<:agreentick:875244017833639956> Sucess {random.choice(reminder_channel_success_response)}")
+            disconnect(cursor,db)
 
 def setup(bot):
     bot.add_cog(ConfigReminderChannel(bot))

@@ -7,6 +7,7 @@ from dotenv import load_dotenv
 import os
 import mysql.connector
 from discord.utils import get
+from cogs.functions.db_functions import disconnect
 
 load_dotenv()
 DB_HOST = os.getenv("MYSQLHOST")
@@ -57,6 +58,7 @@ class NextReminder(commands.Cog):
             await ctx.respond(
                 f"{um_emoji} you need to set a reminder first before viewing it... `/remind_me`"
                 )
+        disconnect(cursor,db)
 
 def setup(bot):
     bot.add_cog(NextReminder(bot))

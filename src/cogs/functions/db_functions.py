@@ -17,13 +17,14 @@ def connect():
         password=DB_PASSWORD,
         database=DB_NAME,
         port=PORT,
-        pool_size=24,
+        pool_size=32,
         pool_name="resolutionpool"
     )
     cursor = db.cursor(buffered=True)
 
     return cursor, db
     
-def disconnect(cursor):
-    return cursor.close()
-
+def disconnect(cursor,db):
+    cursor.close()
+    db.close()
+    return True

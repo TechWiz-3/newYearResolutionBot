@@ -6,9 +6,9 @@ from dotenv import load_dotenv
 import os
 import mysql.connector
 from discord.commands import Option
-from cogs.functions.db_functions import connect
+from cogs.functions.db_functions import connect,disconnect
 
-cusor,db=connect()
+cursor,db=connect()
 
 class EditGoal(commands.Cog):
 
@@ -37,6 +37,7 @@ class EditGoal(commands.Cog):
         else:
             # if the goal doesn't belong to the command invoker
             await ctx.respond("Something sus here bruh, idk what it is tho, maybe the ID you put is wrong?")
+        disconnect(cursor,db)
 
 def setup(bot):
     bot.add_cog(EditGoal(bot))

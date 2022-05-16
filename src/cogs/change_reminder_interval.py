@@ -7,7 +7,7 @@ import os
 from datetime import date
 from discord.utils import get
 from discord.commands import Option
-from cogs.functions.db_functions import connect
+from cogs.functions.db_functions import connect,disconnect
 from mysql.connector import errors as db_errors
 
 load_dotenv()
@@ -54,6 +54,7 @@ class ChangeReminderInterval(commands.Cog):
                 await ctx.respond(
                     "An error occured while connecting to the database however an attempt to reconnect was successful, if you run the command again, it should work"
                         )
+        disconnect(cursor,db)
 
 def setup(bot):
     bot.add_cog(ChangeReminderInterval(bot))

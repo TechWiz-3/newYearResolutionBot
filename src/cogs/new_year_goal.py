@@ -7,7 +7,7 @@ from os import getenv
 #import mysql.connector as connector
 from mysql.connector import errors as db_errors
 from discord.utils import get as discord_getter
-from cogs.functions.db_functions import connect
+from cogs.functions.db_functions import connect,disconnect
 
 cursor,db = connect()
 
@@ -56,6 +56,7 @@ class NewYearGoal(commands.Cog):
                 await ctx.respond(
                     "An error occured while connecting to the database however an attempt to reconnect was successful, if you run the command again, it should work :pray:"
                         )
+            disconnect(cursor,db)
 
 
 def setup(bot):

@@ -6,7 +6,7 @@ from dotenv import load_dotenv
 import os
 import mysql.connector
 from discord.commands import Option
-from cogs.functions.db_functions import connect
+from cogs.functions.db_functions import connect,disconnect
 
 cursor,db=connect()
 
@@ -40,6 +40,7 @@ class GoalAchieved(commands.Cog):
             await ctx.respond(
                 "Hmm, something sus be going on here, maybe you made an error with the id? I'm not sure... but I wasn't able to log the goal as achieved T_T"
                     )
+        disconnect(cursor,db)
 
 def setup(bot):
     bot.add_cog(GoalAchieved(bot))

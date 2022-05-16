@@ -9,7 +9,7 @@ import mysql.connector
 import random
 from discord.utils import get
 from discord.commands import Option
-from cogs.functions.db_functions import connect
+from cogs.functions.db_functions import connect,disconnect
 
 cursor,db = connect()
 
@@ -71,7 +71,8 @@ class ClearGoals(commands.Cog):
                 police_emoji = get(self.bot.emojis, name="pepe_police")
                 await ctx.respond(
                     f"Wow, you trying to delete somebody elses goals? That's malicious dude {police_emoji} <:angry_pepe_ak47:930283816143171604>\n||If not that means you put the wrong ID||"
-                )   
+                )
+        disconnect(cursor,db)
 
 def setup(bot):
     bot.add_cog(ClearGoals(bot))

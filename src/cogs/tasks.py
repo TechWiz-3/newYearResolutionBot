@@ -5,6 +5,7 @@ import mysql.connector
 from datetime import date, timedelta
 from discord.utils import get
 import random
+from cogs.functions.db_functions import disconnect
 
 load_dotenv()
 DB_HOST = os.getenv("MYSQLHOST")
@@ -13,21 +14,7 @@ DB_PASSWORD = os.getenv("MYSQLPASSWORD")
 DB_NAME = os.getenv("MYSQLDATABASE")
 PORT = os.getenv("MYSQLPORT")
 
-db = mysql.connector.connect(
-    host=DB_HOST,
-    user=DB_USER,
-    password=DB_PASSWORD,
-    database=DB_NAME,
-    port=PORT,
-    pool_name="taskspool",
-    pool_size=32
-        )
 
-cursor = db.cursor(buffered=True)
-second_cursor = db.cursor(buffered=True)
-third_cursor = db.cursor(buffered=True)
-fourth_cursor = db.cursor(buffered=True)
-fifth_cursor = db.cursor(buffered=True)
 
 reminder_funny_text = ["The force wishes me to remind you of your goals, here they are.", "Did you think I'd let you forget about your goals? NOT A CHANCE", "How's it going mate?", "*Mighty presense decscends from sky to deliver a reminder to you*", "Ay bro, it's been some time, keep working at it", "Gravity Destroyers 2022 checking in with you"]
 reminder_for_one_achieved = ["You've made the first step, now it's time for the second one <:lezgooo:925286931221344256>", "Hard work, smart work let's go <:lezgooo:925286931221344256> <:lezgooo:925286931221344256>", "You got this baby, second goal achieve coming soon <:stronk_doge:925285801921769513>", "*Mighty presense decscends from sky to deliver a reminder to you*"]
@@ -36,6 +23,20 @@ reminder_for_three_plus_achieved = ["This mans on a roll, keep it going bro", "D
 
 @tasks.loop(minutes = 2.0)
 async def reminder_function(bot):
+    db = mysql.connector.connect(
+    host=DB_HOST,
+    user=DB_USER,
+    password=DB_PASSWORD,
+    database=DB_NAME,
+    port=PORT,
+    pool_name="taskspool",
+    pool_size=32
+        )
+    cursor = db.cursor(buffered=True)
+    second_cursor = db.cursor(buffered=True)
+    third_cursor = db.cursor(buffered=True)
+    fourth_cursor = db.cursor(buffered=True)
+    fifth_cursor = db.cursor(buffered=True)
     print("I'm running")
     goals = ""
     find_channel_id = 0
@@ -215,3 +216,4 @@ async def reminder_function(bot):
                 values_for_changing_date = (next_date, user_id_for_third_query)
                 fourth_cursor.execute(update_sql, values_for_changing_date)
                 db.commit()
+                disconnect(cursor,db)

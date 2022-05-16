@@ -8,9 +8,9 @@ import os
 import mysql.connector
 from discord.utils import get
 from discord.errors import HTTPException
-from cogs.functions.db_functions import connect
+from cogs.functions.db_functions import connect,disconnect
 
-cusor,db=connect()
+
 
 
 class ViewIds(commands.Cog):
@@ -20,6 +20,7 @@ class ViewIds(commands.Cog):
     @slash_command()
     async def view_ids(self, ctx):
         """Displays each logged called and it's unique ID to access"""
+        cursor,db=connect()
         db.commit()
         final_message = ""
         author = (str(ctx.author.id),) # gets the command invoker
@@ -35,6 +36,7 @@ class ViewIds(commands.Cog):
         except HTTPException:
             if goals_logged:
                 await ctx.respond("Seems like you don't have any goals?")
+        disconnect(cursor,db)
 
 def setup(bot):
     bot.add_cog(ViewIds(bot))
