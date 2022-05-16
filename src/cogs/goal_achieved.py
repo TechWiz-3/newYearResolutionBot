@@ -8,8 +8,6 @@ import mysql.connector
 from discord.commands import Option
 from cogs.functions.db_functions import connect,disconnect
 
-cursor,db=connect()
-
 class GoalAchieved(commands.Cog):
 
     def __init__(self, bot):
@@ -18,6 +16,7 @@ class GoalAchieved(commands.Cog):
     @slash_command()
     async def goal_achieved(self, ctx, id: Option(int, "Enter the ID of the goal you wish to mark as achieved", required=True)):  # type: ignore
         """Log when you achieve a goal by goal ID"""
+        cursor,db=connect()
         db.commit()
         user_goal_id_verified = False
         achieved_goal_name = ""
