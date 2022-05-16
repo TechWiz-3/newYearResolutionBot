@@ -9,8 +9,6 @@ from mysql.connector import errors as db_errors
 from discord.utils import get as discord_getter
 from cogs.functions.db_functions import connect,disconnect
 
-cursor,db = connect()
-
 class NewYearGoal(commands.Cog):
 
     def __init__(self, bot):
@@ -19,8 +17,7 @@ class NewYearGoal(commands.Cog):
     @slash_command()
     async def new_year_goal(self, ctx, *, goal: Option(str, "Type the name of the goal (one only)", required=True)):  # type: ignore
         """Log a goal, one at a time"""
-        global cursor
-        global db
+        cursor,db = connect()
         try:
             db.commit()
             person = str(ctx.author) # get name

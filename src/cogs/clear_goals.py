@@ -11,8 +11,6 @@ from discord.utils import get
 from discord.commands import Option
 from cogs.functions.db_functions import connect,disconnect
 
-cursor,db = connect()
-
 all_goals_deleted = [
     "WTH THIS PEEP IS CRAZY",
     "Dude is on a KILLING RAMPAGE",
@@ -35,6 +33,7 @@ class ClearGoals(commands.Cog):
     @slash_command()
     async def clear_goals(self, ctx, id: Option(int, "Enter the ID of the goal you wish to delete", required=False)):  # type: ignore
         """Delete all logged goals, or a specific goal based on ID"""
+        cursor,db = connect()
         db.commit()
         if id == None:
             delete_goals = "DELETE FROM goal WHERE user_id = %s"

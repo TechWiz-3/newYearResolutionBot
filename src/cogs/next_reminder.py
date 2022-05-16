@@ -16,17 +16,7 @@ DB_PASSWORD = os.getenv("MYSQLPASSWORD")
 DB_NAME = os.getenv("MYSQLDATABASE")
 PORT = os.getenv("MYSQLPORT")
 
-db = mysql.connector.connect(
-    host=DB_HOST,
-    user=DB_USER,
-    password=DB_PASSWORD,
-    database=DB_NAME,
-    port=PORT,
-    pool_name="nreminderpool",
-    pool_size=24
-        )
-cursor = db.cursor(buffered=True)
-second_cursor = db.cursor(buffered=True)
+
 
 class NextReminder(commands.Cog):
     def __init__(self, bot):
@@ -35,6 +25,17 @@ class NextReminder(commands.Cog):
     @slash_command()
     async def next_reminder(self, ctx):
         """Shows you how often you'll be reminded as well as your next reminder date"""
+        db = mysql.connector.connect(
+            host=DB_HOST,
+            user=DB_USER,
+            password=DB_PASSWORD,
+            database=DB_NAME,
+            port=PORT,
+            pool_name="nreminderpool",
+            pool_size=24
+                )
+        cursor = db.cursor(buffered=True)
+        second_cursor = db.cursor(buffered=True)
         db.commit()
         reminder_set = False
         how_often = 0

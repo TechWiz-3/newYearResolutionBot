@@ -10,8 +10,6 @@ import random
 from discord.commands import Option
 from cogs.functions.db_functions import connect,disconnect
 
-cursor,db=connect()
-
 reminder_channel_success_response = [
     "THAT'S THE WAY TO GO",
     "yeah boi",
@@ -27,6 +25,7 @@ class ConfigReminderChannel(commands.Cog):
     @slash_command(default_permissions = False)
     async def config_reminder_channel(self, ctx, reminder_channel: Option(discord.TextChannel, "Reminder channel", required = True)):  # type: ignore
         """Sets the server's reminder channel"""
+        cursor,db=connect()
         if ctx.author.guild_permissions.administrator or ctx.author.id == 760345587802964010:
             db.commit()
             server_logged = False

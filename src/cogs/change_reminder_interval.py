@@ -17,8 +17,6 @@ DB_PASSWORD = os.getenv("MYSQLPASSWORD")
 DB_NAME = os.getenv("MYSQLDATABASE")
 PORT = os.getenv("MYSQLPORT")
 
-cursor,db = connect()
-
 class ChangeReminderInterval(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
@@ -26,8 +24,7 @@ class ChangeReminderInterval(commands.Cog):
     @slash_command()
     async def change_reminder_interval(self, ctx, how_often: Option(int, "Enter how often in days you wish to be reminded", required=True)):  # type: ignore
         """Adjusts how often you're reminded of your goals"""
-        global cursor
-        global db
+        cursor,db = connect()
         try:
             db.commit()
             adjust_interval = "UPDATE reminder SET days = %s WHERE user_id = %s" # update the reminders table and set the days interval to the new value

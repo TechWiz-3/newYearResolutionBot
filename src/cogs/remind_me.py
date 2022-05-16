@@ -16,18 +16,6 @@ DB_PASSWORD = os.getenv("MYSQLPASSWORD")
 DB_NAME = os.getenv("MYSQLDATABASE")
 PORT = os.getenv("MYSQLPORT")
 
-db = mysql.connector.connect(
-    host=DB_HOST,
-    user=DB_USER,
-    password=DB_PASSWORD,
-    database=DB_NAME,
-    port=PORT,
-    pool_name="remindmepool",
-    pool_size=24
-        )
-
-cursor = db.cursor(buffered=True)
-second_cursor = db.cursor(buffered=True)
 
 class RemindMe(commands.Cog):
     def __init__(self, bot):
@@ -36,6 +24,19 @@ class RemindMe(commands.Cog):
     @slash_command()
     async def remind_me(self, ctx, *, days: Option(int, "Enter how often you'd like to be reminded in days", required=True)):  # type: ignore # time in days
         """Tells the bot to remind you about your goals every x days"""
+        db = mysql.connector.connect(
+            host=DB_HOST,
+            user=DB_USER,
+            password=DB_PASSWORD,
+            database=DB_NAME,
+            port=PORT,
+            pool_name="remindmepool",
+            pool_size=24
+                )
+
+        cursor = db.cursor(buffered=True)
+        second_cursor = db.cursor(buffered=True)
+        
         db.commit()       
         goal_set = False # automatically assume that goals haven't been set
         check_goals = "SELECT * FROM goal WHERE user_id = %s" # check if goals have been set

@@ -8,8 +8,6 @@ import mysql.connector
 from discord.commands import Option
 from cogs.functions.db_functions import connect,disconnect
 
-cursor,db=connect()
-
 class EditGoal(commands.Cog):
 
     def __init__(self, bot):
@@ -18,6 +16,7 @@ class EditGoal(commands.Cog):
     @slash_command()
     async def edit_goal(self, ctx, id: Option(int, "Enter the ID corresponding to the goal you wish to change"), newtext: Option(str, "Enter the new goal you'd like to set")):  # type: ignore
         """Edits a goal entry based on ID"""
+        cursor,db=connect()
         db.commit()
         goal_is_for_user = False
         check_goal_and_id = "SELECT user_id FROM goal WHERE id = %s" # looks for the goal with that id

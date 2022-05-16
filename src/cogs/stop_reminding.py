@@ -9,8 +9,6 @@ from discord.utils import get
 import random
 from cogs.functions.db_functions import connect,disconnect
 
-cursor,db=connect()
-
 reminder_deleted = [
     "Oh no, why did you delete your reminder T_T",
     "He deleted his reminders :(",
@@ -25,6 +23,7 @@ class StopReminding(commands.Cog):
     async def stop_reminding(self, ctx):
         """Stops the bot from reminding you about your goals"""
         # write code to check if reminders have been set first
+        cursor,db=connect()
         db.commit()
         delete_reminder_entries = "DELETE FROM reminder WHERE user_id = %s"
         delete_date_reminder_entries = "Delete FROM next_reminder WHERE user_id = %s"
