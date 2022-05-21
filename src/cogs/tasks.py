@@ -33,10 +33,6 @@ async def reminder_function(bot):
     pool_size=32
         )
     cursor = db.cursor(buffered=True)
-    second_cursor = db.cursor(buffered=True)
-    third_cursor = db.cursor(buffered=True)
-    fourth_cursor = db.cursor(buffered=True)
-    fifth_cursor = db.cursor(buffered=True)
     print("I'm running")
     goals = ""
     find_channel_id = 0
@@ -46,22 +42,29 @@ async def reminder_function(bot):
     reminder_channel_object = None
     sql = "SELECT user_id, days FROM reminder"  # select the username and their selected reminder interval
     cursor.execute(sql)  # execute sql query
-    for (user_id, howOften) in cursor:  # loop through the results of the sql query
+    results = cursor.fetchall()
+    for (user_id, howOften) in results:  # loop through the results of the sql query
         sql = "SELECT user_id, next_date FROM next_reminder WHERE user_id = %s"
         value = (user_id,)
+        second_cursor = db.cursor(buffered=True)
         second_cursor.execute(sql, value)
-        for date_entry in second_cursor:
+        second_results = second_cursor.fetchall()
+        second_cursor.close()
+        for date_entry in second_results:
             user_id_for_third_query, unpackedDate = date_entry
             slash_emoji = get(bot.emojis, name="aslash")
             green_tick_emoji = get(bot.emojis, name="epicTick")
             if unpackedDate == date.today():
                 get_goal_entry = "SELECT user, goal, status, user_id, server_id FROM goal WHERE user_id = %s"  # request for the users goals in the goals table
                 user_request = (user_id_for_third_query,)
+                third_cursor = db.cursor(buffered=True)
                 third_cursor.execute(get_goal_entry, user_request)  # execute sql query
+                third_results = third_cursor.fetchall()
+                third_cursor.close()
                 status_counter = 0
                 for (
                     fullEntry
-                ) in third_cursor:  # loop the the results of the latest query
+                ) in third_results:  # loop the the results of the latest query
                     user,goal,status,idByMember,serverByMember = fullEntry #assign the variables returned
                     find_channel_id = int(serverByMember) # variable used for finding the channel, it is the server id
                     global_server_id = int(serverByMember) # used for getting the server object later on
@@ -75,6 +78,7 @@ async def reminder_function(bot):
                         status_counter +=1
                     elif status == 0:
                         goals += f'{slash_emoji} `{goal}`\n'
+                third_cursor = db.cursor(buffered=True) 
                 get_reminder_channel = "SELECT reminder_channel_id FROM config WHERE server_id = %s"
                 values = (find_channel_id,)
                 third_cursor.execute(get_reminder_channel, values)
@@ -132,18 +136,22 @@ async def reminder_function(bot):
                 update_sql = "UPDATE next_reminder SET next_date = %s WHERE user_id = %s"
                 next_date = date.today() + timedelta(days=howOften)
                 values_for_changing_date = (next_date, user_id_for_third_query)
+                fourth_cursor = db.cursor(buffered=True)
                 fourth_cursor.execute(update_sql, values_for_changing_date)
+                fourth_cursor.close()
                 db.commit()
 
             elif unpackedDate < date.today(): #if the table is outdated
                 print("Date smaller than current date triggered for", user_id_for_third_query)
                 get_goal_entry = "SELECT goal, status, user_id, server_id FROM goal WHERE user_id = %s"  # request for the users goals in the goals table
                 user_request = (user_id_for_third_query,)
+                third_cursor = db.cursor(buffered=True)
                 third_cursor.execute(get_goal_entry, user_request)  # execute sql query
+                third_results = third_cursor.fetchall()
                 status_counter = 0
                 for (
                     fullEntry
-                ) in third_cursor:  # loop the the results of the latest query
+                ) in third_results:  # loop the the results of the latest query
                     goal,status,idByMember,serverByMember = fullEntry #assign the variables returned
                     find_channel_id = int(serverByMember) # variable used for finding the channel, it is the server id
                     global_server_id = int(serverByMember) # used for getting the server object later on
@@ -160,7 +168,9 @@ async def reminder_function(bot):
                 get_reminder_channel = "SELECT reminder_channel_id FROM config WHERE server_id = %s"
                 values = (find_channel_id,)
                 third_cursor.execute(get_reminder_channel, values)
-                for unpacked_channel in third_cursor:
+                third_results_again = third_cursor.fetchall()
+                third_cursor.close()
+                for unpacked_channel in third_results_again:
                     # unpack the channel id
                     reminder_channel_id_final, = unpacked_channel
                     reminder_channel_id_final = int(reminder_channel_id_final)
@@ -214,6 +224,8 @@ async def reminder_function(bot):
                 update_sql = "UPDATE next_reminder SET next_date = %s WHERE user_id = %s"
                 next_date = date.today() + timedelta(days=howOften)
                 values_for_changing_date = (next_date, user_id_for_third_query)
+                fourth_cursor = db.cursor(buffered=True)
                 fourth_cursor.execute(update_sql, values_for_changing_date)
+                fourth_cursor.close()
                 db.commit()
-                disconnect(cursor,db)
+    disconnect(cursor,db)

@@ -2,7 +2,7 @@
 
 # Update created by Zac on 17/Mar
 
-# change poolsize
+# inefficient db functions but hopefully will fix the issue
 
 # Version 6.0.0 PRE RELEASE
 
