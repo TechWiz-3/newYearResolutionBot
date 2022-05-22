@@ -76,11 +76,11 @@ Useful tools and setup guides in [tools](./tools/)
 
 ### DB Logic
 
-`2022_Goals` *is used for storing each users goals as well as their user id and name, in the future it will also store the server ID of which the command was invoked in.*  
+`goal` *is used for storing each users goals as well as their user id and name, in the future it will also store the server ID of which the command was invoked in.*  
 
-`reminders` *stores the uername, user id and how often (in days) the user wishes to be reminded.*  
+`reminder` *stores the uername, user id and how often (in days) the user wishes to be reminded.*  
 
-`nextDateReminder` *stores the username, user id and next date each user should be reminded on.*    
+`next_reminder` *stores the username, user id and next date each user should be reminded on.*    
   
 `config` *stores server ids and their preferred reminder channel id*
 
