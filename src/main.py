@@ -2,9 +2,9 @@
 
 # Update created by Zac on 17/Mar
 
-# inefficient db functions but hopefully will fix the issue
+# db issue solved
 
-# Version 6.0.0 PRE RELEASE
+# Version 6.0.0
 
 from discord.ext import commands
 from dotenv import load_dotenv
