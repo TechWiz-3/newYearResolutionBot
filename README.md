@@ -8,7 +8,7 @@
 ![Image](https://img.shields.io/github/commit-activity/m/TechWiz-3/newYearsResolutionBot?color=yellowgreen&logo=git&style=for-the-badge)
 ![Image](https://img.shields.io/badge/python-3.9-informational?style=for-the-badge&logo=python&logoColor=yellow)
 ![Image](https://img.shields.io/badge/Host-Railway-blueviolet?style=for-the-badge&logo=railway)
-![Image](https://img.shields.io/tokei/lines/github/TechWiz-3/newYearsResolutionBot?color=36b2f5&logo=visual%20studio%20code&logoColor=0078d7&style=for-the-badge)
+![Image](https://img.shields.io/tokei/lines/github/TechWiz-3/newYearResolutionBot?color=36b2f5&logo=visual%20studio%20code&logoColor=0078d7&style=for-the-badge)
 ### Invite
 <a href= "https://discord.com/api/oauth2/authorize?client_id=922767657265168394&permissions=2147838976&scope=applications.commands%20bot"><img src="./data/lezgoo_top.png" alt="lezgooinvite" width="40"/></a>  
 Click the image for invite
