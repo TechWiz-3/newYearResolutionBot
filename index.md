@@ -127,5 +127,3 @@ While I no longer use RailwayApp, I still highly recommend it for free hosting.
 More info [here](https://github.com/TechWiz-3/newYearResolutionBot/blob/main/tools/DOCKERWORKFLOW.md)
 
 ## License
-
-The New Year Resolution Bot is licensed under the GPL 3.0 license. See the [`LICENSE`](./LICENSE) file for more information.
