@@ -95,20 +95,20 @@ MySQL DB information: `MYSQLHOST` `MYSQLUSER` `MYSQLPASSWORD` `MYSQLDATABASE` `M
 `config` *stores server ids and their preferred reminder channel id*
 
 ## Folder Organisation
-[**`src`**](./src/)  
-Contains all the bot's source code. Including [`main.py`](./src/main.py) and the [`cogs`](./src/cogs) folder  
+[**`src`**](https://github.com/TechWiz-3/newYearResolutionBot/tree/main/src)  
+Contains all the bot's source code. Including [`main.py`](https://github.com/TechWiz-3/newYearResolutionBot/blob/main/src/main.py) and the [`cogs`](https://github.com/TechWiz-3/newYearResolutionBot/tree/main/src/cogs) folder  
 
-[**`tools`**](./tools/)  
+[**`tools`**](https://github.com/TechWiz-3/newYearResolutionBot/tree/main/tools)  
 Contains database setup and migration programs.
 
-[**`data`**](./data/)  
+[**`data`**](https://github.com/TechWiz-3/newYearResolutionBot/tree/main/data)  
 Contains media assets used in the repositories readme's
 
 ### Other files
-[**`Dockerfile`**](./Dockerfile)  
+[**`Dockerfile`**](https://github.com/TechWiz-3/newYearResolutionBot/blob/main/Dockerfile)  
 Contains the [instructions](https://docs.docker.com/engine/reference/builder/) for the bot's image build.  
 
-[**`backlogs.md`**](./backlogs.md)  
+[**`backlogs.md`**](https://github.com/TechWiz-3/newYearResolutionBot/blob/main/backlogs.md)  
 Contains future features to work on (though the list is may not be complete)  
 
 ## Hosting
@@ -127,3 +127,4 @@ While I no longer use RailwayApp, I still highly recommend it for free hosting.
 More info [here](https://github.com/TechWiz-3/newYearResolutionBot/blob/main/tools/DOCKERWORKFLOW.md)
 
 ## License
+The New Year Resolution Bot is licensed under the GPL 3.0 license. See the [`LICENSE`](https://github.com/TechWiz-3/newYearResolutionBot/blob/main/LICENSE) file for more information.
