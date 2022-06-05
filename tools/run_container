@@ -6,6 +6,15 @@
 
 set -o errexit  # exits if an error occurs
 
+for arg in $"@"
+do
+    case "${arg}" in
+        -d|--delete-other)
+            delete_existing=true
+            ;;
+    esac
+done
+
 seperate="------------------------------------------------------------------------"
 
 if [[ $(which tput) ]] ; then
@@ -15,6 +24,14 @@ if [[ $(which tput) ]] ; then
     bold=$(tput bold)       # bold affect
     yellow=$(tput setaf 3)  # yellow foreground
     purple=$(tput setaf 5)  # purple foreground
+# else
+#     black_green=
+#     reset=
+#     emphasise=
+#     bold=
+#     yellow=
+#     purple=
+#\033[0m
 fi
 
 clear
@@ -38,13 +55,29 @@ fi
 echo -n "Enter the tag you wish to use: "
 read tag
 
-echo "Your tag: $tag"  # if you enter the wrong tag, the sleep will allow an easy Ctrl-C
+printf "%s\n" "Your tag: $tag"  # if you enter the wrong tag, the sleep will allow an easy Ctrl-C
 sleep 2
 
 echo $seperate
 sleep 1
 echo "${bold}DOCKER BUILD${reset}"
 sudo docker build --tag "$tag" .
+
+if [[ "$delete_existing" == "true" ]]
+then
+    echo "Obtaining existing container ID for deletion"
+    container_id=$(sudo docker ps -a --filter "name=NewYearResolutionBot" | awk 'NR==2{print $1}')
+    if [[ -z "$container_id" ]]
+    then
+        echo "No existing containers with same name"
+    else
+    echo $seperate
+    sleep 2
+    echo "DOCKER RM"
+    sudo docker rm "$container_id"
+    echo $seperate
+    fi
+fi
 
 echo $seperate
 sleep 1
