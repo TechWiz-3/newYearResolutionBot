@@ -8,7 +8,7 @@
 ![Image](https://img.shields.io/github/commit-activity/m/TechWiz-3/newYearsResolutionBot?color=yellowgreen&logo=git&style=for-the-badge)
 ![Image](https://img.shields.io/badge/python-3.9-informational?style=for-the-badge&logo=python&logoColor=yellow)
 ![Image](https://img.shields.io/badge/Host-Railway-blueviolet?style=for-the-badge&logo=railway)
-![Image](https://img.shields.io/tokei/lines/github/TechWiz-3/newYearsResolutionBot?color=36b2f5&logo=visual%20studio%20code&logoColor=0078d7&style=for-the-badge)
+![Image](https://img.shields.io/tokei/lines/github/TechWiz-3/newYearResolutionBot?color=36b2f5&logo=visual%20studio%20code&logoColor=0078d7&style=for-the-badge)
 ### Invite
 <a href= "https://discord.com/api/oauth2/authorize?client_id=922767657265168394&permissions=2147838976&scope=applications.commands%20bot"><img src="./data/lezgoo_top.png" alt="lezgooinvite" width="40"/></a>  
 Click the image for invite
@@ -76,11 +76,11 @@ Useful tools and setup guides in [tools](./tools/)
 
 ### DB Logic
 
-`2022_Goals` *is used for storing each users goals as well as their user id and name, in the future it will also store the server ID of which the command was invoked in.*  
+`goal` *is used for storing each users goals as well as their user id and name, in the future it will also store the server ID of which the command was invoked in.*  
 
-`reminders` *stores the uername, user id and how often (in days) the user wishes to be reminded.*  
+`reminder` *stores the uername, user id and how often (in days) the user wishes to be reminded.*  
 
-`nextDateReminder` *stores the username, user id and next date each user should be reminded on.*    
+`next_reminder` *stores the username, user id and next date each user should be reminded on.*    
   
 `config` *stores server ids and their preferred reminder channel id*
 
