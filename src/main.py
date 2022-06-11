@@ -1,10 +1,10 @@
 # Created by #Zac the Wise#1381 with help from #iamkneel#2359
 
-# Update created by Zac on 17/Mar
+# Update created by Zac on 11/June
 
-# db issue solved
+# fix migration bug in clear goals
 
-# Version 6.0.0
+# Version 6.0.1
 
 from discord.ext import commands
 from dotenv import load_dotenv
