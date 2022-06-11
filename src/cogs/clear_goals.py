@@ -49,7 +49,7 @@ class ClearGoals(commands.Cog):
                 )
         else:
             user_and_id_match = False
-            get_user_from_goal = "SELECT user_id FROM goals WHERE id = %s"
+            get_user_from_goal = "SELECT user_id FROM goal WHERE id = %s"
             values = (id,)
             cursor.execute(get_user_from_goal, values)
             for goalEntry in cursor:
