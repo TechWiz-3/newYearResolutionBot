@@ -4,6 +4,8 @@
 # Copied from my railwayAppGDBot and automation repos
 # https://github.com/TechWiz-3/automation/blob/main/docker-automation/run_container
 
+# Make the container deletion part a function and make it accessible from the error handler
+
 set -o errexit  # exits if an error occurs
 
 for arg in $"@"
