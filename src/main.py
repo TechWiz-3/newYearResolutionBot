@@ -4,7 +4,7 @@
 
 # fix migration bug in clear goals
 
-# Version 6.0.1
+# Version 6.1.0
 
 from discord.ext import commands
 from dotenv import load_dotenv
@@ -20,7 +20,7 @@ PROD_GUILD_ID = 867597533458202644
 
 intents = Intents.all()
 bot = commands.Bot(command_prefix="goals!", intents=intents)
-            
+
 bot.load_extension('cogs.new_year_goal')
 bot.load_extension('cogs.remind_me')
 bot.load_extension('cogs.view_goals')
