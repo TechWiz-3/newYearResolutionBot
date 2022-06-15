@@ -37,7 +37,7 @@ class GoalAchieved(commands.Cog):
                 )
         elif user_goal_id_verified == False: # if it's the wrong user
             await ctx.respond(
-                "Hmm, something sus be going on here, maybe you made an error with the id? I'm not sure... but I wasn't able to log the goal as achieved T_T"
+                "Hmm, something sus be going on here, maybe you made an error with the id? Remember, to mark the goal as achieved you need it's unique id, get it by using the `/view_ids` command."
                     )
         disconnect(cursor,db)
 
