@@ -76,7 +76,7 @@ Useful tools and setup guides in [tools](./tools/)
 
 ### DB Logic
 
-`goal` *is used for storing each users goals as well as their user id and name, in the future it will also store the server ID of which the command was invoked in.*  
+`goal` *is used for storing each user's goals as well as their user id and name, in the future it will also store the server ID of which the command was invoked in.*  
 
 `reminder` *stores the uername, user id and how often (in days) the user wishes to be reminded.*  
 
